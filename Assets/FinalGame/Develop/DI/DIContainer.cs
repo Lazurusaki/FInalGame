@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace FinalGame.Develop.DI
 {
@@ -10,7 +9,7 @@ namespace FinalGame.Develop.DI
 
         private readonly DIContainer _parent;
 
-        private readonly List<Type> _requests;
+        private readonly List<Type> _requests = new();
 
         public DIContainer() : this(null)
         {
@@ -23,7 +22,7 @@ namespace FinalGame.Develop.DI
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException($"{typeof(T)} already registered");
 
-            Registration registration = new Registration(container => factory(container));
+            var registration = new Registration(container => factory(container));
             _container[typeof(T)] = registration;
         }
         
@@ -44,7 +43,7 @@ namespace FinalGame.Develop.DI
 
             try
             {
-                if (_container.TryGetValue(typeof(T), out Registration registration))
+                if (_container.TryGetValue(typeof(T), out var registration))
                     return CreateFrom<T>(registration);
 
                 if (_parent != null)
