@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FinalGame.Develop.DI
 {
-    public class DIContainer
+    public class DIContainer : IService
     {
         private readonly Dictionary<Type, Registration> _container = new();
 
@@ -25,7 +25,7 @@ namespace FinalGame.Develop.DI
             var registration = new Registration(container => factory(container));
             _container[typeof(T)] = registration;
         }
-        
+
         private T CreateFrom<T>(Registration registration)
         {
             if (registration.Instance == null && registration.Factory != null)
@@ -33,7 +33,7 @@ namespace FinalGame.Develop.DI
 
             return (T)registration.Instance;
         }
-        
+
         public T Resolve<T>()
         {
             if (_requests.Contains(typeof(T)))

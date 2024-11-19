@@ -1,26 +1,29 @@
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.LoadingScreen;
+using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
 using UnityEngine;
 
 namespace FinalGame.Develop.EntryPoint
 {
     //регистрация глобальных сервисов для старта игры
-    public class EntryPoint: MonoBehaviour
+    public class EntryPoint : MonoBehaviour
     {
         [SerializeField] private Bootstrap _gameBootstrap;
-        
+
         private void Awake()
         {
             SetupAppSettings();
 
             var projectContainer = new DIContainer();
-            
+
             RegisterResourcesAssetLoader(projectContainer);
             RegisterCoroutinePerformer(projectContainer);
             RegisterLoadingScreen(projectContainer);
-            
+            RegisterSceneLoader(projectContainer);
+            RegisterSceneSwitcher(projectContainer);
+
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
 
             //регистрация глобальных сервисов
@@ -33,17 +36,17 @@ namespace FinalGame.Develop.EntryPoint
             Application.targetFrameRate = 144;
         }
 
-        private void RegisterResourcesAssetLoader(DIContainer container)
-        {
-            container.RegisterAsSingle(c=> new ResourcesAssetLoader()); 
-        }
+        private void RegisterResourcesAssetLoader(DIContainer container) =>
+            container.RegisterAsSingle(c => new ResourcesAssetLoader());
 
         private void RegisterCoroutinePerformer(DIContainer container)
         {
             container.RegisterAsSingle<ICoroutinePerformer>(c =>
             {
                 var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
-                var coroutinePerformerPrefab = resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths.CoroutinePerformerPath);
+                var coroutinePerformerPrefab =
+                    resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths
+                        .CoroutinePerformerPath);
                 return Instantiate(coroutinePerformerPrefab);
             });
         }
@@ -53,9 +56,21 @@ namespace FinalGame.Develop.EntryPoint
             container.RegisterAsSingle<ILoadingScreen>(c =>
             {
                 var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
-                var loadingScreenPrefab = resourcesAssetLoader.LoadResource<LoadingScreen>(InfrastructureAssetPaths.LoadingScreenPath);
+                var loadingScreenPrefab =
+                    resourcesAssetLoader.LoadResource<LoadingScreen>(InfrastructureAssetPaths.LoadingScreenPath);
                 return Instantiate(loadingScreenPrefab);
             });
         }
+
+        private void RegisterSceneLoader(DIContainer container) =>
+            container.RegisterAsSingle(c => new SceneLoader());
+
+        private void RegisterSceneSwitcher(DIContainer container) =>
+            container.RegisterAsSingle(c =>
+                new SceneSwitcher(
+                    c,
+                    c.Resolve<CoroutinePerformer>(),
+                    c.Resolve<LoadingScreen>(), 
+                    c.Resolve<SceneLoader>()));
     }
 }
