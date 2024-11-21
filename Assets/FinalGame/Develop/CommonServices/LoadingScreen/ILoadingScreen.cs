@@ -1,6 +1,6 @@
 namespace FinalGame.Develop.CommonServices.LoadingScreen
 {
-    public interface ILoadingScreen
+    public interface ILoadingScreen : IService
     {
         public bool IsShown { get; }
 

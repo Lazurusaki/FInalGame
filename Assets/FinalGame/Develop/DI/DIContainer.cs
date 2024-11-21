@@ -17,7 +17,7 @@ namespace FinalGame.Develop.DI
 
         public DIContainer(DIContainer parent) => _parent = parent;
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> factory)
+        public void RegisterAsSingle<T>(Func<DIContainer, T> factory) where T : IService
         {
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException($"{typeof(T)} already registered");
@@ -59,13 +59,13 @@ namespace FinalGame.Develop.DI
 
         public class Registration
         {
-            public Registration(object instance) => Instance = instance;
+            public Registration(IService instance) => Instance = instance;
 
-            public Registration(Func<DIContainer, object> factory) => Factory = factory;
+            public Registration(Func<DIContainer, IService> factory) => Factory = factory;
 
-            public Func<DIContainer, object> Factory { get; }
+            public Func<DIContainer, IService> Factory { get; }
 
-            public object Instance { get; set; }
+            public IService Instance { get; set; }
         }
     }
 }
