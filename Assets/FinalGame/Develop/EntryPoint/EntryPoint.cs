@@ -47,7 +47,8 @@ namespace FinalGame.Develop.EntryPoint
             {
                 var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
                 var coroutinePerformerPrefab =
-                    resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths.CoroutinePerformerPath);
+                    resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths
+                        .CoroutinePerformerPath);
                 return Instantiate(coroutinePerformerPrefab);
             });
         }
@@ -63,20 +64,19 @@ namespace FinalGame.Develop.EntryPoint
             });
         }
 
-        private void RegisterSceneLoader(DIContainer container) =>
-            container.RegisterAsSingle<ISceneLoader>(c => new SceneLoader());
+        private void RegisterSceneLoader(DIContainer container)
+            => container.RegisterAsSingle<ISceneLoader>(c => new SceneLoader());
 
-        private void RegisterSceneSwitcher(DIContainer container) =>
-            container.RegisterAsSingle(c =>
-                new SceneSwitcher(
+        private void RegisterSceneSwitcher(DIContainer container)
+            => container.RegisterAsSingle(c
+                => new SceneSwitcher(
                     c,
                     c.Resolve<ICoroutinePerformer>(),
-                    c.Resolve<ILoadingScreen>(), 
+                    c.Resolve<ILoadingScreen>(),
                     c.Resolve<ISceneLoader>()));
         
-        private void RegisterSaveLoadService(DIContainer projectContainer)
-        {
-            throw new System.NotImplementedException();
-        }
+        private void RegisterSaveLoadService(DIContainer container)
+            => container.RegisterAsSingle<ISaveLoadService>(c
+                => new SaveLoadService(new LocalDataRepository(), new JsonSerializer()));
     }
 }
