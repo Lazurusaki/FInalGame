@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 
 namespace FinalGame.Develop.CommonServices.SceneManagement
 {
-    public class SceneSwitcher : IService
+    public class SceneSwitcher
     {
         private const string ErrorSceneTransitionMessage = "Transition is not possible";
 

@@ -1,9 +1,9 @@
-using System;
+                                                                          using System;
 using System.Collections.Generic;
 
 namespace FinalGame.Develop.DI
 {
-    public class DIContainer : IService
+    public class DIContainer
     {
         private readonly Dictionary<Type, Registration> _container = new();
 
@@ -17,7 +17,7 @@ namespace FinalGame.Develop.DI
 
         public DIContainer(DIContainer parent) => _parent = parent;
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> factory) where T : IService
+        public void RegisterAsSingle<T>(Func<DIContainer, T> factory)
         {
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException($"{typeof(T)} already registered");
@@ -59,13 +59,13 @@ namespace FinalGame.Develop.DI
 
         public class Registration
         {
-            public Registration(IService instance) => Instance = instance;
+            public Registration(Object instance) => Instance = instance;
 
-            public Registration(Func<DIContainer, IService> factory) => Factory = factory;
+            public Registration(Func<DIContainer, Object> factory) => Factory = factory;
 
-            public Func<DIContainer, IService> Factory { get; }
+            public Func<DIContainer, Object> Factory { get; }
 
-            public IService Instance { get; set; }
+            public Object Instance { get; set; }
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace FinalGame.Develop.CommonServices.SceneManagement
 {
-    public interface ISceneLoader : IService
+    public interface ISceneLoader
     {
         IEnumerator LoadAsync(SceneID sceneID, LoadSceneMode loadSceneMode = LoadSceneMode.Single);
     }

@@ -1,5 +1,6 @@
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
+using FinalGame.Develop.CommonServices.DataManagement;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
@@ -23,6 +24,7 @@ namespace FinalGame.Develop.EntryPoint
             RegisterLoadingScreen(projectContainer);
             RegisterSceneLoader(projectContainer);
             RegisterSceneSwitcher(projectContainer);
+            RegisterSaveLoadService(projectContainer);
 
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
 
@@ -71,5 +73,10 @@ namespace FinalGame.Develop.EntryPoint
                     c.Resolve<ICoroutinePerformer>(),
                     c.Resolve<ILoadingScreen>(), 
                     c.Resolve<ISceneLoader>()));
+        
+        private void RegisterSaveLoadService(DIContainer projectContainer)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
