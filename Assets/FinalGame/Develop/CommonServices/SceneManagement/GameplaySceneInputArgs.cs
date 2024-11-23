@@ -1,9 +1,11 @@
+using FinalGame.Develop.Gameplay;
+
 namespace FinalGame.Develop.CommonServices.SceneManagement
 {
     public class GameplaySceneInputArgs : IInputSceneArgs
     {
-        public GameplaySceneInputArgs(int levelIndex) => LevelIndex = levelIndex;
-        
-        public int LevelIndex { get; }
+        public GameplaySceneInputArgs(GameModes gameMode) => GameMode = gameMode;
+
+        public GameModes GameMode;
     }
 }

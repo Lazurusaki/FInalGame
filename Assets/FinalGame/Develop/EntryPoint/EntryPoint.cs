@@ -19,17 +19,22 @@ namespace FinalGame.Develop.EntryPoint
 
             var projectContainer = new DIContainer();
 
+            ProcessRegistrations(projectContainer);
+
+            projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
+
+            //регистрация глобальных сервисов
+            //аналог Global Context в популярных DI фреймворках
+        }
+
+        private void ProcessRegistrations(DIContainer projectContainer)
+        {
             RegisterResourcesAssetLoader(projectContainer);
             RegisterCoroutinePerformer(projectContainer);
             RegisterLoadingScreen(projectContainer);
             RegisterSceneLoader(projectContainer);
             RegisterSceneSwitcher(projectContainer);
             RegisterSaveLoadService(projectContainer);
-
-            projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
-
-            //регистрация глобальных сервисов
-            //аналог Global Context в популярных DI фреймворках
         }
 
         private void SetupAppSettings()

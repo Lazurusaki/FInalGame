@@ -5,6 +5,7 @@ using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.Infrastructure;
 using FinalGame.Develop.MainMenu.Infrastructure;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace FinalGame.Develop.CommonServices.SceneManagement
@@ -18,7 +19,7 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
         private readonly ILoadingScreen _loadingScreen;
         private readonly ISceneLoader _sceneLoader;
 
-        private DIContainer _currentSceneContainer;
+        private DIContainer _nextSceneContainer;
 
         public SceneSwitcher(DIContainer projectContainer, ICoroutinePerformer coroutinePerformer, ILoadingScreen loadingScreen, ISceneLoader sceneLoader)
         {
@@ -33,19 +34,19 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
         {
             switch (outputSceneArgs)
             {
-                case BootstrapSceneOutputArgs outputBootstrapSceneArgs:
+                case BootstrapSceneOutputArgs bootstrapSceneOutputArgs:
                 {
-                    _coroutinePerformer.StartPerform(ProcessSwitchFromBootstrapScene(outputBootstrapSceneArgs));
+                    _coroutinePerformer.StartPerform(ProcessSwitchFromBootstrapScene(bootstrapSceneOutputArgs));
                     break;
                 }
-                case MainMenuSceneOutputArgs outputMainMenuSceneArgs:
+                case MainMenuSceneOutputArgs mainMenuSceneOutputArgs:
                 {
-                    _coroutinePerformer.StartPerform(ProcessSwitchFromMainMenuScene(outputMainMenuSceneArgs));
+                    _coroutinePerformer.StartPerform(ProcessSwitchFromMainMenuScene(mainMenuSceneOutputArgs));
                     break;
                 }
-                case GameplaySceneOutputArgs outputGameplaySceneArgs:
+                case GameplaySceneOutputArgs gameplaySceneOutputArgs:
                 {
-                    _coroutinePerformer.StartPerform(ProcessSwitchFromGameplayScene(outputGameplaySceneArgs));
+                    _coroutinePerformer.StartPerform(ProcessSwitchFromGameplayScene(gameplaySceneOutputArgs));
                     break;
                 }
                 
@@ -94,6 +95,12 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
                     break;
                 }
                 
+                case GameplaySceneInputArgs gameplaySceneInputArgs:
+                {
+                    yield return ProcessSwitchToGameplayScene(gameplaySceneInputArgs);
+                    break;
+                }
+                
                 default: 
                     throw new ArgumentException(ErrorSceneTransitionMessage);
             }
@@ -111,11 +118,13 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
             if (mainMenuBootstrap == null)
                 throw new NullReferenceException(nameof(mainMenuBootstrap));
 
-            _currentSceneContainer = new DIContainer(_projectContainer);
-
-            yield return mainMenuBootstrap.Run(_currentSceneContainer, mainMenuSceneInputArgs);
+            _nextSceneContainer = new DIContainer(_projectContainer);
+            
+            yield return mainMenuBootstrap.Run(_nextSceneContainer, mainMenuSceneInputArgs);
             
             _loadingScreen.Hide();
+            
+            //mainMenuBootstrap.Runs(_currentSceneContainer, mainMenuSceneInputArgs);
         }
         
         private IEnumerator ProcessSwitchToGameplayScene(GameplaySceneInputArgs gameplaySceneInputArgs)
@@ -130,9 +139,9 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
             if (gameplayBootstrap == null)
                 throw new NullReferenceException(nameof(gameplayBootstrap));
             
-            _currentSceneContainer = new DIContainer(_projectContainer);
+            _nextSceneContainer = new DIContainer(_projectContainer);
 
-            yield return gameplayBootstrap.Run(_currentSceneContainer, gameplaySceneInputArgs);
+            yield return gameplayBootstrap.Run(_nextSceneContainer, gameplaySceneInputArgs);
             
             _loadingScreen.Hide();
         }
