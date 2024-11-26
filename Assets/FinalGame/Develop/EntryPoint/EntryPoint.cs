@@ -4,6 +4,7 @@ using FinalGame.Develop.CommonServices.DataManagement;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
+using FinalGame.Develop.Gameplay;
 using UnityEngine;
 
 namespace FinalGame.Develop.EntryPoint
@@ -79,7 +80,7 @@ namespace FinalGame.Develop.EntryPoint
                     c.Resolve<ICoroutinePerformer>(),
                     c.Resolve<ILoadingScreen>(),
                     c.Resolve<ISceneLoader>()));
-        
+
         private void RegisterSaveLoadService(DIContainer container)
             => container.RegisterAsSingle<ISaveLoadService>(c
                 => new SaveLoadService(new LocalDataRepository(), new JsonSerializer()));

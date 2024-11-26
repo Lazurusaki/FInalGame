@@ -1,6 +1,4 @@
 using System.Collections;
-using FinalGame.Develop.CommonServices.AssetsManagement;
-using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
 using UnityEngine;
@@ -9,37 +7,44 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : MonoBehaviour
     {
-        private const int ValuesCount = 6;
+        private DIContainer _container;
+        private IGameMode _gameMode;
         
         public IEnumerator Run(DIContainer container, GameplaySceneInputArgs sceneInputArgs)
         {
-            Debug.Log($"Gameplay scene, GameMode - {sceneInputArgs.GameMode}");
+            _container = container;
             
-            ProcessRegistrations(container);
+            RegisterGameModeFabric();
+            RegisterConditionFabric();
             
-            Game game = new(container, sceneInputArgs.GameMode, ValuesCount);
+            _gameMode = _container.Resolve<GameModeFabric>().CreateGameMode(sceneInputArgs.GameModeName);
+            
+            RegisterGameModeHandler();
+            
+            ICondition winCondition = _container.Resolve<ConditionFabric>().CreateCondition(EndGameConditions.ValuesGuessed);
+            ICondition looseCondition = _container.Resolve<ConditionFabric>().CreateCondition(EndGameConditions.Mistake);
+            
+            Game game = new(container, winCondition, looseCondition);
 
             yield return new WaitForSeconds(1);
 
-            game.Launch();
+            game.Start();
         }
         
-        private void ProcessRegistrations(DIContainer container)
+        private void RegisterGameModeHandler()
         {
-            RegisterCoroutinePerformer(container);
+            _container.RegisterAsSingle(c => new GameModeHandler(_gameMode));
         }
 
-        private void RegisterCoroutinePerformer(DIContainer container)
+        private void RegisterGameModeFabric()
         {
-            container.RegisterAsSingle<ICoroutinePerformer>(c =>
-            {
-                var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
-                var coroutinePerformerPrefab =
-                    resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths
-                        .CoroutinePerformerPath);
-                
-                return Instantiate(coroutinePerformerPrefab);
-            });
+            _container.RegisterAsSingle(c => new GameModeFabric());
         }
+        
+        private void RegisterConditionFabric()
+        {
+            _container.RegisterAsSingle(c => new ConditionFabric(_container));
+        }
+        
     }
 }

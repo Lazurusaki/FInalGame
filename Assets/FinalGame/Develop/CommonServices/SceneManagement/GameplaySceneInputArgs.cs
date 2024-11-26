@@ -4,8 +4,8 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
 {
     public class GameplaySceneInputArgs : IInputSceneArgs
     {
-        public GameplaySceneInputArgs(GameModes gameMode) => GameMode = gameMode;
-
-        public GameModes GameMode;
+        public readonly GameModes GameModeName;
+        
+        public GameplaySceneInputArgs(GameModes gameModeName) => GameModeName = gameModeName;
     }
 }

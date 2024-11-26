@@ -1,5 +1,6 @@
+using System;
 using System.Collections;
-using FinalGame.Develop.CommonServices.AssetsManagement;
+using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
@@ -10,69 +11,54 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 {
     public class MainMenuBootstrap: MonoBehaviour
     {
+        private readonly string _header = "Main Menu. Please Select Game Mode:";
+
         private DIContainer _container;
-        private ICoroutinePerformer _coroutinePerformer;
+        
+        private readonly List<MenuItem> _menuItems = new()
+        {
+            new MenuItem(GameModes.Numbers.ToString()), 
+            new MenuItem(GameModes.Letters.ToString())
+        };
+        
+        private readonly List<IMenuCommand> _commands = new()
+        {
+            new StartGame(GameModes.Numbers),
+            new StartGame(GameModes.Letters)
+        };
         
         public IEnumerator Run(DIContainer container, MainMenuSceneInputArgs mainMenuSceneInputArgs)
         {
             _container = container;
-            _coroutinePerformer = _container.Resolve<ICoroutinePerformer>();
             
             ProcessRegistrations();
+            InitializeCommands();
+            
+            IMenu mainMenu = new ConsoleMenu(_header, _menuItems);
+            BindCommands(new MenuItemCommandsMap(mainMenu));
             
             yield return new WaitForSeconds(1);
-
-            Launch();
-        }
-
-        private void Launch()
-        {
-            ShowMenuMessage();
             
-            _coroutinePerformer.StartPerform(SelectGameMode());
+            _container.Resolve<ICoroutinePerformer>().StartPerform(mainMenu.Start());
         }
-        
+
+        private void BindCommands(MenuItemCommandsMap map)
+        {
+            if (_menuItems.Count != _commands.Count)
+                throw new InvalidOperationException("Menu items count must be equal commands count");
+            
+            for (var i = 0; i < _menuItems.Count; i++)
+                map.Bind(_menuItems[i], _commands[i]);
+        }
+
         private void ProcessRegistrations()
         {
-           RegisterCoroutinePerformer(_container); 
         }
         
-        private void ShowMenuMessage()
+        private void InitializeCommands()
         {
-            Debug.Log("Main Menu");
-            Debug.Log($"Choose Game mode: 1 - {GameModes.Numbers}, 2 - {GameModes.Letters}");
-        }
-
-        private IEnumerator SelectGameMode()
-        {
-            bool isModeSelected = false;
-            GameModes gameMode = default;
-
-            while (isModeSelected == false)
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    isModeSelected = true;
-                    gameMode = Input.GetKeyDown(KeyCode.Alpha1) ? GameModes.Numbers : GameModes.Letters;
-                }
-
-                yield return null;
-            }
-
-            _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new MainMenuSceneOutputArgs(
-                new GameplaySceneInputArgs(gameMode)));
-        }
-        
-        private void RegisterCoroutinePerformer(DIContainer container)
-        {
-            container.RegisterAsSingle<ICoroutinePerformer>(c =>
-            {
-                var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
-                var coroutinePerformerPrefab =
-                    resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths
-                        .CoroutinePerformerPath);
-                return Instantiate(coroutinePerformerPrefab);
-            });
+            foreach (var command in _commands)
+                command.Initialize(_container);
         }
     }
 }

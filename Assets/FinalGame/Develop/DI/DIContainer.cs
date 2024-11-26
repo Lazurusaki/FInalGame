@@ -1,6 +1,5 @@
-                                                                          using System;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Object = System.Object;
 
 namespace FinalGame.Develop.DI
@@ -21,19 +20,11 @@ namespace FinalGame.Develop.DI
 
         public void RegisterAsSingle<T>(Func<DIContainer, T> factory)
         {
-            if (_container.ContainsKey(typeof(T)))
+            if (FindInContainerHierarchy(typeof(T)))
                 throw new InvalidOperationException($"{typeof(T)} already registered");
 
             var registration = new Registration(container => factory(container));
             _container[typeof(T)] = registration;
-        }
-
-        private T CreateFrom<T>(Registration registration)
-        {
-            if (registration.Instance == null && registration.Factory != null)
-                registration.Instance = registration.Factory(this);
-
-            return (T)registration.Instance;
         }
 
         public T Resolve<T>()
@@ -48,7 +39,7 @@ namespace FinalGame.Develop.DI
                 if (_container.TryGetValue(typeof(T), out var registration))
                     return CreateFrom<T>(registration);
 
-                if (_parent != null)
+                if (_parent is not null)
                     return _parent.Resolve<T>();
             }
             finally
@@ -68,6 +59,22 @@ namespace FinalGame.Develop.DI
             public Func<DIContainer, Object> Factory { get; }
 
             public Object Instance { get; set; }
+        }
+
+        private T CreateFrom<T>(Registration registration)
+        {
+            if (registration.Instance == null && registration.Factory != null)
+                registration.Instance = registration.Factory(this);
+
+            return (T)registration.Instance;
+        }
+
+        private bool FindInContainerHierarchy(Type type)
+        {
+            if (_container.ContainsKey(type))
+                return true;
+
+            return _parent is not null && _parent.FindInContainerHierarchy(type);
         }
     }
 }

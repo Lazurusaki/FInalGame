@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
@@ -11,90 +10,56 @@ namespace FinalGame.Develop.Gameplay
     public class Game
     {
         private const KeyCode ContinueButton = KeyCode.Space;
-        
+
         private readonly DIContainer _container;
-        private readonly GameModes _gameMode;
-        private readonly int _valuesCount;
-        private readonly List<char> _values;
-        
-        public Game(DIContainer container, GameModes gameMode, int valuesCount)
+        private readonly IGameMode _gameMode;
+
+        private readonly ICondition _winCondition;
+        private readonly ICondition _looseCondition;
+
+        public Game(DIContainer container, ICondition winCondition, ICondition looseCondition)
         {
             _container = container;
-            _gameMode = gameMode;
-            _valuesCount = valuesCount;
-            _values = GenerateValues(_gameMode);
+            _gameMode = _container.Resolve<GameModeHandler>().GameMode;
+
+            _winCondition = winCondition;
+            _looseCondition = looseCondition;
         }
         
-        public void Launch()
+        private void OnWin()
         {
-            _container.Resolve<ICoroutinePerformer>().StartPerform(GameLoop());
-        }
-        
-        private List<char> GenerateValues(GameModes gameMode)
-        {
-            switch (gameMode)
+            Stop();
+            ShowWinMessage();
+            ShowReturnToMainMenuMessage();
+
+            HandleGameEnd(() =>
             {
-                case GameModes.Numbers:
-                    return RandomValuesListGenerator.GenerateNumbers(_valuesCount);
-                case GameModes.Letters:
-                    return RandomValuesListGenerator.GenerateLetters(_valuesCount);
-                default:
-                    throw new ArgumentException("Game mode is not exist");
-            }
-        }
-        
-        private IEnumerator GameLoop()
-        {
-            ShowValues(_values);
-
-            bool isFinished = false;
-            GameResults gameResult = default;
-
-            List<char> inputValues = new();
-
-            while (isFinished == false)
-            {
-                foreach (var c in Input.inputString)
-                {
-                    inputValues.Add(char.ToUpper(c));
-
-                    if (inputValues[^1] != _values[inputValues.Count - 1])
-                    {
-                        isFinished = true;
-                        gameResult = GameResults.Loose;
-                    }
-                    else if (inputValues.Count == _values.Count)
-                    {
-                        isFinished = true;
-                        gameResult = GameResults.Win;
-                    }
-                }
-
-                yield return null;
-            }
-
-            _container.Resolve<ICoroutinePerformer>().StartPerform(ProcessGameResult(gameResult));
+                _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
+                    new MainMenuSceneInputArgs()));
+            });
         }
 
-        private IEnumerator ProcessGameResult(GameResults gameResult)
+        private void OnLoose()
         {
-            bool isFinished = false;
+            Stop();
+            ShowLooseMessage();
+            ShowTryAgainMessage();
 
-            switch (gameResult)
+            HandleGameEnd(() =>
             {
-                case GameResults.Win:
-                {
-                    ShowWinMessage();
-                    ShowReturnToMainMenuMessage();
-                    break;
-                }
-                case GameResults.Loose:
-                {
-                    ShowLooseMessage();
-                    ShowTryAgainMessage();
-                    break;
-                }
-            }
+                _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
+                    new GameplaySceneInputArgs(_gameMode.Name)));
+            });
+        }
+
+        private void HandleGameEnd(Action switchSceneAction)
+        {
+            _container.Resolve<ICoroutinePerformer>().StartPerform(WaitForContinue(switchSceneAction));
+        }
+
+        private IEnumerator WaitForContinue(Action onComplete)
+        {
+            var isFinished = false;
 
             while (isFinished == false)
             {
@@ -104,34 +69,7 @@ namespace FinalGame.Develop.Gameplay
                 yield return null;
             }
 
-            ChangeSceneTo(GetNextSceneFromGameResult(gameResult));
-        }
-
-        private SceneID GetNextSceneFromGameResult(GameResults gameResult)
-            => gameResult == GameResults.Win ? SceneID.MainMenu : SceneID.Gameplay;
-
-        private void ChangeSceneTo(SceneID scene)
-        {
-            switch (scene)
-            {
-                case SceneID.MainMenu:
-                {
-                    _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
-                        new MainMenuSceneInputArgs()));
-                    break;
-                }
-                case SceneID.Gameplay:
-                {
-                    _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
-                        new GameplaySceneInputArgs(_gameMode)));
-                    break;
-                }
-            }
-        }
-
-        private void ShowValues(List<char> values)
-        {
-            Debug.Log(string.Join(" ", values));
+            onComplete.Invoke();
         }
 
         private void ShowWinMessage()
@@ -152,6 +90,26 @@ namespace FinalGame.Develop.Gameplay
         private void ShowReturnToMainMenuMessage()
         {
             Debug.Log($"Press {ContinueButton} to return to main menu");
+        }
+        
+        private void Stop()
+        {
+            _winCondition.Completed -= OnWin;
+            _looseCondition.Completed -= OnLoose;
+            _winCondition.Reset();
+            _looseCondition.Reset();
+        }
+        
+        public void Start()
+        {
+            Debug.Log($"GameMode - {_gameMode.Name}");
+
+            _container.Resolve<ICoroutinePerformer>().StartPerform(_gameMode.Start());
+
+            _winCondition.Completed += OnWin;
+            _looseCondition.Completed += OnLoose;
+            _winCondition.Start();
+            _looseCondition.Start();
         }
     }
 }

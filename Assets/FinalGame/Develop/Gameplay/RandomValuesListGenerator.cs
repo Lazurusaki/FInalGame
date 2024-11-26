@@ -1,11 +1,25 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace FinalGame.Develop.Gameplay
 {
     public static class RandomValuesListGenerator
     {
-        public static List<char> GenerateNumbers(int count)
+        public static List<char> Generate(ValueTypes valuesType, int count)
+        {
+            switch (valuesType)
+            {
+                case ValueTypes.Numbers:
+                    return GenerateNumbers(count);
+                case ValueTypes.Letters:
+                    return GenerateLetters(count);
+                default:
+                    throw new ArgumentException("Values type is not exist");
+            }
+        }
+        
+        private static List<char> GenerateNumbers(int count)
         {
             var values = new List<char>();
 
@@ -14,8 +28,8 @@ namespace FinalGame.Develop.Gameplay
 
             return values;
         }
-
-        public static List<char> GenerateLetters(int count)
+        
+        private static List<char> GenerateLetters(int count)
         {
             var values = new List<char>();
 
