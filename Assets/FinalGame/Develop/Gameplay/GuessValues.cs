@@ -13,13 +13,10 @@ namespace FinalGame.Develop.Gameplay
         public event Action Fail;
 
         private readonly List<char> _values;
-
-        public GameModes Name { get; }
         
-        public GuessValues(GameModes gameModeName)
+        public GuessValues(ValueTypes valuesType)
         {
-            Name = gameModeName;
-            _values = RandomValuesListGenerator.Generate(GetValuesTypeFromGameMode(gameModeName), Count);
+            _values = RandomValuesListGenerator.Generate(valuesType, Count);
         }
         
         public IEnumerator Start()
@@ -55,20 +52,6 @@ namespace FinalGame.Develop.Gameplay
         private void ShowValues(List<char> values)
         {
             Debug.Log(string.Join(" ", values));
-        }
-
-        private ValueTypes GetValuesTypeFromGameMode(GameModes gameMode)
-        {
-            switch (gameMode)
-            {
-                case GameModes.Numbers:
-                    return ValueTypes.Numbers;
-                case GameModes.Letters:
-                    return ValueTypes.Letters;
-                
-                default: 
-                        throw new ArgumentException("Unknown game mode");
-            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace FinalGame.Develop.Gameplay
 {
     public interface IGameMode
     {
-        public GameModes Name { get; }
+        //public GameModes Name { get; }
 
         public event Action Success;
         public event Action Fail;

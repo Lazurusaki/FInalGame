@@ -16,6 +16,8 @@ namespace FinalGame.Develop.Gameplay
 
         private readonly ICondition _winCondition;
         private readonly ICondition _looseCondition;
+        
+        public event Action<GameResults> GameOver ;
 
         public Game(DIContainer container, ICondition winCondition, ICondition looseCondition)
         {
@@ -32,11 +34,7 @@ namespace FinalGame.Develop.Gameplay
             ShowWinMessage();
             ShowReturnToMainMenuMessage();
 
-            HandleGameEnd(() =>
-            {
-                _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
-                    new MainMenuSceneInputArgs()));
-            });
+            HandleGameEnd(() => { GameOver?.Invoke(GameResults.Win); });
         }
 
         private void OnLoose()
@@ -45,16 +43,12 @@ namespace FinalGame.Develop.Gameplay
             ShowLooseMessage();
             ShowTryAgainMessage();
 
-            HandleGameEnd(() =>
-            {
-                _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
-                    new GameplaySceneInputArgs(_gameMode.Name)));
-            });
+            HandleGameEnd(() => { GameOver?.Invoke(GameResults.Loose); });
         }
 
-        private void HandleGameEnd(Action switchSceneAction)
+        private void HandleGameEnd(Action endGameAction)
         {
-            _container.Resolve<ICoroutinePerformer>().StartPerform(WaitForContinue(switchSceneAction));
+            _container.Resolve<ICoroutinePerformer>().StartPerform(WaitForContinue(endGameAction));
         }
 
         private IEnumerator WaitForContinue(Action onComplete)
@@ -102,7 +96,7 @@ namespace FinalGame.Develop.Gameplay
         
         public void Start()
         {
-            Debug.Log($"GameMode - {_gameMode.Name}");
+            Debug.Log($"GameMode - {_gameMode}");
 
             _container.Resolve<ICoroutinePerformer>().StartPerform(_gameMode.Start());
 

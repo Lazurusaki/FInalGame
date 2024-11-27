@@ -3,11 +3,11 @@ using FinalGame.Develop.DI;
 
 namespace FinalGame.Develop.Gameplay
 {
-    public class ConditionFabric
+    public class ConditionFactory
     {
         private readonly DIContainer _container;
         
-        public ConditionFabric(DIContainer container) => _container = container;
+        public ConditionFactory(DIContainer container) => _container = container;
 
         public ICondition CreateCondition(EndGameConditions conditionName)
         {
