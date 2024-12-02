@@ -4,7 +4,7 @@ using Object = System.Object;
 
 namespace FinalGame.Develop.DI
 {
-    public class DIContainer
+    public class DIContainer : IDisposable
     {
         private readonly Dictionary<Type, Registration> _container = new();
 
@@ -18,13 +18,15 @@ namespace FinalGame.Develop.DI
 
         public DIContainer(DIContainer parent) => _parent = parent;
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> factory)
+        public Registration RegisterAsSingle<T>(Func<DIContainer, T> factory)
         {
             if (FindInContainerHierarchy(typeof(T)))
                 throw new InvalidOperationException($"{typeof(T)} already registered");
 
             var registration = new Registration(container => factory(container));
             _container[typeof(T)] = registration;
+
+            return registration;
         }
 
         public T Resolve<T>()
@@ -50,17 +52,30 @@ namespace FinalGame.Develop.DI
             throw new InvalidOperationException($"Registration for {typeof(T)} not found");
         }
 
-        public class Registration
+        public void Initialize()
         {
-            public Registration(Object instance) => Instance = instance;
+            foreach (Registration registration in _container.Values)
+            {
+                if (registration.Instance is null && registration.IsNonLazy)
+                    registration.Instance = registration.Factory(this);
 
-            public Registration(Func<DIContainer, Object> factory) => Factory = factory;
-
-            public Func<DIContainer, Object> Factory { get; }
-
-            public Object Instance { get; set; }
+                if (registration.Instance is not null)
+                    if (registration.Instance is IInitializeable initializeable)
+                        initializeable.Initialize();
+            }
         }
-
+        
+        public void Dispose()
+        {
+            foreach (Registration registration in _container.Values)
+            {
+                if (registration.Instance is not null)
+                    if (registration.Instance is IDisposable disposable)
+                     disposable.Dispose();
+                
+            }
+        }
+        
         private T CreateFrom<T>(Registration registration)
         {
             if (registration.Instance == null && registration.Factory != null)
@@ -68,7 +83,7 @@ namespace FinalGame.Develop.DI
 
             return (T)registration.Instance;
         }
-
+        
         private bool FindInContainerHierarchy(Type type)
         {
             if (_container.ContainsKey(type))
@@ -76,5 +91,21 @@ namespace FinalGame.Develop.DI
 
             return _parent is not null && _parent.FindInContainerHierarchy(type);
         }
+        
+        public class Registration
+        {
+            public Func<DIContainer, Object> Factory { get; }
+            
+            public Object Instance { get; set; }
+            public bool IsNonLazy { get; private set; }
+            
+            public Registration(Object instance) => Instance = instance;
+            
+            public Registration(Func<DIContainer, Object> factory) => Factory = factory;
+
+            public void NonLazy() => IsNonLazy = true;
+        }
+
+        
     }
 }

@@ -27,7 +27,6 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
             _coroutinePerformer = coroutinePerformer;
             _loadingScreen = loadingScreen;
             _sceneLoader = sceneLoader;
-            
         }
 
         public void ProcessSwitchSceneFor(IOutputSceneArgs outputSceneArgs)
@@ -109,6 +108,8 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
         private IEnumerator ProcessSwitchToMainMenuScene(MainMenuSceneInputArgs mainMenuSceneInputArgs)
         {
             _loadingScreen.Show();
+            
+            _nextSceneContainer?.Dispose();
 
             yield return _sceneLoader.LoadAsync(SceneID.Empty);
             yield return _sceneLoader.LoadAsync(SceneID.MainMenu);
@@ -130,6 +131,8 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
         private IEnumerator ProcessSwitchToGameplayScene(GameplaySceneInputArgs gameplaySceneInputArgs)
         {
             _loadingScreen.Show();
+            
+            _nextSceneContainer?.Dispose();
 
             yield return _sceneLoader.LoadAsync(SceneID.Empty);
             yield return _sceneLoader.LoadAsync(SceneID.Gameplay);

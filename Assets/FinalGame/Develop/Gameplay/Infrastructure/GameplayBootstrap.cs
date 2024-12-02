@@ -26,6 +26,8 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             
             RegisterGameModeHandler();
             
+            _container.Initialize();
+            
             var winCondition = _container.Resolve<ConditionFactory>().CreateCondition(EndGameConditions.ValuesGuessed);
             var looseCondition = _container.Resolve<ConditionFactory>().CreateCondition(EndGameConditions.Mistake);
             

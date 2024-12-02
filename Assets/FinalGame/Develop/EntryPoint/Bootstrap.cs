@@ -1,4 +1,5 @@
 using System.Collections;
+using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
@@ -17,6 +18,8 @@ namespace FinalGame.Develop.EntryPoint
             var sceneSwitcher = container.Resolve<SceneSwitcher>();
             
             loadingScreen.Show();
+            
+            container.Resolve<PlayerDataProvider>().Load();
             
             yield return new WaitForSeconds(1);
             

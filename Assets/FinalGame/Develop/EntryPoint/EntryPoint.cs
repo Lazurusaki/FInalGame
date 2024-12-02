@@ -1,11 +1,15 @@
+using System.ComponentModel;
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.DataManagement;
+using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
+using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
 using UnityEngine;
+using UnityEngine.Rendering.LookDev;
 
 namespace FinalGame.Develop.EntryPoint
 {
@@ -21,7 +25,7 @@ namespace FinalGame.Develop.EntryPoint
             var projectContainer = new DIContainer();
 
             ProcessRegistrations(projectContainer);
-
+            
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
 
             //регистрация глобальных сервисов
@@ -36,6 +40,10 @@ namespace FinalGame.Develop.EntryPoint
             RegisterSceneLoader(projectContainer);
             RegisterSceneSwitcher(projectContainer);
             RegisterSaveLoadService(projectContainer);
+            RegisterPlayerDataProvider(projectContainer);
+            RegisterWalletService(projectContainer);
+            
+            projectContainer.Initialize();
         }
 
         private void SetupAppSettings()
@@ -84,5 +92,13 @@ namespace FinalGame.Develop.EntryPoint
         private void RegisterSaveLoadService(DIContainer container)
             => container.RegisterAsSingle<ISaveLoadService>(c
                 => new SaveLoadService(new LocalDataRepository(), new JsonSerializer()));
+
+        private void RegisterPlayerDataProvider(DIContainer container)
+            => container.RegisterAsSingle(c 
+                => new PlayerDataProvider(c.Resolve<ISaveLoadService>()));
+
+        private void RegisterWalletService(DIContainer container)
+            => container.RegisterAsSingle(c 
+                => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
     }
 }

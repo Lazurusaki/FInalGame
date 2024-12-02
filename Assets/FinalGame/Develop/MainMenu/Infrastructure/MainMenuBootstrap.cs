@@ -53,6 +53,7 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 
         private void ProcessRegistrations()
         {
+            _container.Initialize();    
         }
         
         private void InitializeCommands()
