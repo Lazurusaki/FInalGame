@@ -6,6 +6,8 @@ using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonServices.Wallet;
+using FinalGame.Develop.Configs.Common.Wallet;
+using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
 using UnityEngine;
@@ -18,32 +20,35 @@ namespace FinalGame.Develop.EntryPoint
     {
         [SerializeField] private Bootstrap _gameBootstrap;
 
+        private DIContainer _projectContainer = new DIContainer();
+        
         private void Awake()
         {
             SetupAppSettings();
-
-            var projectContainer = new DIContainer();
-
-            ProcessRegistrations(projectContainer);
             
-            projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
+            ProcessRegistrations();
+            
+            _projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(_projectContainer));
 
             //регистрация глобальных сервисов
             //аналог Global Context в популярных DI фреймворках
         }
 
-        private void ProcessRegistrations(DIContainer projectContainer)
+        private void ProcessRegistrations()
         {
-            RegisterResourcesAssetLoader(projectContainer);
-            RegisterCoroutinePerformer(projectContainer);
-            RegisterLoadingScreen(projectContainer);
-            RegisterSceneLoader(projectContainer);
-            RegisterSceneSwitcher(projectContainer);
-            RegisterSaveLoadService(projectContainer);
-            RegisterPlayerDataProvider(projectContainer);
-            RegisterWalletService(projectContainer);
             
-            projectContainer.Initialize();
+            
+            RegisterResourcesAssetLoader();
+            RegisterCoroutinePerformer();
+            RegisterLoadingScreen();
+            RegisterSceneLoader();
+            RegisterSceneSwitcher();
+            RegisterSaveLoadService();
+            RegisterPlayerDataProvider();
+            RegisterWalletService();
+            RegisterStartWalletConfig();
+            
+            _projectContainer.Initialize();
         }
 
         private void SetupAppSettings()
@@ -52,14 +57,14 @@ namespace FinalGame.Develop.EntryPoint
             Application.targetFrameRate = 144;
         }
 
-        private void RegisterResourcesAssetLoader(DIContainer container) =>
-            container.RegisterAsSingle(c => new ResourcesAssetLoader());
+        private void RegisterResourcesAssetLoader() =>
+            _projectContainer.RegisterAsSingle(c => new ResourcesAssetLoader());
 
-        private void RegisterCoroutinePerformer(DIContainer container)
+        private void RegisterCoroutinePerformer()
         {
-            container.RegisterAsSingle<ICoroutinePerformer>(c =>
+            _projectContainer.RegisterAsSingle<ICoroutinePerformer>(c =>
             {
-                var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
+                var resourcesAssetLoader = _projectContainer.Resolve<ResourcesAssetLoader>();
                 var coroutinePerformerPrefab =
                     resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths
                         .CoroutinePerformerPath);
@@ -67,38 +72,42 @@ namespace FinalGame.Develop.EntryPoint
             });
         }
 
-        private void RegisterLoadingScreen(DIContainer container)
+        private void RegisterLoadingScreen()
         {
-            container.RegisterAsSingle<ILoadingScreen>(c =>
+            _projectContainer.RegisterAsSingle<ILoadingScreen>(c =>
             {
-                var resourcesAssetLoader = container.Resolve<ResourcesAssetLoader>();
+                var resourcesAssetLoader = _projectContainer.Resolve<ResourcesAssetLoader>();
                 var loadingScreenPrefab =
                     resourcesAssetLoader.LoadResource<LoadingScreen>(InfrastructureAssetPaths.LoadingScreenPath);
                 return Instantiate(loadingScreenPrefab);
             });
         }
 
-        private void RegisterSceneLoader(DIContainer container)
-            => container.RegisterAsSingle<ISceneLoader>(c => new SceneLoader());
+        private void RegisterSceneLoader()
+            => _projectContainer.RegisterAsSingle<ISceneLoader>(c => new SceneLoader());
 
-        private void RegisterSceneSwitcher(DIContainer container)
-            => container.RegisterAsSingle(c
+        private void RegisterSceneSwitcher()
+            => _projectContainer.RegisterAsSingle(c
                 => new SceneSwitcher(
                     c,
                     c.Resolve<ICoroutinePerformer>(),
                     c.Resolve<ILoadingScreen>(),
                     c.Resolve<ISceneLoader>()));
 
-        private void RegisterSaveLoadService(DIContainer container)
-            => container.RegisterAsSingle<ISaveLoadService>(c
+        private void RegisterSaveLoadService()
+            => _projectContainer.RegisterAsSingle<ISaveLoadService>(c
                 => new SaveLoadService(new LocalDataRepository(), new JsonSerializer()));
 
-        private void RegisterPlayerDataProvider(DIContainer container)
-            => container.RegisterAsSingle(c 
-                => new PlayerDataProvider(c.Resolve<ISaveLoadService>()));
+        private void RegisterPlayerDataProvider()
+            => _projectContainer.RegisterAsSingle(c 
+                => new PlayerDataProvider(c.Resolve<ISaveLoadService>(),c.Resolve<ConfigsProviderService>()));
 
-        private void RegisterWalletService(DIContainer container)
-            => container.RegisterAsSingle(c 
+        private void RegisterWalletService()
+            => _projectContainer.RegisterAsSingle(c 
                 => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
+
+        private void RegisterStartWalletConfig()
+            => _projectContainer.RegisterAsSingle(c 
+                => new ConfigsProviderService(c.Resolve<ResourcesAssetLoader>()));
     }
 }

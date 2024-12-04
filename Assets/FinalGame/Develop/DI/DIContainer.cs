@@ -20,7 +20,7 @@ namespace FinalGame.Develop.DI
 
         public Registration RegisterAsSingle<T>(Func<DIContainer, T> factory)
         {
-            if (FindInContainerHierarchy(typeof(T)))
+            if (IsAlreadyRegistered<T>())
                 throw new InvalidOperationException($"{typeof(T)} already registered");
 
             var registration = new Registration(container => factory(container));
@@ -72,7 +72,6 @@ namespace FinalGame.Develop.DI
                 if (registration.Instance is not null)
                     if (registration.Instance is IDisposable disposable)
                      disposable.Dispose();
-                
             }
         }
         
@@ -83,13 +82,13 @@ namespace FinalGame.Develop.DI
 
             return (T)registration.Instance;
         }
-        
-        private bool FindInContainerHierarchy(Type type)
+
+        public bool IsAlreadyRegistered<T>()
         {
-            if (_container.ContainsKey(type))
+            if (_container.ContainsKey(typeof(T)))
                 return true;
 
-            return _parent is not null && _parent.FindInContainerHierarchy(type);
+            return _parent is not null && _parent.IsAlreadyRegistered<T>();
         }
         
         public class Registration

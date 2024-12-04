@@ -1,10 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
+using FinalGame.Develop.CommonServices.Wallet;
+using FinalGame.Develop.CommonUI.Wallet;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
+using FinalGame.Develop.MainMenu.UI;
 using UnityEngine;
 
 namespace FinalGame.Develop.MainMenu.Infrastructure
@@ -53,13 +57,35 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 
         private void ProcessRegistrations()
         {
+            RegisterMainMenuUIRoot();
+            RegisterWalletPresentorFactory();
+            RegisterCurrencyPresentor();
+            
             _container.Initialize();    
         }
-        
+
         private void InitializeCommands()
         {
             foreach (var command in _commands)
                 command.Initialize(_container);
         }
+        
+        private void RegisterMainMenuUIRoot()
+        {
+            _container.RegisterAsSingle( c =>
+            {
+                var mainMenuUIRootPrefab = _container.Resolve<ResourcesAssetLoader>().LoadResource<MainMenuUIRoot>("MainMenu/UI/MainMenuUiRoot");
+                return Instantiate(mainMenuUIRootPrefab);
+            }).NonLazy();
+        }
+
+        private void RegisterWalletPresentorFactory()
+            => _container.RegisterAsSingle(c=> new WalletPresentorFactory(c));
+
+        private void RegisterCurrencyPresentor()
+            => _container.RegisterAsSingle(c =>
+                new WalletPresentorFactory(c).CreateCurrencyPresentor(
+                    c.Resolve<MainMenuUIRoot>()._currencyView,
+                    CurrencyTypes.Gold)).NonLazy();
     }
 }
