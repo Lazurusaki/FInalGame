@@ -1,8 +1,10 @@
+using System;
 using System.ComponentModel;
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.DataManagement;
 using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
+using FinalGame.Develop.CommonServices.LevelsService;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonServices.Wallet;
@@ -36,8 +38,6 @@ namespace FinalGame.Develop.EntryPoint
 
         private void ProcessRegistrations()
         {
-            
-            
             RegisterResourcesAssetLoader();
             RegisterCoroutinePerformer();
             RegisterLoadingScreen();
@@ -47,10 +47,11 @@ namespace FinalGame.Develop.EntryPoint
             RegisterPlayerDataProvider();
             RegisterWalletService();
             RegisterStartWalletConfig();
+            RegisterCompletedLevelsService();
             
             _projectContainer.Initialize();
         }
-
+        
         private void SetupAppSettings()
         {
             QualitySettings.vSyncCount = 0;
@@ -109,5 +110,9 @@ namespace FinalGame.Develop.EntryPoint
         private void RegisterStartWalletConfig()
             => _projectContainer.RegisterAsSingle(c 
                 => new ConfigsProviderService(c.Resolve<ResourcesAssetLoader>()));
+
+        private void RegisterCompletedLevelsService()
+            => _projectContainer.RegisterAsSingle(c
+                => new CompletedLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();
     }
 }

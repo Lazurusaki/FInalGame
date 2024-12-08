@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 
 namespace FinalGame.Develop.CommonUI.Wallet
 {
-    public class CurrencyPresentor : IInitializable, IDisposable
+    public class CurrencyPresenter : IInitializable, IDisposable
     {
         //model link
         private readonly IReadOnlyVariable<int> _currency;
@@ -14,34 +14,36 @@ namespace FinalGame.Develop.CommonUI.Wallet
         private readonly CurrencyIconsConfig _currencyIconsConfig;
 
         //view link
-        private IconWithText _currencyView;
-
-        public CurrencyPresentor(
+        private readonly IconWithText _view;
+        
+        public CurrencyPresenter(
             IReadOnlyVariable<int> currency, 
             CurrencyTypes currencyType, 
-            IconWithText currencyView, 
+            IconWithText view, 
             CurrencyIconsConfig currencyIconsConfig)
         {
             _currency = currency;
             _currencyType = currencyType;
-            _currencyView = currencyView;
+            _view = view;
             _currencyIconsConfig = currencyIconsConfig;
         }
+        
+        public IconWithText View => _view;
 
         public void Initialize()
         {
             UpdateValue(_currency.Value);
-            _currency.Changed += OncurrencyChanged;
-            _currencyView.SetIcon(_currencyIconsConfig.GetSpriteFor(_currencyType));
+            _currency.Changed += OnCurrencyChanged;
+            _view.SetIcon(_currencyIconsConfig.GetSpriteFor(_currencyType));
         }
 
-        private void OncurrencyChanged(int oldValue, int nweValue) => UpdateValue(nweValue);
+        private void OnCurrencyChanged(int oldValue, int nweValue) => UpdateValue(nweValue);
         
         public void Dispose()
         {
-            _currency.Changed -= OncurrencyChanged;
+            _currency.Changed -= OnCurrencyChanged;
         }
 
-        private void UpdateValue(int value) => _currencyView.SetText(value.ToString());
+        private void UpdateValue(int value) => _view.SetText(value.ToString());
     }
 }

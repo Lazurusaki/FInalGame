@@ -51,7 +51,6 @@ namespace FinalGame.Develop.CommonServices.Wallet
                 if (data.WalletData.ContainsKey(currency.Key))
                     data.WalletData[currency.Key] = currency.Value.Value;
             }
-                
         }
     }
 }

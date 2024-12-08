@@ -21,7 +21,8 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
         {
             return new PlayerData
             {
-                WalletData = InitWalletData()
+                WalletData = InitWalletData(),
+                CompletedLevels = new ()
             };
         }
 

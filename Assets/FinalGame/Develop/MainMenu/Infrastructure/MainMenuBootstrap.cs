@@ -15,7 +15,7 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 {
     public class MainMenuBootstrap: MonoBehaviour
     {
-        private readonly string _header = "Main Menu. Please Select Game Mode:";
+        //private readonly string _header = "Main Menu. Please Select Game Mode:";
 
         private DIContainer _container;
         
@@ -36,14 +36,18 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             _container = container;
             
             ProcessRegistrations();
-            InitializeCommands();
+            
+            /*InitializeCommands();
             
             IMenu mainMenu = new ConsoleMenu(_header, _menuItems);
             BindCommands(new MenuItemCommandsMap(mainMenu));
             
-            yield return new WaitForSeconds(1);
+            
             
             _container.Resolve<ICoroutinePerformer>().StartPerform(mainMenu.Start());
+            */
+            
+            yield return new WaitForSeconds(1);
         }
 
         private void BindCommands(MenuItemCommandsMap map)
@@ -57,9 +61,9 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 
         private void ProcessRegistrations()
         {
+            RegisterWalletPresenterFactory();
             RegisterMainMenuUIRoot();
-            RegisterWalletPresentorFactory();
-            RegisterCurrencyPresentor();
+            RegisterWalletPresenter();
             
             _container.Initialize();    
         }
@@ -74,18 +78,17 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
         {
             _container.RegisterAsSingle( c =>
             {
-                var mainMenuUIRootPrefab = _container.Resolve<ResourcesAssetLoader>().LoadResource<MainMenuUIRoot>("MainMenu/UI/MainMenuUiRoot");
+                var mainMenuUIRootPrefab = c.Resolve<ResourcesAssetLoader>().LoadResource<MainMenuUIRoot>("MainMenu/UI/MainMenuUiRoot");
                 return Instantiate(mainMenuUIRootPrefab);
             }).NonLazy();
         }
 
-        private void RegisterWalletPresentorFactory()
-            => _container.RegisterAsSingle(c=> new WalletPresentorFactory(c));
+        private void RegisterWalletPresenterFactory()
+            => _container.RegisterAsSingle(c=> new WalletPresenterFactory(c));
 
-        private void RegisterCurrencyPresentor()
+        private void RegisterWalletPresenter()
             => _container.RegisterAsSingle(c =>
-                new WalletPresentorFactory(c).CreateCurrencyPresentor(
-                    c.Resolve<MainMenuUIRoot>()._currencyView,
-                    CurrencyTypes.Gold)).NonLazy();
+                c.Resolve<WalletPresenterFactory>().CreateWalletPresenter(
+                    c.Resolve<MainMenuUIRoot>().WalletView)).NonLazy();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Object = System.Object;
 
 namespace FinalGame.Develop.DI
@@ -58,6 +59,7 @@ namespace FinalGame.Develop.DI
             {
                 if (registration.Instance is null && registration.IsNonLazy)
                     registration.Instance = registration.Factory(this);
+
 
                 if (registration.Instance is not null)
                     if (registration.Instance is IInitializeable initializeable)
