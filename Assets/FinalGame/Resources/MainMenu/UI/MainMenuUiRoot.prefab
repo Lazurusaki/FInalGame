@@ -1391,6 +1391,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8611411128497875519, guid: e58d750f086795b4facb7f4f1056065d,
+        type: 3}
+      propertyPath: _parent
+      value: 
+      objectReference: {fileID: 5065550918807887745}
+    - target: {fileID: 8611411128497875519, guid: e58d750f086795b4facb7f4f1056065d,
+        type: 3}
+      propertyPath: _iconWithTextPrefab
+      value: 
+      objectReference: {fileID: 6947955917859335911, guid: 525f61cf9df95414292002315b9ee2d6,
+        type: 3}
     - target: {fileID: 8847663758369321485, guid: e58d750f086795b4facb7f4f1056065d,
         type: 3}
       propertyPath: m_Name
@@ -1409,6 +1420,12 @@ PrefabInstance:
 --- !u!224 &806860605880891282 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3633118920961654034, guid: e58d750f086795b4facb7f4f1056065d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4132586036719127168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &5065550918807887745 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 9157391039878698241, guid: e58d750f086795b4facb7f4f1056065d,
     type: 3}
   m_PrefabInstance: {fileID: 4132586036719127168}
   m_PrefabAsset: {fileID: 0}
@@ -1542,6 +1559,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5252619294541403630, guid: 4251c97492a92794baea538bc3fa504b,
+        type: 3}
+      propertyPath: _iconWithTextPrefab
+      value: 
+      objectReference: {fileID: 6947955917859335911, guid: 525f61cf9df95414292002315b9ee2d6,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

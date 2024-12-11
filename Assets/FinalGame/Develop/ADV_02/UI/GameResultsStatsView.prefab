@@ -111,6 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351bf5530ce7b374fa7445e03eeec99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _iconWithTextPrefab: {fileID: 5891237731467390046, guid: 525f61cf9df95414292002315b9ee2d6,
+  _iconWithTextPrefab: {fileID: 6947955917859335911, guid: 525f61cf9df95414292002315b9ee2d6,
     type: 3}
   _parent: {fileID: 9157391039878698241}

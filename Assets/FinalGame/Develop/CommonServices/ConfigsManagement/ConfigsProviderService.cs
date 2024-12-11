@@ -31,10 +31,12 @@ namespace FinalGame.Develop.ConfigsManagement
             LoadStartWalletConfig();
             LoadCurrencyIconsConfig();
             LoadLevelListConfig();
+            
+            //ADV_02
+            LoadGameResultIconsConfig();
+            LoadGameConfig();
         }
-
         
-
         private void LoadStartWalletConfig()
             => StartWalletConfig = _resourcesAssetLoader.LoadResource<StartWalletConfig>("Configs/Common/Wallet/StartWalletConfig");
 
@@ -47,9 +49,9 @@ namespace FinalGame.Develop.ConfigsManagement
                 _resourcesAssetLoader.LoadResource<LevelListConfig>("Configs/Gameplay/Levels/LevelListConfig");
         
         private void LoadGameResultIconsConfig()
-            => GameResultIconsConfig = _resourcesAssetLoader.LoadResource<GameResultIconsConfig>("ADV_02/Configs/GameConfig");
+            => GameResultIconsConfig = _resourcesAssetLoader.LoadResource<GameResultIconsConfig>("Configs/ADV_02/GameResulIconsConfig");
         
         private void LoadGameConfig()
-            => GameConfig = _resourcesAssetLoader.LoadResource<GameConfig>("ADV_02/Configs/GameConfig");
+            => GameConfig = _resourcesAssetLoader.LoadResource<GameConfig>("Configs/ADV_02/GameConfig");
     }
 }

@@ -89,6 +89,8 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
                 new GameplaySceneInputArgs(_sceneInputArgs.GameModeName)));
 
+            
+            
             _walletService.Spend(CurrencyTypes.Gold, _container.Resolve<ConfigsProviderService>().GameConfig.LossPenalty);
         }
 
