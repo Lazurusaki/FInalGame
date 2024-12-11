@@ -15,7 +15,7 @@ namespace FinalGame.Develop.ADV_02
 {
     public class GameResultsStatsService: IDataReader<PlayerData>, IDataWriter<PlayerData>
     {
-        private GameStats _gameStats;
+        private readonly GameStats _gameStats;
         
         public GameResultsStatsService(PlayerDataProvider playerDataProvider)
         {

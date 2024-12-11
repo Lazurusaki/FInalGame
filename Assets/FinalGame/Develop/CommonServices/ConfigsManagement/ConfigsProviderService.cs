@@ -1,3 +1,4 @@
+using FinalGame.Develop.ADV_02.Configs;
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.Configs.Gameplay.Levels;
@@ -18,6 +19,10 @@ namespace FinalGame.Develop.ConfigsManagement
         public CurrencyIconsConfig CurrencyIconsConfig { get; private set; }
         
         public LevelListConfig LevelsListConfig { get; private set; }
+
+        public GameResultIconsConfig GameResultIconsConfig { get; private set; }
+        
+        public GameConfig GameConfig { get; private set; }
         
         public void LoadAll()
         {
@@ -40,5 +45,11 @@ namespace FinalGame.Develop.ConfigsManagement
         private void LoadLevelListConfig()
             => LevelsListConfig =
                 _resourcesAssetLoader.LoadResource<LevelListConfig>("Configs/Gameplay/Levels/LevelListConfig");
+        
+        private void LoadGameResultIconsConfig()
+            => GameResultIconsConfig = _resourcesAssetLoader.LoadResource<GameResultIconsConfig>("ADV_02/Configs/GameConfig");
+        
+        private void LoadGameConfig()
+            => GameConfig = _resourcesAssetLoader.LoadResource<GameConfig>("ADV_02/Configs/GameConfig");
     }
 }

@@ -10,5 +10,13 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
         public Dictionary<CurrencyTypes, int> WalletData;
 
         public List<int> CompletedLevels;
+        
+        public GameStats GameStats;
+    }
+    
+    public struct GameStats
+    {
+        public int Wins; 
+        public int Losses;
     }
 }
