@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using FinalGame.Develop.ADV_02;
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.DataManagement;
@@ -46,11 +45,9 @@ namespace FinalGame.Develop.EntryPoint
             RegisterSceneSwitcher();
             RegisterSaveLoadService();
             RegisterPlayerDataProvider();
-            //RegisterWalletService();
-            RegisterConfigsProviderService();
-            //RegisterCompletedLevelsService();
-            
-            RegisterGameStatsService();
+            RegisterWalletService();
+            RegisterStartWalletConfig();
+            RegisterCompletedLevelsService();
             
             _projectContainer.Initialize();
         }
@@ -110,16 +107,12 @@ namespace FinalGame.Develop.EntryPoint
             => _projectContainer.RegisterAsSingle(c 
                 => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
-        private void RegisterConfigsProviderService()
+        private void RegisterStartWalletConfig()
             => _projectContainer.RegisterAsSingle(c 
                 => new ConfigsProviderService(c.Resolve<ResourcesAssetLoader>()));
 
         private void RegisterCompletedLevelsService()
             => _projectContainer.RegisterAsSingle(c
                 => new CompletedLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();
-
-        private void RegisterGameStatsService()
-            => _projectContainer.RegisterAsSingle(c
-               => new GameResultsStatsService(c.Resolve<PlayerDataProvider>())).NonLazy();
     }
 }

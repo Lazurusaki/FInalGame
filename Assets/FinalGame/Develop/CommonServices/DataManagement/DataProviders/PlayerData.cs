@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FinalGame.Develop.ADV_02;
 using FinalGame.Develop.CommonServices.Wallet;
 
 namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
@@ -13,5 +12,3 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
         public List<int> CompletedLevels;
     }
 }
-
-

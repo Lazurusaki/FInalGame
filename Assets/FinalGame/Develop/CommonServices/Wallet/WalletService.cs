@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.Utils.Reactive;
+using UnityEngine;
 
 namespace FinalGame.Develop.CommonServices.Wallet
 {
@@ -32,7 +33,6 @@ namespace FinalGame.Develop.CommonServices.Wallet
         }
 
         public void Add(CurrencyTypes types, int amount) => _currencies[types].Value += amount;
-        
         public void ReadFrom(PlayerData data)
         {
             foreach (KeyValuePair<CurrencyTypes, int> currency in data.WalletData)
