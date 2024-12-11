@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e1ac6efe932914f8ab490e35f8e1c9, type: 3}
   m_Name: StartWalletConfig
   m_EditorClassIdentifier: 
-  _values:
+  _currencyConfigs:
   - <Type>k__BackingField: 0
     <Value>k__BackingField: 100
-  - <Type>k__BackingField: 1
-    <Value>k__BackingField: 0

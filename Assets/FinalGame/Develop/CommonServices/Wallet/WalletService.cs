@@ -1,25 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.Utils.Reactive;
-using UnityEngine;
 
 namespace FinalGame.Develop.CommonServices.Wallet
 {
-    public class WalletService : IDataReader<PlayerData>, IDataWriter<PlayerData>
+    public class WalletService
     {
         private readonly Dictionary<CurrencyTypes, ReactiveVariable<int>> _currencies = new();
 
+        
         public List<CurrencyTypes> AvailableCurrencies => _currencies.Keys.ToList();
-
+        
         public IReadOnlyVariable<int> GetCurrency(CurrencyTypes types) => _currencies[types];
-
-        public WalletService(PlayerDataProvider playerDataProvider)
-        {
-            playerDataProvider.RegisterWriter(this);
-            playerDataProvider.RegisterReader(this);
-        }
         
         public bool HasEnough(CurrencyTypes types, int amount)
             => _currencies[types].Value >= amount;
@@ -32,7 +25,15 @@ namespace FinalGame.Develop.CommonServices.Wallet
             _currencies[types].Value -= amount;
         }
 
-        public void Add(CurrencyTypes types, int amount) => _currencies[types].Value += amount;
+        public void Add(CurrencyTypes type, int amount)
+        {
+            if (_currencies.ContainsKey(type) == false)
+                _currencies.Add(type, new ReactiveVariable<int>());
+            
+            _currencies[type].Value += amount;
+        }
+        
+        /*
         public void ReadFrom(PlayerData data)
         {
             foreach (KeyValuePair<CurrencyTypes, int> currency in data.WalletData)
@@ -52,5 +53,6 @@ namespace FinalGame.Develop.CommonServices.Wallet
                     data.WalletData[currency.Key] = currency.Value.Value;
             }
         }
+        */
     }
 }

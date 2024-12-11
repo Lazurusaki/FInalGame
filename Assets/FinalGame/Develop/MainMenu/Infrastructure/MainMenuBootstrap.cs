@@ -7,9 +7,12 @@ using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.CommonUI.Wallet;
+using FinalGame.Develop.Configs.Common.Wallet;
+using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
 using FinalGame.Develop.MainMenu.UI;
+using FinalGame.Develop.Utils.Reactive;
 using UnityEngine;
 
 namespace FinalGame.Develop.MainMenu.Infrastructure
@@ -36,8 +39,9 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
         {
             _container = container;
             
-            ProcessRegistrations();
+            LoadWalletStartData();
             
+            ProcessRegistrations();
             InitializeCommands();
             
             IMenu mainMenu = new ConsoleMenu(_header, _menuItems);
@@ -48,6 +52,15 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             _container.Resolve<ICoroutinePerformer>().StartPerform(mainMenu.Start());
         }
 
+        private void LoadWalletStartData()
+        {
+            var walletService = _container.Resolve<WalletService>();
+            var startWalletConfig = _container.Resolve<ConfigsProviderService>().StartWalletConfig;
+
+            foreach (var currency in startWalletConfig.GetCurrencies())
+                walletService.Add(currency, startWalletConfig.getStartValueFor(currency));
+        }
+        
         private void BindCommands(MenuItemCommandsMap map)
         {
             if (_menuItems.Count != _commands.Count)

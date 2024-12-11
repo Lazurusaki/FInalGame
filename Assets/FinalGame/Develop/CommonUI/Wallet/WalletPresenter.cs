@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.DI;
-
+using UnityEngine;
 
 namespace FinalGame.Develop.CommonUI.Wallet
 {

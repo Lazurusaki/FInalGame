@@ -10,7 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2832d72dc99c4474812f317b7682c105, type: 3}
-  m_Name: GameConfig
+  m_Name: GameRewardsConfig
   m_EditorClassIdentifier: 
-  WinRewrd: 100
-  LossPenalty: 100
+  _rewards:
+  - <GameResult>k__BackingField: 0
+    <CurrencyReward>k__BackingField:
+      CurrencyType: 0
+      Value: 100
+  - <GameResult>k__BackingField: 1
+    <CurrencyReward>k__BackingField:
+      CurrencyType: 0
+      Value: 100

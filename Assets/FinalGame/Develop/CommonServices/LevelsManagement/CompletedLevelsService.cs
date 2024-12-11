@@ -29,13 +29,13 @@ namespace FinalGame.Develop.CommonServices.LevelsService
         public void ReadFrom(PlayerData data)
         {
             _completedLevels.Clear();
-            _completedLevels.AddRange(data.CompletedLevels);
+            //_completedLevels.AddRange(data.CompletedLevels);
         }
 
         public void WriteTo(PlayerData data)
         {
-            data.CompletedLevels.Clear();
-            data.CompletedLevels.AddRange(_completedLevels);
+         //   data.CompletedLevels.Clear();
+         // data.CompletedLevels.AddRange(_completedLevels);
         }
     }
 }

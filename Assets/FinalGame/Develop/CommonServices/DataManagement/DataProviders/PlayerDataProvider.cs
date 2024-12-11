@@ -19,11 +19,7 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
 
         protected override PlayerData GetOriginData()
         {
-            return new PlayerData
-            {
-                WalletData = InitWalletData(),
-                CompletedLevels = new ()
-            };
+            return new PlayerData();
         }
 
         private Dictionary<CurrencyTypes, int> InitWalletData()

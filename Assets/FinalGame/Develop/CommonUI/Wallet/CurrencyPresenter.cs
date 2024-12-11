@@ -3,6 +3,7 @@ using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.Utils.Reactive;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace FinalGame.Develop.CommonUI.Wallet
 {
@@ -23,6 +24,7 @@ namespace FinalGame.Develop.CommonUI.Wallet
             CurrencyIconsConfig currencyIconsConfig)
         {
             _currency = currency;
+            Debug.Log(_currency.Value);
             _currencyType = currencyType;
             _view = view;
             _currencyIconsConfig = currencyIconsConfig;

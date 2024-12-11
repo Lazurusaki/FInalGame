@@ -22,7 +22,7 @@ namespace FinalGame.Develop.ConfigsManagement
 
         public GameResultIconsConfig GameResultIconsConfig { get; private set; }
         
-        public GameConfig GameConfig { get; private set; }
+        public GameRewardsConfig GameRewardsConfig { get; private set; }
         
         public void LoadAll()
         {
@@ -52,6 +52,6 @@ namespace FinalGame.Develop.ConfigsManagement
             => GameResultIconsConfig = _resourcesAssetLoader.LoadResource<GameResultIconsConfig>("Configs/ADV_02/GameResulIconsConfig");
         
         private void LoadGameConfig()
-            => GameConfig = _resourcesAssetLoader.LoadResource<GameConfig>("Configs/ADV_02/GameConfig");
+            => GameRewardsConfig = _resourcesAssetLoader.LoadResource<GameRewardsConfig>("Configs/ADV_02/GameRewardsConfig");
     }
 }

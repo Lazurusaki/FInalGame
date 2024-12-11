@@ -20,6 +20,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
         private Game _game;
         private GameResultsStatsService _gameResultsStatsService;
         private WalletService _walletService;
+        private ConfigsProviderService _configsProviderService;
 
         public IEnumerator Run(DIContainer container, GameplaySceneInputArgs sceneInputArgs)
         {
@@ -34,6 +35,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
 
             _gameResultsStatsService = _container.Resolve<GameResultsStatsService>();
             _walletService = _container.Resolve<WalletService>();
+            _configsProviderService = _container.Resolve<ConfigsProviderService>();
 
             RegisterGameModeHandler();
 
@@ -62,36 +64,36 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
         private void UpdatePlayerData(GameResults gameResult)
         {
             _gameResultsStatsService.Add(gameResult);
+
+            var reward = _configsProviderService.GameRewardsConfig.GetReward(gameResult);
             
             switch (gameResult)
             {
                 case GameResults.Win:
-                    HandleWin();
+                    HandleWin(reward);
                     break;
                 case GameResults.Loose:
-                    HandleLoose();
+                    HandleLoose(reward);
                     break;
                 default:
                     throw new ArgumentException($"Unexpected game result - {gameResult}");
             }
         }
         
-        private void HandleWin()
+        private void HandleWin(CurrencyReward reward)
         {
             _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
                 new MainMenuSceneInputArgs()));
 
-            _walletService.Add(CurrencyTypes.Gold, _container.Resolve<ConfigsProviderService>().GameConfig.WinRewrd);
+            _walletService.Add(reward.CurrencyType, reward.Value);
         }
 
-        private void HandleLoose()
+        private void HandleLoose(CurrencyReward reward)
         {
             _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
                 new GameplaySceneInputArgs(_sceneInputArgs.GameModeName)));
-
             
-            
-            _walletService.Spend(CurrencyTypes.Gold, _container.Resolve<ConfigsProviderService>().GameConfig.LossPenalty);
+            _walletService.Spend(reward.CurrencyType, reward.Value);
         }
 
         private void SaveGame()

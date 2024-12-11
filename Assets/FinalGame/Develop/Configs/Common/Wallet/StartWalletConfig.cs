@@ -9,10 +9,13 @@ namespace FinalGame.Develop.Configs.Common.Wallet
     [CreateAssetMenu(menuName = "Configs/Common/Wallet/StartWalletConfig", fileName = "StartWalletConfig")]
     public class StartWalletConfig : ScriptableObject
     {
-        [SerializeField] private List<CurrencyConfig> _values;
+        [SerializeField] private List<CurrencyConfig> _currencyConfigs;
 
+        public List<CurrencyTypes> GetCurrencies()
+            => _currencyConfigs.Select(currency => currency.Type).ToList();
+        
         public int getStartValueFor(CurrencyTypes currencyType) =>
-            _values.First(config => config.Type == currencyType).Value;
+            _currencyConfigs.First(config => config.Type == currencyType).Value;
 
         [Serializable]
         private class CurrencyConfig
@@ -21,5 +24,4 @@ namespace FinalGame.Develop.Configs.Common.Wallet
             [field: SerializeField] public int Value { get; private set; }
         }
     }
-        
 }
