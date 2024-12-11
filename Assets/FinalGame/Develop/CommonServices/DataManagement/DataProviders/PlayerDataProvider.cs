@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.Wallet;
+using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.ConfigsManagement;
 using UnityEngine;
 using CurrencyTypes = FinalGame.Develop.CommonServices.Wallet.CurrencyTypes;
@@ -18,15 +19,18 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
         }
 
         protected override PlayerData GetOriginData()
-        {
-            return new PlayerData();
-        }
-
+            => new PlayerData()
+            {
+                WalletData = InitWalletData(),
+            };
+        
         private Dictionary<CurrencyTypes, int> InitWalletData()
         {
             Dictionary<CurrencyTypes, int> walletData = new();
 
-            foreach (CurrencyTypes currencyType in Enum.GetValues(typeof(CurrencyTypes)))
+            var startWalletConfig = _configsProviderService.StartWalletConfig;
+
+            foreach (CurrencyTypes currencyType in startWalletConfig.GetCurrencies())
                 walletData.Add(currencyType, _configsProviderService.StartWalletConfig.getStartValueFor(currencyType));
 
             return walletData;

@@ -1,14 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.Utils.Reactive;
 
 namespace FinalGame.Develop.CommonServices.Wallet
 {
-    public class WalletService
+    public class WalletService :IDataReader<PlayerData>, IDataWriter<PlayerData>
     {
         private readonly Dictionary<CurrencyTypes, ReactiveVariable<int>> _currencies = new();
 
+        
+        public WalletService(PlayerDataProvider playerDataProvider)
+        {
+            playerDataProvider.RegisterWriter(this);
+            playerDataProvider.RegisterReader(this);
+        }
         
         public List<CurrencyTypes> AvailableCurrencies => _currencies.Keys.ToList();
         
@@ -33,7 +40,7 @@ namespace FinalGame.Develop.CommonServices.Wallet
             _currencies[type].Value += amount;
         }
         
-        /*
+        
         public void ReadFrom(PlayerData data)
         {
             foreach (KeyValuePair<CurrencyTypes, int> currency in data.WalletData)
@@ -53,6 +60,5 @@ namespace FinalGame.Develop.CommonServices.Wallet
                     data.WalletData[currency.Key] = currency.Value.Value;
             }
         }
-        */
     }
 }

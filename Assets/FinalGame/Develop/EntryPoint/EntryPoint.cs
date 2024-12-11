@@ -112,7 +112,7 @@ namespace FinalGame.Develop.EntryPoint
         
         private void RegisterWalletService()
             => _projectContainer.RegisterAsSingle(c
-                => new WalletService()).NonLazy();
+                => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
         private void RegisterCompletedLevelsService()
             => _projectContainer.RegisterAsSingle(c

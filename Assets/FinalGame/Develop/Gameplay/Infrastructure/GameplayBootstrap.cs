@@ -93,7 +93,8 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
                 new GameplaySceneInputArgs(_sceneInputArgs.GameModeName)));
             
-            _walletService.Spend(reward.CurrencyType, reward.Value);
+            if (_walletService.HasEnough(reward.CurrencyType,reward.Value ))
+                _walletService.Spend(reward.CurrencyType, reward.Value);
         }
 
         private void SaveGame()
