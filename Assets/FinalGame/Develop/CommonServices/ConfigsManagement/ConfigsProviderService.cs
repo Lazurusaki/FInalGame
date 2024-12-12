@@ -34,7 +34,7 @@ namespace FinalGame.Develop.ConfigsManagement
             
             //ADV_02
             LoadGameResultIconsConfig();
-            LoadGameConfig();
+            LoadGameRewardsConfig();
         }
         
         private void LoadStartWalletConfig()
@@ -51,7 +51,7 @@ namespace FinalGame.Develop.ConfigsManagement
         private void LoadGameResultIconsConfig()
             => GameResultIconsConfig = _resourcesAssetLoader.LoadResource<GameResultIconsConfig>("Configs/ADV_02/GameResulIconsConfig");
         
-        private void LoadGameConfig()
+        private void LoadGameRewardsConfig()
             => GameRewardsConfig = _resourcesAssetLoader.LoadResource<GameRewardsConfig>("Configs/ADV_02/GameRewardsConfig");
     }
 }
