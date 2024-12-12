@@ -16,8 +16,6 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
     {
         private DIContainer _container;
         
-
-        
         public IEnumerator Run(DIContainer container, MainMenuSceneInputArgs mainMenuSceneInputArgs)
         {
             _container = container;
@@ -42,7 +40,6 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             
             _container.Initialize();    
         }
-        
         
         private void RegisterMainMenuUIRoot()
         {
