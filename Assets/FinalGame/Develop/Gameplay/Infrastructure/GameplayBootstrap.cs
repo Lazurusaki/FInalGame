@@ -110,7 +110,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
         {
             _container.RegisterAsSingle( c =>
             {
-                var gameplayUiRootPrefab = c.Resolve<ResourcesAssetLoader>().LoadResource<GameplayUiRoot>("ADV_02/GameplayUiRoot");
+                var gameplayUiRootPrefab = c.Resolve<ResourcesAssetLoader>().LoadResource<GameplayUiRoot>("CommonUI/ADV_02/GameplayUiRoot");
                 return Instantiate(gameplayUiRootPrefab);
             }).NonLazy();
         }

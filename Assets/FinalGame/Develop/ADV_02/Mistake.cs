@@ -7,9 +7,9 @@ namespace FinalGame.Develop.ADV_02
     {
         public event Action Completed;
     
-        public Mistake(ISequenceGameMode gameModeConsole)
+        public Mistake(ISequenceGameMode gameMode)
         {
-            gameModeConsole.Fail += () => Completed?.Invoke();
+            gameMode.Fail += () => Completed?.Invoke();
         }
     
         public void Start()

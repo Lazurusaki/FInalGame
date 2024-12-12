@@ -18,7 +18,6 @@ namespace FinalGame.Develop.ADV_02
         
         private readonly List<char> _values;
         
-        
         public GuessValues(ValueTypes valuesType)
         {
             _values = RandomValuesListGenerator.Generate(valuesType, Count);

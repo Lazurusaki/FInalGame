@@ -1,10 +1,9 @@
+using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
-using FinalGame.Develop.Gameplay;
 using FinalGame.Develop.MainMenu.UI;
-using Unity.VisualScripting;
 
 namespace FinalGame.Develop.ADV_02
 {
@@ -23,7 +22,6 @@ namespace FinalGame.Develop.ADV_02
             _container.Resolve<MainMenuUIRoot>().ResetStatsButton.onClick.AddListener(ResetStats);
         }
         
-
         public void Dispose()
         {
             _container.Resolve<MainMenuUIRoot>().StartGameButton.onClick.RemoveListener(StartGame);
@@ -40,12 +38,12 @@ namespace FinalGame.Develop.ADV_02
         {
             var wallet = _container.Resolve<WalletService>();
             var resetStatsCurrency = _container.Resolve<ConfigsProviderService>().GameRewardsConfig.GetResetCurrency();
-            var playerStats = _container.Resolve<GameResultsStatsService>();
             
            if (wallet.HasEnough(resetStatsCurrency.CurrencyType, resetStatsCurrency.Value))
            {
                wallet.Spend(resetStatsCurrency.CurrencyType, resetStatsCurrency.Value);
-               playerStats.Reset();
+               _container.Resolve<GameResultsStatsService>().Reset();
+               _container.Resolve<PlayerDataProvider>().Save();
            }
         }
     }

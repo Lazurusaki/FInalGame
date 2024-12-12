@@ -8,7 +8,7 @@ namespace FinalGame.Develop.ConfigsManagement
 {
     public class ConfigsProviderService
     {
-        private ResourcesAssetLoader _resourcesAssetLoader;
+        private readonly ResourcesAssetLoader _resourcesAssetLoader;
 
         public ConfigsProviderService(ResourcesAssetLoader resourcesAssetLoader)
         {

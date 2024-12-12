@@ -16,7 +16,7 @@ MonoBehaviour:
   - <GameResult>k__BackingField: 0
     <Currency>k__BackingField:
       CurrencyType: 0
-      Value: 50
+      Value: 1000
   - <GameResult>k__BackingField: 1
     <Currency>k__BackingField:
       CurrencyType: 0
