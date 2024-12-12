@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
 using FinalGame.Develop.ADV_02;
-using FinalGame.Develop.CommonServices.DataManagement;
+using FinalGame.Develop.ADV_02.UI;
+using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonServices.Wallet;
@@ -15,7 +16,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
     public class GameplayBootstrap : MonoBehaviour
     {
         private DIContainer _container;
-        private IGameMode _gameMode;
+        private ISequenceGameMode _gameMode;
         private GameplaySceneInputArgs _sceneInputArgs;
         private Game _game;
         private GameResultsStatsService _gameResultsStatsService;
@@ -29,10 +30,11 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
 
             RegisterGameModeFactory();
             RegisterConditionFactory();
-            //RegisterGameDataProvider();
-
+            RegisterGameplayUIRoot();
+            RegisterGuessSequencePresenter();
+            RegisterGuessValidatePresenter();
+            
             _gameMode = _container.Resolve<GameModeFactory>().CreateGameMode(sceneInputArgs.GameModeName);
-
             _gameResultsStatsService = _container.Resolve<GameResultsStatsService>();
             _walletService = _container.Resolve<WalletService>();
             _configsProviderService = _container.Resolve<ConfigsProviderService>();
@@ -44,6 +46,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             var winCondition = _container.Resolve<ConditionFactory>().CreateCondition(EndGameConditions.ValuesGuessed);
             var looseCondition = _container.Resolve<ConditionFactory>().CreateCondition(EndGameConditions.Mistake);
 
+
             _game = new Game(container, winCondition, looseCondition);
             _game.GameOver += OnGameOver;
 
@@ -51,6 +54,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
 
             _game.Start();
         }
+        
 
         private void OnGameOver(GameResults gameResult)
         {
@@ -80,27 +84,37 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             }
         }
         
-        private void HandleWin(CurrencyReward reward)
+        private void HandleWin(Currency data)
         {
             _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
                 new MainMenuSceneInputArgs()));
 
-            _walletService.Add(reward.CurrencyType, reward.Value);
+            _walletService.Add(data.CurrencyType, data.Value);
         }
 
-        private void HandleLoose(CurrencyReward reward)
+        private void HandleLoose(Currency data)
         {
             _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new GameplaySceneOutputArgs(
                 new GameplaySceneInputArgs(_sceneInputArgs.GameModeName)));
             
-            if (_walletService.HasEnough(reward.CurrencyType,reward.Value ))
-                _walletService.Spend(reward.CurrencyType, reward.Value);
+            if (_walletService.HasEnough(data.CurrencyType,data.Value ))
+                _walletService.Spend(data.CurrencyType, data.Value);
         }
 
         private void SaveGame()
         {
             _container.Resolve<PlayerDataProvider>().Save();
         }
+        
+        private void RegisterGameplayUIRoot()
+        {
+            _container.RegisterAsSingle( c =>
+            {
+                var gameplayUiRootPrefab = c.Resolve<ResourcesAssetLoader>().LoadResource<GameplayUiRoot>("ADV_02/GameplayUiRoot");
+                return Instantiate(gameplayUiRootPrefab);
+            }).NonLazy();
+        }
+        
         
         private void RegisterGameModeHandler()
         {
@@ -117,10 +131,18 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             _container.RegisterAsSingle(c => new ConditionFactory(_container));
         }
         
-        // private void RegisterGameDataProvider()
-        // {
-        //     _container.RegisterAsSingle(c => new GameDataProvider(
-        //         c.Resolve<SaveLoadService>(), c.Resolve<ConfigsProviderService>()));
-        // }
+        private void RegisterGuessSequencePresenter()
+        {
+            _container.RegisterAsSingle(c => new GuessSequencePresenter(
+                c.Resolve<GameModeHandler>().GameMode,
+                c.Resolve<GameplayUiRoot>().GeneratedSequence)).NonLazy();
+        }
+        
+        private void RegisterGuessValidatePresenter()
+        {
+            _container.RegisterAsSingle(c => new GuessValidatePresenter(
+                c.Resolve<GameModeHandler>().GameMode,
+                c.Resolve<GameplayUiRoot>().GuessValidateView)).NonLazy();
+        }
     }
 }

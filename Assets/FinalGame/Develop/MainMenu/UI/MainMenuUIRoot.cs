@@ -1,5 +1,7 @@
+using FinalGame.Develop.ADV_02.UI;
 using FinalGame.Develop.CommonUI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace FinalGame.Develop.MainMenu.UI
 {
@@ -14,5 +16,9 @@ namespace FinalGame.Develop.MainMenu.UI
         
         //ADV_02
         [field: SerializeField] public IconsWithTextList GameResultsStatsView { get; private set; }
+        [field: SerializeField] public ToggleSwitchWithText GameModeToggle { get; private set; }
+        [field: SerializeField] public Button StartGameButton { get; private set; }
+        
+        [field: SerializeField] public Button ResetStatsButton { get; private set; }
     }
 }

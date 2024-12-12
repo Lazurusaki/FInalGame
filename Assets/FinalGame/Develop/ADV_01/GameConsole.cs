@@ -8,22 +8,22 @@ using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay
 {
-    public class Game
+    public class GameConsole
     {
         private const KeyCode ContinueButton = KeyCode.Space;
 
         private readonly DIContainer _container;
-        private readonly IGameMode _gameMode;
+        private readonly IGameModeConsole _gameModeConsole;
         
         private readonly ICondition _winCondition;
         private readonly ICondition _looseCondition;
         
         public event Action<GameResults> GameOver ;
 
-        public Game(DIContainer container, ICondition winCondition, ICondition looseCondition)
+        public GameConsole(DIContainer container, ICondition winCondition, ICondition looseCondition)
         {
             _container = container;
-            _gameMode = _container.Resolve<GameModeHandler>().GameMode;
+            _gameModeConsole = _container.Resolve<GameModeConsoleHandler>().GameModeConsole;
             
             _winCondition = winCondition;
             _looseCondition = looseCondition;
@@ -97,9 +97,9 @@ namespace FinalGame.Develop.Gameplay
         
         public void Start()
         {
-            Debug.Log($"GameMode - {_gameMode}");
+            Debug.Log($"GameMode - {_gameModeConsole}");
 
-            _container.Resolve<ICoroutinePerformer>().StartPerform(_gameMode.Start());
+            _container.Resolve<ICoroutinePerformer>().StartPerform(_gameModeConsole.Start());
 
             _winCondition.Completed += OnWin;
             _looseCondition.Completed += OnLoose;

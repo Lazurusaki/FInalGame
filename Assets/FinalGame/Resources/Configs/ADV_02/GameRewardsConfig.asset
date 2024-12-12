@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rewards:
   - <GameResult>k__BackingField: 0
-    <CurrencyReward>k__BackingField:
+    <Currency>k__BackingField:
       CurrencyType: 0
-      Value: 100
+      Value: 50
   - <GameResult>k__BackingField: 1
-    <CurrencyReward>k__BackingField:
+    <Currency>k__BackingField:
       CurrencyType: 0
-      Value: 100
+      Value: 50
+  _resetCurrency:
+    CurrencyType: 0
+    Value: 200

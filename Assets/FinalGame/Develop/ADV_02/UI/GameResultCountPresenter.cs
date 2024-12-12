@@ -4,10 +4,8 @@ using FinalGame.Develop.CommonUI;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
 using FinalGame.Develop.Utils.Reactive;
-using Unity.VisualScripting;
-using UnityEngine;
 
-namespace FinalGame.Develop.ADV_02.Prefabs
+namespace FinalGame.Develop.ADV_02.UI
 {
     public class GameResultCountPresenter : IInitializeable, IDisposable
     {

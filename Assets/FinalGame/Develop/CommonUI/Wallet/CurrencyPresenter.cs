@@ -3,7 +3,6 @@ using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.Utils.Reactive;
 using Unity.VisualScripting;
-using UnityEngine;
 
 namespace FinalGame.Develop.CommonUI.Wallet
 {

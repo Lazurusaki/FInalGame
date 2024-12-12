@@ -4,10 +4,8 @@ using Unity.VisualScripting;
 
 namespace FinalGame.Develop.Gameplay
 {
-    public interface IGameMode
+    public interface IGameModeConsole
     {
-        //public GameModes Name { get; }
-
         public event Action Success;
         public event Action Fail;
         

@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using FinalGame.Develop.ADV_02.Prefabs;
 using FinalGame.Develop.CommonUI;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
-using UnityEngine;
 
-namespace FinalGame.Develop.ADV_02
+namespace FinalGame.Develop.ADV_02.UI
 {
     public class GameResultsStatsPresenter : IInitializeable, IDisposable
     {

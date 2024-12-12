@@ -14,7 +14,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/FinalGame/Develop/ADV_02/GameModeSelectPresenter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FinalGame/Develop/ADV_02/Prefabs/GameResultsStatsView.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FinalGame/Develop/ADV_02/UI/GameModeSelectPresenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/FinalGame/Develop/CommonServices/AssetsManagement/InfrastructureAssetPaths.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/FinalGame/Develop/CommonServices/DataManagement/DataProviders/IDataReader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/FinalGame/Develop/CommonServices/DataManagement/DataProviders/IDataWriter.cs" root0="FORCE_HIGHLIGHTING" />

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay
 {
-    public class GuessValues : IGameMode
+    public class GuessValuesConsole : IGameModeConsole
     {
         private const int Count = 6;
         
@@ -14,7 +14,7 @@ namespace FinalGame.Develop.Gameplay
 
         private readonly List<char> _values;
         
-        public GuessValues(ValueTypes valuesType)
+        public GuessValuesConsole(ValueTypes valuesType)
         {
             _values = RandomValuesListGenerator.Generate(valuesType, Count);
         }

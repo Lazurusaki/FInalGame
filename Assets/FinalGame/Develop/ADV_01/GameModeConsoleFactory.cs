@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using FinalGame.Develop.ADV_02;
 
 namespace FinalGame.Develop.Gameplay
 {
-    public class GameModeFactory
+    public class GameModeConsoleFactory
     {
         private readonly Dictionary<GameModes, ValueTypes> _gameModeValueTypes = new ()
         {
@@ -11,21 +12,21 @@ namespace FinalGame.Develop.Gameplay
             { GameModes.Letters, ValueTypes.Letters }
         };
         
-        public IGameMode CreateGameMode(GameModes gameModeName)
+        public IGameModeConsole CreateGameMode(GameModes gameModeName)
         {
-            IGameMode gameMode;
+            IGameModeConsole gameModeConsole;
             
             switch (gameModeName)
             {
                 case GameModes.Numbers:
                 case GameModes.Letters:
-                    gameMode =  new GuessValues(_gameModeValueTypes[gameModeName]);
+                    gameModeConsole =  new GuessValuesConsole(_gameModeValueTypes[gameModeName]);
                     break;
                 
                 default: throw new ArgumentException("Unknown game mode");
             }
 
-            return gameMode;
+            return gameModeConsole;
         }
     }
 }

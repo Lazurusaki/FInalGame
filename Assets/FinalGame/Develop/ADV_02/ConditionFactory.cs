@@ -1,7 +1,8 @@
 using System;
 using FinalGame.Develop.DI;
+using FinalGame.Develop.Gameplay;
 
-namespace FinalGame.Develop.Gameplay
+namespace FinalGame.Develop.ADV_02
 {
     public class ConditionFactory
     {

@@ -1,7 +1,7 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Positions
 {
@@ -15,6 +15,9 @@ namespace FinalGame.Develop.ADV_02.UI
     {
         [SerializeField] private TMP_Text _textLeft;
         [SerializeField] private TMP_Text _textRight;
+        [SerializeField] private Slider _slider;
+
+        public Slider GetSlider => _slider;
         
         public void SetText(Positions position, string text)
         {

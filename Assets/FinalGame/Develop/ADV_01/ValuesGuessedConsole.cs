@@ -2,13 +2,13 @@ using System;
 
 namespace FinalGame.Develop.Gameplay
 {
-    public class ValuesGuessed : ICondition
+    public class ValuesGuessedConsole : ICondition
     {
         public event Action Completed;
 
-        public ValuesGuessed(IGameMode gameMode)
+        public ValuesGuessedConsole(IGameModeConsole gameModeConsole)
         {
-            gameMode.Success += () => Completed?.Invoke();
+            gameModeConsole.Success += () => Completed?.Invoke();
         }
     
         public void Start()

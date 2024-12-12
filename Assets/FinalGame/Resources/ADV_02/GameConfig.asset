@@ -12,5 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2832d72dc99c4474812f317b7682c105, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  WinRewrd: 100
-  LossPenalty: 100
+  _rewards:
+  - <GameResult>k__BackingField: 0
+    <Currency>k__BackingField:
+      CurrencyType: 0
+      Value: 1000
+  - <GameResult>k__BackingField: 1
+    <Currency>k__BackingField:
+      CurrencyType: 0
+      Value: 50
+  _resetCurrency:
+    CurrencyType: 0
+    Value: 200

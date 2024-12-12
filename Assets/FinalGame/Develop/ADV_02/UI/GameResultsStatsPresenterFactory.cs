@@ -1,12 +1,9 @@
-﻿using FinalGame.Develop.ADV_02.Prefabs;
-using FinalGame.Develop.CommonServices.Wallet;
-using FinalGame.Develop.CommonUI;
-using FinalGame.Develop.CommonUI.Wallet;
+﻿using FinalGame.Develop.CommonUI;
 using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
 
-namespace FinalGame.Develop.ADV_02
+namespace FinalGame.Develop.ADV_02.UI
 {
     public class GameResultsStatsPresenterFactory
     {

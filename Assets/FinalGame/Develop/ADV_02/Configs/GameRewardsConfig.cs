@@ -11,15 +11,18 @@ namespace FinalGame.Develop.ADV_02.Configs
     public class GameRewardsConfig : ScriptableObject
     {
         [SerializeField] private List<Reward> _rewards;
+        [SerializeField] private Currency _resetCurrency;
 
-        public CurrencyReward GetReward(GameResults gameResult)
-            => _rewards.First(_rewards => _rewards.GameResult == gameResult).CurrencyReward;
+        public Currency GetReward(GameResults gameResult)
+            => _rewards.First(_rewards => _rewards.GameResult == gameResult).Currency;
+
+        public Currency GetResetCurrency() => _resetCurrency;
 
         [Serializable]
         private class Reward
         {
             [field: SerializeField] public GameResults GameResult { get; private set; }
-            [field: SerializeField] public CurrencyReward CurrencyReward { get; private set; }
+            [field: SerializeField] public Currency Currency { get; private set; }
         }
     }
 }

@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using FinalGame.Develop.ADV_02;
+using FinalGame.Develop.ADV_02.UI;
 using FinalGame.Develop.CommonServices.AssetsManagement;
-using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonUI.Wallet;
 using FinalGame.Develop.DI;
@@ -15,46 +14,19 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 {
     public class MainMenuBootstrap: MonoBehaviour
     {
-        private readonly string _header = "Main Menu. Please Select Game Mode:";
-
         private DIContainer _container;
         
-        private readonly List<MenuItem> _menuItems = new()
-        {
-            new MenuItem(GameModes.Numbers.ToString()), 
-            new MenuItem(GameModes.Letters.ToString())
-        };
-        
-        private readonly List<IMenuCommand> _commands = new()
-        {
-            new StartGame(GameModes.Numbers),
-            new StartGame(GameModes.Letters)
-        };
+
         
         public IEnumerator Run(DIContainer container, MainMenuSceneInputArgs mainMenuSceneInputArgs)
         {
             _container = container;
             
             ProcessRegistrations();
-            InitializeCommands();
             
-            IMenu mainMenu = new ConsoleMenu(_header, _menuItems);
-            BindCommands(new MenuItemCommandsMap(mainMenu));
-            
-            yield return new WaitForSeconds(1);
-            
-            _container.Resolve<ICoroutinePerformer>().StartPerform(mainMenu.Start());
+            yield return new WaitForSeconds(0.1f);
         }
         
-        private void BindCommands(MenuItemCommandsMap map)
-        {
-            if (_menuItems.Count != _commands.Count)
-                throw new InvalidOperationException("Menu items count must be equal commands count");
-            
-            for (var i = 0; i < _menuItems.Count; i++)
-                map.Bind(_menuItems[i], _commands[i]);
-        }
-
         private void ProcessRegistrations()
         {
             RegisterWalletPresenterFactory();
@@ -62,17 +34,15 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             RegisterWalletPresenter();
             
             //ADV_02
+            RegisterMainMenuService();
             RegisterGameResultsStatsPresenterFactory();
             RegisterGameResultsStatsPresenter();
+            RegisterGameModeNameHandler();
+            RegisterGameModeTogglePresenter();
             
             _container.Initialize();    
         }
-
-        private void InitializeCommands()
-        {
-            foreach (var command in _commands)
-                command.Initialize(_container);
-        }
+        
         
         private void RegisterMainMenuUIRoot()
         {
@@ -82,6 +52,9 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
                 return Instantiate(mainMenuUIRootPrefab);
             }).NonLazy();
         }
+
+        private void RegisterMainMenuService()
+            => _container.RegisterAsSingle(c => new ADV_02.MainMenu(_container)).NonLazy();
 
         private void RegisterWalletPresenterFactory()
             => _container.RegisterAsSingle(c=> new WalletPresenterFactory(c));
@@ -98,5 +71,14 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             => _container.RegisterAsSingle(c =>
                 c.Resolve<GameResultsStatsPresenterFactory>().CreateGameResultsStatsPresenter(
                     c.Resolve<MainMenuUIRoot>().GameResultsStatsView)).NonLazy();
+
+        private void RegisterGameModeNameHandler()
+            => _container.RegisterAsSingle(c => new GameModeNameHandler()).NonLazy();
+
+        private void RegisterGameModeTogglePresenter()
+            => _container.RegisterAsSingle(c 
+                => new GameModeTogglePresenter(
+                        c.Resolve<GameModeNameHandler>(),
+                        c.Resolve<MainMenuUIRoot>().GameModeToggle)).NonLazy();
     }
 }
