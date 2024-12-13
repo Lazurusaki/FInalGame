@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49118d7013e340b392e7fac6c512aad9, type: 3}
+  m_Name: GameModesConfig
+  m_EditorClassIdentifier: 
+  _gameModeConfigs:
+  - GameMode: 0
+    SymbolsCount: 4
+    Symbols: 3000310032003300340035003600370038003900
+  - GameMode: 1
+    SymbolsCount: 4
+    Symbols: 410042004300

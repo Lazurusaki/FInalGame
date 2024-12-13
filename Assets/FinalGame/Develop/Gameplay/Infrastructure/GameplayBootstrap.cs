@@ -34,7 +34,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             RegisterGuessSequencePresenter();
             RegisterGuessValidatePresenter();
             
-            _gameMode = _container.Resolve<GameModeFactory>().CreateGameMode(sceneInputArgs.GameModeName);
+            _gameMode = _container.Resolve<GameModeFactory>().CreateGameMode(container, sceneInputArgs.GameModeName);
             _gameResultsStatsService = _container.Resolve<GameResultsStatsService>();
             _walletService = _container.Resolve<WalletService>();
             _configsProviderService = _container.Resolve<ConfigsProviderService>();

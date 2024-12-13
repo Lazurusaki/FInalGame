@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using FinalGame.Develop.ConfigsManagement;
+using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
 
 namespace FinalGame.Develop.ADV_02
@@ -12,7 +14,7 @@ namespace FinalGame.Develop.ADV_02
             { GameModes.Letters, ValueTypes.Letters }
         };
         
-        public ISequenceGameMode CreateGameMode(GameModes gameModeName)
+        public ISequenceGameMode CreateGameMode(DIContainer container, GameModes gameModeName)
         {
             ISequenceGameMode sequenceGameMode;
             
@@ -20,7 +22,10 @@ namespace FinalGame.Develop.ADV_02
             {
                 case GameModes.Numbers:
                 case GameModes.Letters:
-                    sequenceGameMode =  new GuessValues(_gameModeValueTypes[gameModeName]);
+                    sequenceGameMode =  new GuessValues(
+                        container.Resolve<ConfigsProviderService>().GameModesConfig.GetSymbolsFor(gameModeName),
+                        container.Resolve<ConfigsProviderService>().GameModesConfig.GetSymbolsCount(gameModeName)
+                        );
                     break;
                 
                 default: throw new ArgumentException("Unknown game mode");

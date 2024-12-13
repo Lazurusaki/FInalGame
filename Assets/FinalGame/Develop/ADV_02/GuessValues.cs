@@ -11,16 +11,14 @@ namespace FinalGame.Develop.ADV_02
 {
     public class GuessValues : ISequenceGameMode
     {
-        private const int Count = 6;
-        
         public event Action Success;
         public event Action Fail;
         
         private readonly List<char> _values;
         
-        public GuessValues(ValueTypes valuesType)
+        public GuessValues(List<Char> symbols, int count)
         {
-            _values = RandomValuesListGenerator.Generate(valuesType, Count);
+            _values = RandomValuesListGenerator.GenerateFrom(symbols, count);
         }
         
         public string GetSequence()

@@ -24,6 +24,8 @@ namespace FinalGame.Develop.ConfigsManagement
         
         public GameRewardsConfig GameRewardsConfig { get; private set; }
         
+        public GameModesConfig GameModesConfig { get; private set; }
+        
         public void LoadAll()
         {
             //add configs here
@@ -35,6 +37,7 @@ namespace FinalGame.Develop.ConfigsManagement
             //ADV_02
             LoadGameResultIconsConfig();
             LoadGameRewardsConfig();
+            LoadGameModesConfig();
         }
         
         private void LoadStartWalletConfig()
@@ -53,5 +56,9 @@ namespace FinalGame.Develop.ConfigsManagement
         
         private void LoadGameRewardsConfig()
             => GameRewardsConfig = _resourcesAssetLoader.LoadResource<GameRewardsConfig>("Configs/ADV_02/GameRewardsConfig");
+
+        private void LoadGameModesConfig()
+            => GameModesConfig = _resourcesAssetLoader.LoadResource<GameModesConfig>("Configs/ADV_02/GameModesConfig");
+
     }
 }

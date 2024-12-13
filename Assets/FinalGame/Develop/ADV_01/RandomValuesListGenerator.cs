@@ -6,6 +6,16 @@ namespace FinalGame.Develop.Gameplay
 {
     public static class RandomValuesListGenerator
     {
+        public static List<char> GenerateFrom(List<char> symbols, int count)
+        {
+            var values = new List<char>();
+
+            for (var i = 0; i < count; i++)
+                values.Add(symbols[Random.Range(0, symbols.Count)]);
+
+            return values;
+        }
+        
         public static List<char> Generate(ValueTypes valuesType, int count)
         {
             switch (valuesType)
