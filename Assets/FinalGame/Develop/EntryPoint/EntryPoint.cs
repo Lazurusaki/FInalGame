@@ -46,7 +46,7 @@ namespace FinalGame.Develop.EntryPoint
             RegisterSaveLoadService();
             RegisterPlayerDataProvider();
             RegisterWalletService();
-            RegisterStartWalletConfig();
+            RegisterConfigsProvider();
             RegisterCompletedLevelsService();
             
             _projectContainer.Initialize();
@@ -107,7 +107,7 @@ namespace FinalGame.Develop.EntryPoint
             => _projectContainer.RegisterAsSingle(c 
                 => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
-        private void RegisterStartWalletConfig()
+        private void RegisterConfigsProvider()
             => _projectContainer.RegisterAsSingle(c 
                 => new ConfigsProviderService(c.Resolve<ResourcesAssetLoader>()));
 

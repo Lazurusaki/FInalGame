@@ -7,6 +7,8 @@ namespace FinalGame.Develop.MainMenu.UI
     {
         [field: SerializeField] public IconsWithTextList WalletView { get; private set; }
         
+        [field: SerializeField] public ActionButton OpenLevelsMenuButton { get; private set; }
+        
         [field: SerializeField] public Transform HUDLayer { get; private set; }
         [field: SerializeField] public Transform PopupsLayer { get; private set; }
         [field: SerializeField] public Transform VFXLayer { get; private set; }

@@ -8,6 +8,7 @@ using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.CommonUI.Wallet;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay;
+using FinalGame.Develop.MainMenu.Features.LevelsMenu.LevelsMenuPopup;
 using FinalGame.Develop.MainMenu.UI;
 using UnityEngine;
 
@@ -18,20 +19,31 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 
         private DIContainer _container;
         
-        
         public IEnumerator Run(DIContainer container, MainMenuSceneInputArgs mainMenuSceneInputArgs)
         {
             _container = container;
             
             ProcessRegistrations();
             
+            InitializeUI();
             
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        private void InitializeUI()
+        {
+            var mainMenuUIRoot = _container.Resolve<MainMenuUIRoot>();
+            
+            mainMenuUIRoot.OpenLevelsMenuButton.Initialize(() =>
+            {
+                var levelsMenuPopupPresenter = _container.Resolve<LevelsMenuPopupFactory>().CreateLevelsMenuPopupPresenter();
+                levelsMenuPopupPresenter.Enable();
+            });
         }
         
-
         private void ProcessRegistrations()
         {
+            RegisterLevelsMenuPopupFactory();
             RegisterWalletPresenterFactory();
             RegisterMainMenuUIRoot();
             RegisterWalletPresenter();
@@ -55,5 +67,8 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             => _container.RegisterAsSingle(c =>
                 c.Resolve<WalletPresenterFactory>().CreateWalletPresenter(
                     c.Resolve<MainMenuUIRoot>().WalletView)).NonLazy();
+
+        private void RegisterLevelsMenuPopupFactory()
+            => _container.RegisterAsSingle(c => new LevelsMenuPopupFactory(c));
     }
 }
