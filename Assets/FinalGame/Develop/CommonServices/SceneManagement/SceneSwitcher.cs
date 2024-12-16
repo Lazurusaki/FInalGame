@@ -5,6 +5,7 @@ using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.Infrastructure;
 using FinalGame.Develop.MainMenu.Infrastructure;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -61,6 +62,11 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
                 case MainMenuSceneInputArgs mainMenuInputSceneArgs:
                 {
                     yield return ProcessSwitchToMainMenuScene(mainMenuInputSceneArgs);
+                    break;
+                }
+                case GameplaySceneInputArgs gameplaySceneInputArgs:
+                {
+                    yield return ProcessSwitchToGameplayScene(gameplaySceneInputArgs);
                     break;
                 }
                 

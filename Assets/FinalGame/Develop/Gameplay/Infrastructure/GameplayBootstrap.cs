@@ -1,24 +1,38 @@
 using System.Collections;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
+using FinalGame.Develop.Gameplay.Entities;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : MonoBehaviour
     {
+        [SerializeField] private GameplayTest _gameplayTest;
+        
         private DIContainer _container;
-        private GameplaySceneInputArgs _sceneInputArgs;
         
         public IEnumerator Run(DIContainer container, GameplaySceneInputArgs sceneInputArgs)
         {
             _container = container;
-            _sceneInputArgs = sceneInputArgs;
+
+            ProcessRegistrations();
             
             _container.Initialize();
             
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
             
+            _gameplayTest.StartProcess(container);
+        }
+
+        private void ProcessRegistrations()
+        {
+            RegisterEntityFactory();
+        }
+
+        private void RegisterEntityFactory()
+        {
+            _container.RegisterAsSingle(c => new EntityFactory(c));
         }
     }
 }

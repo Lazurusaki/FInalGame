@@ -23,11 +23,11 @@ namespace FinalGame.Develop.EntryPoint
             container.Resolve<ConfigsProviderService>().LoadAll();
             container.Resolve<PlayerDataProvider>().Load();
             
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
             
             loadingScreen.Hide();
 
-            sceneSwitcher.ProcessSwitchSceneFor(new BootstrapSceneOutputArgs(new MainMenuSceneInputArgs()));
+            sceneSwitcher.ProcessSwitchSceneFor(new BootstrapSceneOutputArgs(new GameplaySceneInputArgs(1)));
 
             //конец инициализации игры
             //запуск игры

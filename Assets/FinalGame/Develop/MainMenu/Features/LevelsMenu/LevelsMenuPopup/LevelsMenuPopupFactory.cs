@@ -10,6 +10,8 @@ namespace FinalGame.Develop.MainMenu.Features.LevelsMenu.LevelsMenuPopup
 {
     public class LevelsMenuPopupFactory
     {
+        public const string LevelsMenuPopupViewPrefabPath = "MainMenu/UI/LevelsPopupMenu/LevelsMenuPopupView";
+        
         private readonly DIContainer _container;
         private readonly ResourcesAssetLoader _resourcesAssetLoader;
         private readonly MainMenuUIRoot _mainMenuUiRoot;
@@ -38,11 +40,10 @@ namespace FinalGame.Develop.MainMenu.Features.LevelsMenu.LevelsMenuPopup
 
         public LevelsMenuPopupPresenter CreateLevelsMenuPopupPresenter()
         {
-            LevelsMenuPopupView levelsMenuPopupViewPrefab =
-                _resourcesAssetLoader.LoadResource<LevelsMenuPopupView>(
-                    "MainMenu/UI/LevelsPopupMenu/LevelsMenuPopupView");
+            var levelsMenuPopupViewPrefab =
+                _resourcesAssetLoader.LoadResource<LevelsMenuPopupView>(LevelsMenuPopupViewPrefabPath);
 
-            LevelsMenuPopupView levelsMenuPopupView =
+            var levelsMenuPopupView =
                 Object.Instantiate(levelsMenuPopupViewPrefab, _mainMenuUiRoot.PopupsLayer);
             
             return new LevelsMenuPopupPresenter(this, levelsMenuPopupView);
