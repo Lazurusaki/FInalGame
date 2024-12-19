@@ -24,7 +24,7 @@ namespace FinalGame.Develop.DI
             if (IsAlreadyRegistered<T>())
                 throw new InvalidOperationException($"{typeof(T)} already registered");
 
-            var registration = new Registration(container => factory(container));
+            var registration = new Registration(container => factory.Invoke(container));
             _container[typeof(T)] = registration;
 
             return registration;

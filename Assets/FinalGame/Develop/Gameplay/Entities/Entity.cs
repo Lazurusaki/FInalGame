@@ -7,6 +7,9 @@ namespace FinalGame.Develop.Gameplay.Entities
 {
     public class Entity : MonoBehaviour
     {
+        public event Action<Entity> Initialized;
+        public event Action<Entity> Disposed;
+        
         private readonly Dictionary<EntityValues, object> _values = new();
 
         private readonly HashSet<IEntityBehavior> _behaviors = new();
@@ -37,6 +40,8 @@ namespace FinalGame.Develop.Gameplay.Entities
                 initializable.OnInit(this);
 
             _isInitialized = true;
+            
+            Initialized?.Invoke(this);
         }
         
         private void Update()
@@ -52,6 +57,8 @@ namespace FinalGame.Develop.Gameplay.Entities
         {
             foreach (var disposable in _disposables)
                 disposable.OnDispose();
+            
+            Disposed?.Invoke(this);
         }
 
         public Entity AddValue<TValue>(EntityValues valueType, TValue value)

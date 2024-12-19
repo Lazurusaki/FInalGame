@@ -14,6 +14,7 @@ namespace FinalGame.Develop.Gameplay
         {
             _container = container;
             _ghost = _container.Resolve<EntityFactory>().CreateEntity(Vector3.zero);
+            _container.Resolve<EntityFactory>().CreateEntity(Vector3.zero + Vector3.forward * 3);
         }
 
         private void Update()
@@ -24,6 +25,11 @@ namespace FinalGame.Develop.Gameplay
             {
                 _ghost.GetMoveDirection().Value = input;
                 _ghost.GetRotationDirection().Value = input;
+                
+                if (Input.GetKeyDown(KeyCode.E) && _ghost.TryGetTakeDamageRequest(out var takeDamageRequest))
+                {
+                    takeDamageRequest.Invoke(50);
+                }
             }
         }
     }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FinalGame.Develop.Gameplay.AI.Sensors;
+using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
 using UnityEditor;
 using UnityEngine;
@@ -14,12 +16,30 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
         {
             {EntityValues.MoveSpeed, typeof(ReactiveVariable<float>) },
             {EntityValues.MoveDirection, typeof(ReactiveVariable<Vector3>) },
+            {EntityValues.MoveCondition, typeof(ICompositeCondition) },
+            {EntityValues.IsMoving, typeof(ReactiveVariable<bool>) },
             
             {EntityValues.RotationSpeed, typeof(ReactiveVariable<float>) },
             {EntityValues.RotationDirection, typeof(ReactiveVariable<Vector3>) },
+            {EntityValues.RotationCondition, typeof(ICompositeCondition) },
+            
+            {EntityValues.SelfTriggerDamage, typeof(ReactiveVariable<float>) },
+            {EntityValues.SelfTriggerReceiver, typeof(TriggerReceiver) },
             
             {EntityValues.CharacterController, typeof(CharacterController) },
-            {EntityValues.Transform, typeof(Transform) }
+            {EntityValues.Transform, typeof(Transform) },
+            
+            {EntityValues.Health, typeof(ReactiveVariable<float>) },
+            {EntityValues.MaxHealth , typeof(ReactiveVariable<float>)},
+            
+            {EntityValues.TakeDamageRequest , typeof(ReactiveEvent<float>)},
+            {EntityValues.TakeDamageEvent , typeof(ReactiveEvent<float>)},
+            {EntityValues.TakeDamageCondition , typeof(ICompositeCondition)},
+            
+            { EntityValues.IsDead , typeof(ReactiveVariable<bool>)},
+            { EntityValues.IsDeathProcess , typeof(ReactiveVariable<bool>)},
+            { EntityValues.DeathCondition , typeof(ICompositeCondition)},
+            { EntityValues.SelfDestroyCondition , typeof(ICompositeCondition)}
         };
         
         [InitializeOnLoadMethod]
