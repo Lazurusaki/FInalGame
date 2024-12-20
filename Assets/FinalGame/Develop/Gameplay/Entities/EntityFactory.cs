@@ -4,9 +4,11 @@ using FinalGame.Develop.Gameplay.Features.Damage;
 using FinalGame.Develop.Gameplay.Features.Death;
 using FinalGame.Develop.Gameplay.Features.Energy;
 using FinalGame.Develop.Gameplay.Features.Movement;
+using FinalGame.Develop.Gameplay.Features.Skills;
 using FinalGame.Develop.Gameplay.Features.Teleport;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Entities
@@ -100,13 +102,14 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddSpendEnergyEvent()
                 .AddRestoreEnergyCooldown(new ReactiveVariable<float>(1))
                 .AddRadiusAttackDamage(new ReactiveVariable<float>(30))
-                .AddRadiusAttackRadius(new ReactiveVariable<float>(3))
+                .AddRadiusAttackRadius(new ReactiveVariable<float>(4))
                 .AddRadiusAttackTrigger()
                 .AddTeleportRadius(new ReactiveVariable<float>(5))
-                .AddTeleportEnergyCost(new ReactiveVariable<float>(50))
+                .AddTeleportEnergyCost(new ReactiveVariable<float>(20))
                 .AddTeleportTrigger()
                 .AddTeleportStartEvent()
                 .AddTeleportEndEvent()
+                .AddRadialAttackTeleportTrigger()
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddIsDead()
@@ -126,6 +129,9 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .Add(new FuncCondition(() => instance.GetIsDead().Value == false))
                 .Add(new FuncCondition(() => instance.GetEnergy().Value >= instance.GetTeleportEnergyCost().Value));
             
+            ICompositeCondition radiusAttackCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+            
             ICompositeCondition restoreEnergyCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => instance.GetIsDead().Value == false))
                 .Add(new FuncCondition(() => instance.GetEnergy().Value < instance.GetMaxEnergy().Value));
@@ -135,6 +141,7 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddTakeDamageCondition(takeDamageCondition)
                 .AddSelfDestroyCondition(selfDestroyCondition)
                 .AddTeleportCondition(teleportCondition)
+                .AddRadiusAttackCondition(radiusAttackCondition)
                 .AddRestoreEnergyCondition(restoreEnergyCondition);
 
             instance
@@ -142,11 +149,12 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddBehavior(new ApplyDamageFilterBehavior())
                 .AddBehavior(new ApplyDamageBehavior())
                 .AddBehavior(new SelfDestroyBehavior())
+                .AddBehavior(new RadialAttackTeleportBehavior())
                 .AddBehavior(new TeleportBehavior())
+                .AddBehavior(new DealRadiusDamageBehavior())
                 .AddBehavior(new SpendEnergyFilterBehavior())
                 .AddBehavior(new SpendEnergyBehavior())
-                .AddBehavior(new GradualRestoreEnergyBehavior())
-                .AddBehavior(new DealRadiusDamageBehavior());
+                .AddBehavior(new GradualRestoreEnergyBehavior());
             
             instance.Initialize();
             

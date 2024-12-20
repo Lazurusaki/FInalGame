@@ -17,9 +17,11 @@ namespace FinalGame.Develop.Gameplay
         public void StartProcess(DIContainer container)
         {
             _container = container;
-            _ghost = _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero);
-            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * -3);
-            _shifter = _container.Resolve<EntityFactory>().CreateShifter(Vector3.zero + Vector3.forward * 3);
+            _ghost = _container.Resolve<EntityFactory>().CreateGhost(Vector3.forward * 5);
+            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * -5);
+            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.right * -5);
+            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.right * 5);
+            _shifter = _container.Resolve<EntityFactory>().CreateShifter(Vector3.zero + Vector3.zero);
         }
 
         private void Update()
@@ -52,12 +54,8 @@ namespace FinalGame.Develop.Gameplay
 
         private void ProcessShifter()
         {
-            if (Input.GetKeyDown(KeyCode.T) && _shifter.TryGetSpendEnergyRequest(out var spendEnergyRequest))
-            {
-                _shifter.GetTeleportTrigger().Invoke();
-                spendEnergyRequest.Invoke(10);
-                _shifter.GetRadiusAttackTrigger().Invoke();
-            }
+            if (Input.GetKeyDown(KeyCode.T))
+                _shifter.GetRadialAttackTeleportTrigger().Invoke();
         }
 
         private void ProcessPlayerInput()

@@ -32,6 +32,7 @@
         RadiusAttackDamage,
         RadiusAttackRadius,
         RadiusAttackTrigger,
+        RadiusAttackCondition,
         
         TeleportRadius,
         TeleportEnergyCost,
@@ -39,6 +40,8 @@
         TeleportTrigger,
         TeleportStartEvent,
         TeleportEndEvent,
+        
+        RadialAttackTeleportTrigger,
         
         TakeDamageRequest,
         TakeDamageEvent,

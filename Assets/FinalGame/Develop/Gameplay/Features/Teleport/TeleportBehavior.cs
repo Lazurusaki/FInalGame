@@ -14,7 +14,9 @@ namespace FinalGame.Develop.Gameplay.Features.Teleport
         private Transform _transform;
         private ReactiveEvent _teleportTrigger;
         private IReadOnlyVariable<float> _radius;
+        private IReadOnlyVariable<float> _energyCost;
         
+        private ReactiveEvent<float> _spendEnergyEvent;
         private ReactiveEvent _teleportStartEvent;
         private ReactiveEvent _teleportEndEvent;
         
@@ -24,6 +26,8 @@ namespace FinalGame.Develop.Gameplay.Features.Teleport
         {
             _condition = entity.GetTeleportCondition();
             _radius = entity.GetTeleportRadius();
+            _energyCost = entity.GetTeleportEnergyCost();
+            _spendEnergyEvent = entity.GetSpendEnergyEvent();
             _transform = entity.GetTransform();
             _teleportTrigger = entity.GetTeleportTrigger();
             _teleportStartEvent = entity.GetTeleportStartEvent();
@@ -31,20 +35,21 @@ namespace FinalGame.Develop.Gameplay.Features.Teleport
 
             _teleportTriggerDispose = _teleportTrigger.Subscribe(OnTeleportTrigger);
         }
+        
+        public void OnDispose()
+        {
+            _teleportTriggerDispose.Dispose();
+        }
 
         private void OnTeleportTrigger()
         {
             if (_condition.Evaluate() == false) 
                 return;
             
+            _spendEnergyEvent.Invoke(_energyCost.Value);
             _teleportStartEvent?.Invoke();
             _transform.position = GenerateRandomPoint();
             _teleportEndEvent?.Invoke();
-        }
-        
-        public void OnDispose()
-        {
-            _teleportTriggerDispose.Dispose();
         }
         
         private Vector3 GenerateRandomPoint()

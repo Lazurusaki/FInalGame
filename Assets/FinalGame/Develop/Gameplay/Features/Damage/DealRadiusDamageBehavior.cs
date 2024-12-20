@@ -12,44 +12,44 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
         private IReadOnlyVariable<float> _radius;
         private IReadOnlyVariable<float> _damage;
         private ReactiveEvent _radiusAttackTrigger;
-        private Vector3 _originPosition;
+        private Transform _originTransform;
         private Entity _self;
 
-        private IDisposable _disposableTriggerEnterEvent;
+        private IDisposable _disposableAttackTriggerEvent;
 
         public void OnInit(Entity entity)
         {
             _radius = entity.GetRadiusAttackRadius();
             _damage = entity.GetRadiusAttackDamage();
             _radiusAttackTrigger = entity.GetRadiusAttackTrigger();
-            _originPosition = entity.GetTransform().position;
+            _originTransform = entity.GetTransform();
             _self = entity;
 
-            _disposableTriggerEnterEvent = _radiusAttackTrigger.Subscribe(OnRadiusAttackTrigger);
+            _disposableAttackTriggerEvent = _radiusAttackTrigger.Subscribe(OnRadiusAttackTrigger);
         }
 
         private void OnRadiusAttackTrigger()
         {
-            Collider[] colliders = Physics.OverlapSphere(_originPosition, _radius.Value);
+            Collider[] colliders = Physics.OverlapSphere(_originTransform.position, _radius.Value);
 
             foreach (var collider in colliders)
             {
                 var otherEntity = collider.GetComponentInParent<Entity>();
                 
-                if (otherEntity is not null)
-                {
-                    if (otherEntity == _self)
+                if (otherEntity is null)
+                    continue;
+                
+                if (otherEntity == _self)
                         continue;
-                    
-                    Debug.Log("Radial Damage");
-                    otherEntity.TryTakeDamage(_damage.Value);
-                }
+                
+                Debug.Log("Radial Damage"); 
+                otherEntity.TryTakeDamage(_damage.Value);
             }
         }
 
         public void OnDispose()
         {
-            _disposableTriggerEnterEvent.Dispose();
+            _disposableAttackTriggerEvent.Dispose();
         }
     }
 }

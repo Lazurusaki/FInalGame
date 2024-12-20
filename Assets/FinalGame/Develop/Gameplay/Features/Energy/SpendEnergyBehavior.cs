@@ -19,7 +19,7 @@ namespace FinalGame.Develop.Gameplay.Features.Energy
             _spendEnergyEvent = entity.GetSpendEnergyEvent();
             _energy = entity.GetEnergy();
 
-            _disposableSpendEnergyEvent = _spendEnergyEvent .Subscribe(OnSpendEnergy);
+            _disposableSpendEnergyEvent = _spendEnergyEvent.Subscribe(OnSpendEnergy);
         }
 
         public bool HasEnoughEnergy(float energy) => _energy.Value >= energy;

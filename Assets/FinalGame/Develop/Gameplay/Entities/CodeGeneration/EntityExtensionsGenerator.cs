@@ -43,6 +43,7 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             
             {EntityValues.RadiusAttackDamage , typeof(ReactiveVariable<float>)},
             {EntityValues.RadiusAttackRadius , typeof(ReactiveVariable<float>)},
+            {EntityValues.RadiusAttackCondition , typeof(ICompositeCondition)},
             {EntityValues.RadiusAttackTrigger , typeof(ReactiveEvent)},
             
             {EntityValues.TeleportRadius , typeof(ReactiveVariable<float>)},
@@ -51,15 +52,17 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.TeleportTrigger , typeof(ReactiveEvent)},
             {EntityValues.TeleportStartEvent , typeof(ReactiveEvent)},
             {EntityValues.TeleportEndEvent , typeof(ReactiveEvent)},
+
+            {EntityValues.RadialAttackTeleportTrigger, typeof (ReactiveEvent)},
             
             {EntityValues.TakeDamageRequest , typeof(ReactiveEvent<float>)},
             {EntityValues.TakeDamageEvent , typeof(ReactiveEvent<float>)},
             {EntityValues.TakeDamageCondition , typeof(ICompositeCondition)},
             
-            { EntityValues.IsDead , typeof(ReactiveVariable<bool>)},
-            { EntityValues.IsDeathProcess , typeof(ReactiveVariable<bool>)},
-            { EntityValues.DeathCondition , typeof(ICompositeCondition)},
-            { EntityValues.SelfDestroyCondition , typeof(ICompositeCondition)}
+            {EntityValues.IsDead , typeof(ReactiveVariable<bool>)},
+            {EntityValues.IsDeathProcess , typeof(ReactiveVariable<bool>)},
+            {EntityValues.DeathCondition , typeof(ICompositeCondition)},
+            {EntityValues.SelfDestroyCondition , typeof(ICompositeCondition)}
         };
         
         [InitializeOnLoadMethod]
