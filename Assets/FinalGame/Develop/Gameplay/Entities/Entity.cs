@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FinalGame.Develop.Gameplay.Entities.Behaviors;
 using UnityEngine;
 
@@ -112,6 +113,30 @@ namespace FinalGame.Develop.Gameplay.Entities
                 _disposables.Add(disposable);
 
             return this; 
+        }
+
+        public bool TryRemoveBehavior<T>() where T : IEntityBehavior
+        {
+            IEntityBehavior entityBehavior = _behaviors.FirstOrDefault(beh => beh is T);
+
+            if (entityBehavior is null)
+                return false;
+            
+            _behaviors.Remove(entityBehavior);
+            
+            if (entityBehavior is IEntityInitialize initializable)
+                _initializables.Remove(initializable);
+
+            if (entityBehavior is IEntityUpdate updatable)
+                _updatables.Remove(updatable);
+
+            if (entityBehavior is IEntityDispose disposable)
+            {
+                _disposables.Remove(disposable);
+                disposable.OnDispose();
+            }
+
+            return true;
         }
     }
 }

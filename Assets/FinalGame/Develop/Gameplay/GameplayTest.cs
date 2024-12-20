@@ -1,4 +1,5 @@
 ﻿using FinalGame.Develop.DI;
+using FinalGame.Develop.Gameplay.AI;
 using FinalGame.Develop.Gameplay.Entities;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace FinalGame.Develop.Gameplay
 
         private Entity _ghost;
 
+        private bool _isPlayerInput = true;
+
         public void StartProcess(DIContainer container)
         {
             _container = container;
@@ -19,13 +22,39 @@ namespace FinalGame.Develop.Gameplay
 
         private void Update()
         {
+            if (_isPlayerInput)
+            {
+                ProcessPlayerInput();
+
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    _isPlayerInput = false;
+                    _ghost.GetMoveDirection().Value = Vector3.zero;
+                    _ghost.GetRotationDirection().Value = Vector3.zero;
+
+                    AIStateMachine ghostBehavior = _container.Resolve<AIFactory>().CreateGhostBehavior(_ghost);
+                    _ghost.AddBehavior(new StateMachineBrainBehavior(ghostBehavior));
+                }
+            }
+            else
+            {
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    _isPlayerInput = true;
+                    _ghost.TryRemoveBehavior<StateMachineBrainBehavior>();
+                }
+            }
+        }
+
+        private void ProcessPlayerInput()
+        {
             var input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
             if (_ghost is not null)
             {
                 _ghost.GetMoveDirection().Value = input;
                 _ghost.GetRotationDirection().Value = input;
-                
+
                 if (Input.GetKeyDown(KeyCode.E) && _ghost.TryGetTakeDamageRequest(out var takeDamageRequest))
                 {
                     takeDamageRequest.Invoke(50);

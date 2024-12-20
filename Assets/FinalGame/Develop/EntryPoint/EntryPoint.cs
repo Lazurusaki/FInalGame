@@ -7,6 +7,7 @@ using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.LevelsService;
 using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
+using FinalGame.Develop.CommonServices.Timer;
 using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.ConfigsManagement;
@@ -48,10 +49,11 @@ namespace FinalGame.Develop.EntryPoint
             RegisterWalletService();
             RegisterConfigsProvider();
             RegisterCompletedLevelsService();
+            RegisterTimerFactory();
             
             _projectContainer.Initialize();
         }
-        
+
         private void SetupAppSettings()
         {
             QualitySettings.vSyncCount = 0;
@@ -114,5 +116,9 @@ namespace FinalGame.Develop.EntryPoint
         private void RegisterCompletedLevelsService()
             => _projectContainer.RegisterAsSingle(c
                 => new CompletedLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();
+
+        private void RegisterTimerFactory()
+            => _projectContainer.RegisterAsSingle(c => new TimerServiceFactory(c));
+
     }
 }
