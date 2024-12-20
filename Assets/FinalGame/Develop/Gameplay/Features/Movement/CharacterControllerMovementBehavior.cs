@@ -38,9 +38,6 @@ namespace FinalGame.Develop.Gameplay.Features.Movement
 
             _isMoving.Value = velocity.magnitude > 0;
             _characterController.Move(velocity * deltaTime);
-            
         }
-
-        
     }
 }

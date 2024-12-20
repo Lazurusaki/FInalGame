@@ -10,14 +10,16 @@ namespace FinalGame.Develop.Gameplay
         private DIContainer _container;
 
         private Entity _ghost;
+        private Entity _shifter;
 
         private bool _isPlayerInput = true;
 
         public void StartProcess(DIContainer container)
         {
             _container = container;
-            _ghost = _container.Resolve<EntityFactory>().CreateEntity(Vector3.zero);
-            _container.Resolve<EntityFactory>().CreateEntity(Vector3.zero + Vector3.forward * 3);
+            _ghost = _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero);
+            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * -3);
+            _shifter = _container.Resolve<EntityFactory>().CreateShifter(Vector3.zero + Vector3.forward * 3);
         }
 
         private void Update()
@@ -26,7 +28,7 @@ namespace FinalGame.Develop.Gameplay
             {
                 ProcessPlayerInput();
 
-                if (Input.GetKeyDown(KeyCode.K))
+                if (Input.GetKeyDown(KeyCode.G))
                 {
                     _isPlayerInput = false;
                     _ghost.GetMoveDirection().Value = Vector3.zero;
@@ -38,11 +40,23 @@ namespace FinalGame.Develop.Gameplay
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.K))
+                if (Input.GetKeyDown(KeyCode.G))
                 {
                     _isPlayerInput = true;
                     _ghost.TryRemoveBehavior<StateMachineBrainBehavior>();
                 }
+            }
+
+            ProcessShifter();
+        }
+
+        private void ProcessShifter()
+        {
+            if (Input.GetKeyDown(KeyCode.T) && _shifter.TryGetSpendEnergyRequest(out var spendEnergyRequest))
+            {
+                _shifter.GetTeleportTrigger().Invoke();
+                spendEnergyRequest.Invoke(10);
+                _shifter.GetRadiusAttackTrigger().Invoke();
             }
         }
 

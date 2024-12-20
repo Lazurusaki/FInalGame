@@ -12,7 +12,7 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
 {
     public static class EntityExtensionsGenerator
     {
-        private static Dictionary<EntityValues, Type> _entityValuesType = new Dictionary<EntityValues, Type>()
+        private static Dictionary<EntityValues, Type> _entityValuesTypes = new Dictionary<EntityValues, Type>()
         {
             {EntityValues.MoveSpeed, typeof(ReactiveVariable<float>) },
             {EntityValues.MoveDirection, typeof(ReactiveVariable<Vector3>) },
@@ -31,6 +31,26 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             
             {EntityValues.Health, typeof(ReactiveVariable<float>) },
             {EntityValues.MaxHealth , typeof(ReactiveVariable<float>)},
+            
+            {EntityValues.Energy, typeof(ReactiveVariable<float>) },
+            {EntityValues.MaxEnergy , typeof(ReactiveVariable<float>)},
+            {EntityValues.SpendEnergyRequest , typeof(ReactiveEvent<float>)},
+            {EntityValues.SpendEnergyCondition , typeof(ICompositeCondition)},
+            {EntityValues.SpendEnergyEvent , typeof(ReactiveEvent<float>)},
+            {EntityValues.RestoreEnergyEvent , typeof(ReactiveEvent<float>)},
+            {EntityValues.RestoreEnergyCooldown , typeof(ReactiveVariable<float>)},
+            {EntityValues.RestoreEnergyCondition , typeof(ICompositeCondition)},
+            
+            {EntityValues.RadiusAttackDamage , typeof(ReactiveVariable<float>)},
+            {EntityValues.RadiusAttackRadius , typeof(ReactiveVariable<float>)},
+            {EntityValues.RadiusAttackTrigger , typeof(ReactiveEvent)},
+            
+            {EntityValues.TeleportRadius , typeof(ReactiveVariable<float>)},
+            {EntityValues.TeleportEnergyCost , typeof(ReactiveVariable<float>)},
+            {EntityValues.TeleportCondition, typeof(ICompositeCondition) },
+            {EntityValues.TeleportTrigger , typeof(ReactiveEvent)},
+            {EntityValues.TeleportStartEvent , typeof(ReactiveEvent)},
+            {EntityValues.TeleportEndEvent , typeof(ReactiveEvent)},
             
             {EntityValues.TakeDamageRequest , typeof(ReactiveEvent<float>)},
             {EntityValues.TakeDamageEvent , typeof(ReactiveEvent<float>)},
@@ -54,7 +74,7 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             writer.WriteLine(GetClassHeader());
             writer.WriteLine("{");
 
-            foreach (var entityValueTypePair in _entityValuesType)
+            foreach (var entityValueTypePair in _entityValuesTypes)
             {
                 var type = entityValueTypePair.Value.FullName;
 

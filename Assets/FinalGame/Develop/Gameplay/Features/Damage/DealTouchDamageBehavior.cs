@@ -13,14 +13,14 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
         private TriggerReceiver _triggerReceiver;
         private IReadOnlyVariable<float> _damage;
 
-        private IDisposable _disposableTriggerEnter;
+        private IDisposable _disposableTriggerEnterEvent;
         
         public void OnInit(Entity entity)
         {
             _triggerReceiver = entity.GetSelfTriggerReceiver();
             _damage = entity.GetSelfTriggerDamage();
 
-            _disposableTriggerEnter = _triggerReceiver.Enter.Subscribe(OnTriggerEnter);
+            _disposableTriggerEnterEvent = _triggerReceiver.Enter.Subscribe(OnTriggerEnter);
         }
 
         private void OnTriggerEnter(Collider colloder)
@@ -29,14 +29,14 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
 
             if (otherEntity is not null)
             {
-                Debug.Log("sds");
+                Debug.Log("Touch Damage");
                 otherEntity.TryTakeDamage(_damage.Value);
             }
         }
 
         public void OnDispose()
         {
-            
+            _disposableTriggerEnterEvent.Dispose();
         }
     }
 }

@@ -20,6 +20,26 @@
         Health,
         MaxHealth,
         
+        Energy,
+        MaxEnergy,
+        SpendEnergyEvent,
+        SpendEnergyRequest,
+        SpendEnergyCondition,
+        RestoreEnergyEvent,
+        RestoreEnergyCooldown,
+        RestoreEnergyCondition,
+        
+        RadiusAttackDamage,
+        RadiusAttackRadius,
+        RadiusAttackTrigger,
+        
+        TeleportRadius,
+        TeleportEnergyCost,
+        TeleportCondition,
+        TeleportTrigger,
+        TeleportStartEvent,
+        TeleportEndEvent,
+        
         TakeDamageRequest,
         TakeDamageEvent,
         TakeDamageCondition,
@@ -27,6 +47,6 @@
         IsDead,
         IsDeathProcess,
         DeathCondition,
-        SelfDestroyCondition
+        SelfDestroyCondition,
     }
 }

@@ -39,6 +39,5 @@ namespace FinalGame.Develop.Gameplay.AI.Sensors
         {
             _stay.Invoke(other);
         }
-        
     }
 }
