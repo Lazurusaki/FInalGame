@@ -129,8 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e03dd78e02c4b8893fde4076e0ebb50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _teleportStartEffectPrefab: {fileID: 0}
-  _teleportEndEffectPrefab: {fileID: 0}
+  _teleportStartEffectPrefab: {fileID: 19846592, guid: 4924b9135249e0d448901a81875768c6,
+    type: 3}
+  _teleportEndEffectPrefab: {fileID: 19827778, guid: ec1c5863f61e8ff4a84dbdb8a282a7ac,
+    type: 3}
 --- !u!1001 &8644649429382286612
 PrefabInstance:
   m_ObjectHideFlags: 0

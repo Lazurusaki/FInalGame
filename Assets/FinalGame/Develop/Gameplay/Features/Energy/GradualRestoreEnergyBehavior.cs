@@ -43,8 +43,6 @@ namespace FinalGame.Develop.Gameplay.Features.Energy
             
             _energy.Value = Mathf.Min(_energy.Value + _energyRestoreAmount, _maxEnergy.Value);
             _time = 0;
-            
-            Debug.Log(_energy.Value);
         }
     }
 }
