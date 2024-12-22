@@ -17,6 +17,7 @@ namespace FinalGame.Develop.Gameplay.Entities
     {
         private const string GhostPrefabPath = "Gameplay/Creatures/Ghost";
         private const string ShifterPrefabPath = "Gameplay/Creatures/Shifter";
+        private const string MainHeroPrefabPath = "Gameplay/Creatures/MainHero";
 
         private readonly DIContainer _container;
         private readonly ResourcesAssetLoader _assetsLoader;
@@ -87,6 +88,64 @@ namespace FinalGame.Develop.Gameplay.Entities
             return instance;
         }
         
+        public Entity CreateMainHero(Vector3 position)
+        {
+            var prefab = _assetsLoader.LoadResource<Entity>(MainHeroPrefabPath);
+
+            var instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
+
+            instance
+                .AddMoveDirection()
+                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddIsMoving()
+                .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(900))
+                .AddHealth(new ReactiveVariable<float>(100))
+                .AddMaxHealth(new ReactiveVariable<float>(100))
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                .AddIsDead()
+                .AddIsDeathProcess();
+
+            // All conditions set here
+            
+            ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+            
+            ICompositeCondition rotationCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition takeDamageCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition deathCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetHealth().Value <= 0));
+
+            ICompositeCondition selfDestroyCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value))
+                .Add(new FuncCondition(() => instance.GetIsDeathProcess().Value == false));
+
+
+            instance
+                .AddMoveCondition(moveCondition)
+                .AddRotationCondition(rotationCondition)
+                .AddDeathCondition(deathCondition)
+                .AddTakeDamageCondition(takeDamageCondition)
+                .AddSelfDestroyCondition(selfDestroyCondition);
+
+            instance
+                .AddBehavior(new CharacterControllerMovementBehavior())
+                .AddBehavior(new RotationBehavior())
+                .AddBehavior(new DeathBehavior())
+                .AddBehavior(new ApplyDamageFilterBehavior())
+                .AddBehavior(new ApplyDamageBehavior())
+                .AddBehavior(new SelfDestroyBehavior());
+            
+            instance.Initialize();
+            
+            return instance;
+        }
+        
         public Entity CreateShifter(Vector3 position)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(ShifterPrefabPath);
@@ -131,6 +190,10 @@ namespace FinalGame.Develop.Gameplay.Entities
             
             ICompositeCondition radiusAttackCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition spendEnergyCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false))
+                .Add(new FuncCondition(() => instance.GetEnergy().Value > 0));
             
             ICompositeCondition restoreEnergyCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => instance.GetIsDead().Value == false))
@@ -142,6 +205,7 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddSelfDestroyCondition(selfDestroyCondition)
                 .AddTeleportCondition(teleportCondition)
                 .AddRadiusAttackCondition(radiusAttackCondition)
+                .AddSpendEnergyCondition(spendEnergyCondition)
                 .AddRestoreEnergyCondition(restoreEnergyCondition);
 
             instance

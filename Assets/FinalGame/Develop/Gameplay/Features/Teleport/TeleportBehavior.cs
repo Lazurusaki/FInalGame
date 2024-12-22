@@ -27,7 +27,7 @@ namespace FinalGame.Develop.Gameplay.Features.Teleport
             _condition = entity.GetTeleportCondition();
             _radius = entity.GetTeleportRadius();
             _energyCost = entity.GetTeleportEnergyCost();
-            _spendEnergyEvent = entity.GetSpendEnergyEvent();
+            _spendEnergyEvent = entity.GetSpendEnergyRequest();
             _transform = entity.GetTransform();
             _teleportTrigger = entity.GetTeleportTrigger();
             _teleportStartEvent = entity.GetTeleportStartEvent();

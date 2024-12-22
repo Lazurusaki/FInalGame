@@ -17,7 +17,7 @@ namespace FinalGame.Develop.Gameplay
         public void StartProcess(DIContainer container)
         {
             _container = container;
-            _ghost = _container.Resolve<EntityFactory>().CreateGhost(Vector3.forward * 5);
+            _ghost = _container.Resolve<EntityFactory>().CreateMainHero(Vector3.forward * 5);
             _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * -5);
             _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.right * -5);
             _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.right * 5);

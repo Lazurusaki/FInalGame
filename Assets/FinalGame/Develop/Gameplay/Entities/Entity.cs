@@ -132,8 +132,8 @@ namespace FinalGame.Develop.Gameplay.Entities
 
             if (entityBehavior is IEntityDispose disposable)
             {
-                _disposables.Remove(disposable);
                 disposable.OnDispose();
+                _disposables.Remove(disposable);
             }
 
             return true;

@@ -16,9 +16,7 @@ namespace FinalGame.Develop.Gameplay.Features.Skills
 
         private ICondition _teleportCondition;
         private ICondition _radialAttackCondition;
-
-        private ReactiveEvent<float> _spendEnergyRequest;
-
+        
         private IDisposable _radialAttackTeleportEvent;
 
         public void OnInit(Entity entity)
@@ -26,7 +24,6 @@ namespace FinalGame.Develop.Gameplay.Features.Skills
             _radialAttackTeleportTrigger = entity.GetRadialAttackTeleportTrigger();
             _teleportTrigger = entity.GetTeleportTrigger();
             _radialAttackTrigger = entity.GetRadiusAttackTrigger();
-            _spendEnergyRequest = entity.GetSpendEnergyRequest();
 
             _teleportCondition = entity.GetTeleportCondition();
             _radialAttackCondition = entity.GetRadiusAttackCondition();

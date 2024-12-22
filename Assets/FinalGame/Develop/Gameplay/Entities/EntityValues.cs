@@ -20,6 +20,16 @@
         Health,
         MaxHealth,
         
+        TakeDamageRequest,
+        TakeDamageEvent,
+        TakeDamageCondition,
+        
+        IsDead,
+        IsDeathProcess,
+        DeathCondition,
+        SelfDestroyCondition,
+        
+        //ADV_03
         Energy,
         MaxEnergy,
         SpendEnergyEvent,
@@ -41,15 +51,6 @@
         TeleportStartEvent,
         TeleportEndEvent,
         
-        RadialAttackTeleportTrigger,
-        
-        TakeDamageRequest,
-        TakeDamageEvent,
-        TakeDamageCondition,
-        
-        IsDead,
-        IsDeathProcess,
-        DeathCondition,
-        SelfDestroyCondition,
+        RadialAttackTeleportTrigger
     }
 }

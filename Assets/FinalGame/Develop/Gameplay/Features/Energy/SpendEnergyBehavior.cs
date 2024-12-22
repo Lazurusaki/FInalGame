@@ -13,7 +13,6 @@ namespace FinalGame.Develop.Gameplay.Features.Energy
         
         private IDisposable _disposableSpendEnergyEvent;
 
-        
         public void OnInit(Entity entity)
         {
             _spendEnergyEvent = entity.GetSpendEnergyEvent();
