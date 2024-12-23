@@ -16,6 +16,7 @@
         
         CharacterController,
         Transform,
+        Rigidbody,
         
         Health,
         MaxHealth,
@@ -28,6 +29,17 @@
         IsDeathProcess,
         DeathCondition,
         SelfDestroyCondition,
+        
+        AttackTrigger,
+        AttackCondition,
+        IsAttackProcess, 
+        AttackCancelCondition,
+        
+        Damage,
+        ShootPoint,
+        InstantAttackEvent,
+        AttackInterval,
+        AttackCooldown,
         
         //ADV_03
         Energy,

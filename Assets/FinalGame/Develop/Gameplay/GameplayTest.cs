@@ -9,7 +9,7 @@ namespace FinalGame.Develop.Gameplay
     {
         private DIContainer _container;
 
-        private Entity _ghost;
+        private Entity _mainHero;
         private Entity _shifter;
 
         private bool _isPlayerInput = true;
@@ -17,7 +17,7 @@ namespace FinalGame.Develop.Gameplay
         public void StartProcess(DIContainer container)
         {
             _container = container;
-            _ghost = _container.Resolve<EntityFactory>().CreateMainHero(Vector3.forward * 5);
+            _mainHero = _container.Resolve<EntityFactory>().CreateMainHero(Vector3.forward * 5);
             _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * -5);
             _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.right * -5);
             _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.right * 5);
@@ -33,11 +33,11 @@ namespace FinalGame.Develop.Gameplay
                 if (Input.GetKeyDown(KeyCode.G))
                 {
                     _isPlayerInput = false;
-                    _ghost.GetMoveDirection().Value = Vector3.zero;
-                    _ghost.GetRotationDirection().Value = Vector3.zero;
+                    _mainHero.GetMoveDirection().Value = Vector3.zero;
+                    _mainHero.GetRotationDirection().Value = Vector3.zero;
 
-                    AIStateMachine ghostBehavior = _container.Resolve<AIFactory>().CreateGhostBehavior(_ghost);
-                    _ghost.AddBehavior(new StateMachineBrainBehavior(ghostBehavior));
+                    AIStateMachine ghostBehavior = _container.Resolve<AIFactory>().CreateGhostBehavior(_mainHero);
+                    _mainHero.AddBehavior(new StateMachineBrainBehavior(ghostBehavior));
                 }
             }
             else
@@ -45,7 +45,7 @@ namespace FinalGame.Develop.Gameplay
                 if (Input.GetKeyDown(KeyCode.G))
                 {
                     _isPlayerInput = true;
-                    _ghost.TryRemoveBehavior<StateMachineBrainBehavior>();
+                    _mainHero.TryRemoveBehavior<StateMachineBrainBehavior>();
                 }
             }
 
@@ -62,14 +62,19 @@ namespace FinalGame.Develop.Gameplay
         {
             var input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-            if (_ghost is not null)
+            if (_mainHero is not null)
             {
-                _ghost.GetMoveDirection().Value = input;
-                _ghost.GetRotationDirection().Value = input;
+                _mainHero.GetMoveDirection().Value = input;
+                _mainHero.GetRotationDirection().Value = input;
 
-                if (Input.GetKeyDown(KeyCode.E) && _ghost.TryGetTakeDamageRequest(out var takeDamageRequest))
+                if (Input.GetKeyDown(KeyCode.E) && _mainHero.TryGetTakeDamageRequest(out var takeDamageRequest))
                 {
                     takeDamageRequest.Invoke(50);
+                }
+                
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    _mainHero.GetAttackTrigger().Invoke();
                 }
             }
         }

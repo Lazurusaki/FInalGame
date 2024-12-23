@@ -33,7 +33,7 @@ namespace FinalGame.Develop.Gameplay.Features.Energy
             if (energy< 0)
                 throw new ArgumentException("Negative Energy is not allowed");
             
-            if (HasEnoughEnergy(energy) == false)
+            if (energy > _energy.Value)
             {
                 Debug.Log("Not Enough energy");
                 return;

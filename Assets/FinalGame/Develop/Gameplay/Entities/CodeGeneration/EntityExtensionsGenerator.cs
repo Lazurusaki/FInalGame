@@ -28,10 +28,33 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             
             {EntityValues.CharacterController, typeof(CharacterController) },
             {EntityValues.Transform, typeof(Transform) },
+            {EntityValues.Rigidbody, typeof(Rigidbody) },
             
             {EntityValues.Health, typeof(ReactiveVariable<float>) },
             {EntityValues.MaxHealth , typeof(ReactiveVariable<float>)},
             
+            {EntityValues.TakeDamageRequest , typeof(ReactiveEvent<float>)},
+            {EntityValues.TakeDamageEvent , typeof(ReactiveEvent<float>)},
+            {EntityValues.TakeDamageCondition , typeof(ICompositeCondition)},
+            
+            {EntityValues.AttackTrigger , typeof(ReactiveEvent)},
+            {EntityValues.AttackCondition , typeof(ICompositeCondition)},
+            {EntityValues.IsAttackProcess , typeof(ReactiveVariable<bool>)},
+            {EntityValues.AttackCancelCondition , typeof(ICompositeCondition)},
+            
+            {EntityValues.InstantAttackEvent , typeof(ReactiveEvent)},
+            
+            {EntityValues.ShootPoint , typeof(Transform)},
+            {EntityValues.Damage , typeof(ReactiveVariable<float>)},
+            {EntityValues.AttackInterval , typeof(ReactiveVariable<float>)},
+            {EntityValues.AttackCooldown , typeof(ReactiveVariable<float>)},
+            
+            {EntityValues.IsDead , typeof(ReactiveVariable<bool>)},
+            {EntityValues.IsDeathProcess , typeof(ReactiveVariable<bool>)},
+            {EntityValues.DeathCondition , typeof(ICompositeCondition)},
+            {EntityValues.SelfDestroyCondition , typeof(ICompositeCondition)},
+            
+            //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },
             {EntityValues.MaxEnergy , typeof(ReactiveVariable<float>)},
             {EntityValues.SpendEnergyRequest , typeof(ReactiveEvent<float>)},
@@ -54,15 +77,6 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.TeleportEndEvent , typeof(ReactiveEvent)},
 
             {EntityValues.RadialAttackTeleportTrigger, typeof (ReactiveEvent)},
-            
-            {EntityValues.TakeDamageRequest , typeof(ReactiveEvent<float>)},
-            {EntityValues.TakeDamageEvent , typeof(ReactiveEvent<float>)},
-            {EntityValues.TakeDamageCondition , typeof(ICompositeCondition)},
-            
-            {EntityValues.IsDead , typeof(ReactiveVariable<bool>)},
-            {EntityValues.IsDeathProcess , typeof(ReactiveVariable<bool>)},
-            {EntityValues.DeathCondition , typeof(ICompositeCondition)},
-            {EntityValues.SelfDestroyCondition , typeof(ICompositeCondition)}
         };
         
         [InitializeOnLoadMethod]
