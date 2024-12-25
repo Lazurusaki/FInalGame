@@ -18,7 +18,15 @@ namespace FinalGame.Develop.Gameplay.AI
 
         public AIStateMachine CreateMainHeroBehavior(Entity entity, ITargetSelector targetSelector)
         {
-            AIStateMachine autoAimAttackState = CreateAutoAimAttackStateMachine(entity, targetSelector);
+            //AIStateMachine autoAimAttackState = CreateAutoAimAttackStateMachine(entity, targetSelector);
+
+            var autoAimAttackState = new AutoAimAttackState(
+                entity.GetRotationDirection(),
+                targetSelector,
+                entity.GetTransform(),
+                entity.GetDetectedEntitiesBuffer(),
+                entity.GetAttackTrigger(),
+                entity.GetAttackCondition());
             
             var moveDirection = entity.GetMoveDirection();
             var rotationDirection = entity.GetRotationDirection();

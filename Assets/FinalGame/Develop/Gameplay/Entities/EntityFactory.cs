@@ -40,7 +40,7 @@ namespace FinalGame.Develop.Gameplay.Entities
 
             instance
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(2))
+                .AddMoveSpeed(new ReactiveVariable<float>(1.2f))
                 .AddIsMoving()
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(900))
@@ -55,7 +55,6 @@ namespace FinalGame.Develop.Gameplay.Entities
            
             //MY
             
-                
             // All conditions set here
             
             ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
@@ -116,7 +115,7 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddIsAttackProcess()
                 .AddInstantAttackEvent()
                 .AddDamage(new ReactiveVariable<float>(20))
-                .AddAttackInterval(new ReactiveVariable<float>(0.1f))
+                .AddAttackInterval(new ReactiveVariable<float>(0.15f))
                 .AddAttackCooldown()
                 .AddIsDead()
                 .AddIsDeathProcess()

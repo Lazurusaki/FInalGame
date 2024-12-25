@@ -1,4 +1,5 @@
-﻿using FinalGame.Develop.DI;
+﻿using System;
+using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Develop.Gameplay.Features.Enemy;
 using FinalGame.Develop.Gameplay.Features.MainHero;
@@ -19,6 +20,17 @@ namespace FinalGame.Develop.Gameplay
             _container.Resolve<EnemyFactory>().CreateGhost(Vector3.zero + Vector3.forward * -2);
             _container.Resolve<EnemyFactory>().CreateGhost(Vector3.zero + Vector3.right * -2);
             _container.Resolve<EnemyFactory>().CreateGhost(Vector3.zero + Vector3.right * 2);
+        }
+
+        public void Update()
+        {
+          /*  
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Debug.Log("R");
+                _mainHero.GetAttackTrigger()?.Invoke();
+            }
+            */
         }
     }
 }

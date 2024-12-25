@@ -7,9 +7,9 @@ namespace FinalGame.Develop.Gameplay.AI.States
     {
         private ReactiveEvent _attackEvent;
 
-        public AttackState(ReactiveEvent attackRequest)
+        public AttackState(ReactiveEvent attackEvent)
         {
-            _attackEvent = attackRequest;
+            _attackEvent = attackEvent;
         }
 
         public override void Enter()

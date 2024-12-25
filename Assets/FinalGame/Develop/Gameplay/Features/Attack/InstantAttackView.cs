@@ -34,7 +34,10 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
             _isAttackProcess.Changed -= OnAttackProcessChanged;
         }
 
-        public void OnAttackAnimationEnded() => _isAttackProcess.Value = false;
+        public void OnAttackAnimationEnded()
+        {
+            _isAttackProcess.Value = false;
+        }
 
         public void OnInstantAttack()
         {
