@@ -3,13 +3,13 @@ using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.Features.Attack;
 using FinalGame.Develop.Gameplay.Features.Damage;
 using FinalGame.Develop.Gameplay.Features.Death;
+using FinalGame.Develop.Gameplay.Features.DetectEntities;
 using FinalGame.Develop.Gameplay.Features.Energy;
 using FinalGame.Develop.Gameplay.Features.Movement;
 using FinalGame.Develop.Gameplay.Features.Skills;
 using FinalGame.Develop.Gameplay.Features.Teleport;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Entities
@@ -23,14 +23,16 @@ namespace FinalGame.Develop.Gameplay.Entities
 
         private readonly DIContainer _container;
         private readonly ResourcesAssetLoader _assetsLoader;
+        private readonly EntitiesBuffer _entitiesBuffer;
 
         public EntityFactory(DIContainer container)
         {
             _container = container;
             _assetsLoader = container.Resolve<ResourcesAssetLoader>();
+            _entitiesBuffer = container.Resolve<EntitiesBuffer>();
         }
 
-        public Entity CreateGhost(Vector3 position)
+        public Entity CreateGhost(Vector3 position, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(GhostPrefabPath);
 
@@ -38,7 +40,7 @@ namespace FinalGame.Develop.Gameplay.Entities
 
             instance
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddMoveSpeed(new ReactiveVariable<float>(2))
                 .AddIsMoving()
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(900))
@@ -48,7 +50,8 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddTakeDamageEvent()
                 .AddIsDead()
                 .AddIsDeathProcess()
-                .AddSelfTriggerDamage(new ReactiveVariable<float>(20));
+                .AddSelfTriggerDamage(new ReactiveVariable<float>(20))
+                .AddTeam(new ReactiveVariable<int>(team));
            
             //MY
             
@@ -93,7 +96,7 @@ namespace FinalGame.Develop.Gameplay.Entities
             return instance;
         }
         
-        public Entity CreateMainHero(Vector3 position)
+        public Entity CreateMainHero(Vector3 position, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(MainHeroPrefabPath);
 
@@ -116,7 +119,9 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddAttackInterval(new ReactiveVariable<float>(0.1f))
                 .AddAttackCooldown()
                 .AddIsDead()
-                .AddIsDeathProcess();
+                .AddIsDeathProcess()
+                .AddTeam(new ReactiveVariable<int>(team))
+                .AddDetectedEntitiesBuffer();
 
             // All conditions set here
             
@@ -167,7 +172,8 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddBehavior(new AttackCooldownBehavior())
                 .AddBehavior(new AttackCooldownRestartBehavior())
                 .AddBehavior(new AttackCooldownRestartOnMoveBehavior())
-                .AddBehavior(new SelfDestroyBehavior());
+                .AddBehavior(new SelfDestroyBehavior())
+                .AddBehavior(new UpdateEntitiesBuffer(_entitiesBuffer));
                 
             instance.Initialize();
             
@@ -202,10 +208,12 @@ namespace FinalGame.Develop.Gameplay.Entities
             
             instance.Initialize();
             
+            _entitiesBuffer.Add(instance);
+            
             return instance;
         }
         
-        public Entity CreateShifter(Vector3 position)
+        public Entity CreateShifter(Vector3 position, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(ShifterPrefabPath);
 
@@ -231,7 +239,8 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddIsDead()
-                .AddIsDeathProcess();
+                .AddIsDeathProcess()
+                .AddTeam(new ReactiveVariable<int>(team));
             
             ICompositeCondition takeDamageCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => instance.GetIsDead().Value == false));

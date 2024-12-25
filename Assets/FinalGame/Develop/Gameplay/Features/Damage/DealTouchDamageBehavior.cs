@@ -12,6 +12,7 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
     {
         private TriggerReceiver _triggerReceiver;
         private IReadOnlyVariable<float> _damage;
+        private IReadOnlyVariable<int> _team;
 
         private IDisposable _disposableTriggerEnterEvent;
         
@@ -19,6 +20,7 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
         {
             _triggerReceiver = entity.GetSelfTriggerReceiver();
             _damage = entity.GetSelfTriggerDamage();
+            _team = entity.GetTeam();
 
             _disposableTriggerEnterEvent = _triggerReceiver.Enter.Subscribe(OnTriggerEnter);
         }
@@ -28,10 +30,8 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
             var otherEntity = colloder.GetComponentInParent<Entity>();
 
             if (otherEntity is not null)
-            {
-                Debug.Log("Touch Damage");
-                otherEntity.TryTakeDamage(_damage.Value);
-            }
+                if (otherEntity.TryTakeDamage(_damage.Value, _team.Value))
+                    Debug.Log("Touch Damage");
         }
 
         public void OnDispose()

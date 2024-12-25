@@ -15,5 +15,16 @@ namespace FinalGame.Develop.Utils.Extensions
 
             return false;
         }
+
+        public static bool TryTakeDamage(this Entity entity, float damage, int sourceDamageTeam)
+        {
+            if (entity.TryGetTeam(out ReactiveVariable<int> entityTeam) == false)
+                return false;
+
+            if (entityTeam.Value == sourceDamageTeam)
+                return false;
+
+            return entity.TryTakeDamage(damage);
+        }
     }
 }

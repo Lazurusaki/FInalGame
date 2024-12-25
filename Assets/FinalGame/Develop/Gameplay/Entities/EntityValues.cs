@@ -41,6 +41,9 @@
         AttackInterval,
         AttackCooldown,
         
+        Team,
+        DetectedEntitiesBuffer,
+        
         //ADV_03
         Energy,
         MaxEnergy,

@@ -54,6 +54,9 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.DeathCondition , typeof(ICompositeCondition)},
             {EntityValues.SelfDestroyCondition , typeof(ICompositeCondition)},
             
+            {EntityValues.Team , typeof(ReactiveVariable<int>)},
+            {EntityValues.DetectedEntitiesBuffer , typeof(List<Entity>)},
+            
             //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },
             {EntityValues.MaxEnergy , typeof(ReactiveVariable<float>)},

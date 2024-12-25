@@ -6,20 +6,22 @@ using UnityEngine;
 
 namespace FinalGame.Develop.Utils.StateMachine
 {
-    public abstract class StateMachine<TState>:  IDisposable where TState : class, IState
+    public abstract class StateMachine<TState>: State, IUpdatableState, IDisposable where TState : class, IState
     {
         private readonly List<StateNode<TState>> _states = new();
-
+        private readonly List<IDisposable> _disposables;
+        
         private StateNode<TState> _currentState;
 
         private bool _isRunning;
-
-        private List<IDisposable> _disposables;
-
+        
         protected StateMachine(List<IDisposable> disposables = null)
         {
             if (disposables == null)
+            {
+                _disposables = new List<IDisposable>();
                 return;
+            }
 
             _disposables = new List<IDisposable>(disposables);
         }
@@ -36,8 +38,10 @@ namespace FinalGame.Develop.Utils.StateMachine
 
         protected StateNode<TState> CurrentState => _currentState;
 
-        public void Enter()
+        public override void Enter()
         {
+            base.Enter();
+            
             if (_isRunning) 
                 return;
             
@@ -47,8 +51,10 @@ namespace FinalGame.Develop.Utils.StateMachine
             _isRunning = true;
         }
         
-        public void Exit()
+        public override void Exit()
         {
+            base.Exit();
+            
             _currentState?.State.Exit();
             _isRunning = false;
         }

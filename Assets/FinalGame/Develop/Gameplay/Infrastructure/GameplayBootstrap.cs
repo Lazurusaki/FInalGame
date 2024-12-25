@@ -3,6 +3,9 @@ using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.AI;
 using FinalGame.Develop.Gameplay.Entities;
+using FinalGame.Develop.Gameplay.Features.Enemy;
+using FinalGame.Develop.Gameplay.Features.Input;
+using FinalGame.Develop.Gameplay.Features.MainHero;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Infrastructure
@@ -30,6 +33,10 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
         {
             RegisterEntityFactory();
             RegisterAIFactory();
+            RegisterMainHeroFactory();
+            RegisterEnemyFactory();
+            RegisterEntitiesBuffer();
+            RegisterInputService();
         }
 
         private void RegisterEntityFactory()
@@ -41,5 +48,21 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
         {
             _container.RegisterAsSingle(c => new AIFactory(c));
         }
+        
+        private void RegisterMainHeroFactory()
+        {
+            _container.RegisterAsSingle(c=> new MainHeroFactory(c));
+        }
+        
+        private void RegisterEnemyFactory()
+        {
+            _container.RegisterAsSingle(c => new EnemyFactory(c));
+        }
+
+        private void RegisterEntitiesBuffer()
+            => _container.RegisterAsSingle(c => new EntitiesBuffer());
+
+        private void RegisterInputService() //Тип управление регистрируем тут Desktop/mobile 
+            => _container.RegisterAsSingle<IInputService>(c => new DesktopInput());  
     }
 }
