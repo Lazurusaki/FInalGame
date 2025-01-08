@@ -1,4 +1,5 @@
 ﻿using FinalGame.Develop.CommonServices.AssetsManagement;
+using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.Features.Attack;
 using FinalGame.Develop.Gameplay.Features.Damage;
@@ -32,7 +33,7 @@ namespace FinalGame.Develop.Gameplay.Entities
             _entitiesBuffer = container.Resolve<EntitiesBuffer>();
         }
 
-        public Entity CreateGhost(Vector3 position, int team)
+        public Entity CreateGhost(Vector3 position, GhostConfig config, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(GhostPrefabPath);
 
@@ -40,17 +41,17 @@ namespace FinalGame.Develop.Gameplay.Entities
 
             instance
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(1.2f))
+                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
                 .AddIsMoving()
                 .AddRotationDirection()
-                .AddRotationSpeed(new ReactiveVariable<float>(900))
-                .AddHealth(new ReactiveVariable<float>(100))
-                .AddMaxHealth(new ReactiveVariable<float>(100))
+                .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
+                .AddHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddIsDead()
                 .AddIsDeathProcess()
-                .AddSelfTriggerDamage(new ReactiveVariable<float>(20))
+                .AddSelfTriggerDamage(new ReactiveVariable<float>(config.SelfTriggerDamage))
                 .AddTeam(new ReactiveVariable<int>(team));
            
             //MY
@@ -95,7 +96,7 @@ namespace FinalGame.Develop.Gameplay.Entities
             return instance;
         }
         
-        public Entity CreateMainHero(Vector3 position, int team)
+        public Entity CreateMainHero(Vector3 position, MainHeroConfig config, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(MainHeroPrefabPath);
 
@@ -103,19 +104,19 @@ namespace FinalGame.Develop.Gameplay.Entities
 
             instance
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(6))
+                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
                 .AddIsMoving()
                 .AddRotationDirection()
-                .AddRotationSpeed(new ReactiveVariable<float>(900))
-                .AddHealth(new ReactiveVariable<float>(100))
-                .AddMaxHealth(new ReactiveVariable<float>(100))
+                .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
+                .AddHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddAttackTrigger()
                 .AddIsAttackProcess()
                 .AddInstantAttackEvent()
-                .AddDamage(new ReactiveVariable<float>(20))
-                .AddAttackInterval(new ReactiveVariable<float>(0.15f))
+                .AddDamage(new ReactiveVariable<float>(config.Damage))
+                .AddAttackInterval(new ReactiveVariable<float>(config.AttackInterval))
                 .AddAttackCooldown()
                 .AddIsDead()
                 .AddIsDeathProcess()
@@ -288,6 +289,20 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddBehavior(new GradualRestoreEnergyBehavior());
             
             instance.Initialize();
+            
+            return instance;
+        }
+        
+        //Gameplay
+
+        private const string StartStageTriggerPrefabPath = "Gameplay/Levels/StartStageTrigger";
+
+        public Entity CreateStartStageTrigger(Vector3 position)
+        {
+            Entity prefab = _assetsLoader.LoadResource<Entity>(StartStageTriggerPrefabPath);
+            Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
+            instance.Initialize();
+            _entitiesBuffer.Add(instance);
             
             return instance;
         }

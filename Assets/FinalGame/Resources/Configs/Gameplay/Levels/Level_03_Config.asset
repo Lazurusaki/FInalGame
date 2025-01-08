@@ -12,3 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acfba1d5a39462f48a76da89a974856e, type: 3}
   m_Name: Level_03_Config
   m_EditorClassIdentifier: 
+  _waveConfigs:
+  - _waveItems:
+    - <SpawnPosition>k__BackingField: {x: 1, y: 0, z: 1}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 4cfe453f7e7e51b4187edaa20cb0d2a1,
+        type: 2}
+    - <SpawnPosition>k__BackingField: {x: 2, y: 0, z: 2}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 4cfe453f7e7e51b4187edaa20cb0d2a1,
+        type: 2}
+    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: 0}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 4cfe453f7e7e51b4187edaa20cb0d2a1,
+        type: 2}
+    - <SpawnPosition>k__BackingField: {x: -1, y: 0, z: -1}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 4cfe453f7e7e51b4187edaa20cb0d2a1,
+        type: 2}
+    - <SpawnPosition>k__BackingField: {x: -2, y: 0, z: -2}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 4cfe453f7e7e51b4187edaa20cb0d2a1,
+        type: 2}

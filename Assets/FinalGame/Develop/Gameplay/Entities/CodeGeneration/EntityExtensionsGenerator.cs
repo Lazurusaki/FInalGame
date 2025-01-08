@@ -56,6 +56,7 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             
             {EntityValues.Team , typeof(ReactiveVariable<int>)},
             {EntityValues.DetectedEntitiesBuffer , typeof(List<Entity>)},
+            {EntityValues.IsMainHero , typeof(ReactiveVariable<bool>)},
             
             //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },

@@ -1,4 +1,6 @@
-﻿using FinalGame.Develop.DI;
+﻿using System;
+using FinalGame.Develop.Configs.Gameplay.Creatures;
+using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.AI;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Develop.Gameplay.Features.Team;
@@ -22,10 +24,20 @@ namespace FinalGame.Develop.Gameplay.Features.Enemy
             _entitiesBuffer = container.Resolve<EntitiesBuffer>();
         }
 
-        public Entity CreateGhost(Vector3 position)
+        public Entity Create(Vector3 position, CreatureConfig config)
         {
-            Entity entity = _entityFactory.CreateGhost(position, _team);
-            AIStateMachine brain = _aiFactory.CreateGhostBehavior(entity);
+            Entity entity;
+            AIStateMachine brain;
+
+            switch (config)
+            {
+                case GhostConfig ghostConfig:
+                    entity = _entityFactory.CreateGhost(position, ghostConfig, _team);
+                    brain = _aiFactory.CreateGhostBehavior(entity);
+                    break;
+                default:
+                    throw new ArgumentException("Unknown config");
+            }
 
             entity.AddBehavior(new StateMachineBrainBehavior(brain));
             

@@ -42,7 +42,10 @@
         AttackCooldown,
         
         Team,
+        
         DetectedEntitiesBuffer,
+        
+        IsMainHero,
         
         //ADV_03
         Energy,
