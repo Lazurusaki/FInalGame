@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FinalGame.Develop.Gameplay.AI.Sensors;
+using FinalGame.Develop.Gameplay.Features.Ability;
+using FinalGame.Develop.Gameplay.Features.Stats;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
 using UnityEditor;
@@ -57,6 +59,11 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.Team , typeof(ReactiveVariable<int>)},
             {EntityValues.DetectedEntitiesBuffer , typeof(List<Entity>)},
             {EntityValues.IsMainHero , typeof(ReactiveVariable<bool>)},
+
+            {EntityValues.BaseStats, typeof(Dictionary<StatTypes, float>)},
+            {EntityValues.ModifiedStats, typeof(Dictionary<StatTypes, float>)},
+            {EntityValues.StatsEffectsList, typeof(StatsEffectsList)},
+            {EntityValues.AbilityList , typeof(AbilityList)},
             
             //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },

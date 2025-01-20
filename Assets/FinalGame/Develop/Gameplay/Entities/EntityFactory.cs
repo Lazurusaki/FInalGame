@@ -1,6 +1,8 @@
-﻿using FinalGame.Develop.CommonServices.AssetsManagement;
+﻿using System.Collections.Generic;
+using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.DI;
+using FinalGame.Develop.Gameplay.Features.Ability;
 using FinalGame.Develop.Gameplay.Features.Attack;
 using FinalGame.Develop.Gameplay.Features.Damage;
 using FinalGame.Develop.Gameplay.Features.Death;
@@ -8,9 +10,11 @@ using FinalGame.Develop.Gameplay.Features.DetectEntities;
 using FinalGame.Develop.Gameplay.Features.Energy;
 using FinalGame.Develop.Gameplay.Features.Movement;
 using FinalGame.Develop.Gameplay.Features.Skills;
+using FinalGame.Develop.Gameplay.Features.Stats;
 using FinalGame.Develop.Gameplay.Features.Teleport;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Entities
@@ -99,24 +103,37 @@ namespace FinalGame.Develop.Gameplay.Entities
         public Entity CreateMainHero(Vector3 position, MainHeroConfig config, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(MainHeroPrefabPath);
-
+            
             var instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
 
+            Dictionary<StatTypes, float> baseStats = new()
+            {
+                { StatTypes.MoveSpeed, config.MoveSpeed },
+                { StatTypes.MaxHealth, config.MaxHealth },
+                { StatTypes.AttackInterval, config.AttackInterval },
+                { StatTypes.Damage, config.Damage }
+            };
+
+            Dictionary<StatTypes, float> modifiedStats = new(baseStats);
+            
             instance
+                .AddStatsEffectsList()
+                .AddBaseStats(baseStats)
+                .AddModifiedStats(modifiedStats)
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
+                .AddMoveSpeed(new ReactiveVariable<float>(baseStats[StatTypes.MoveSpeed]))
                 .AddIsMoving()
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
-                .AddHealth(new ReactiveVariable<float>(config.MaxHealth))
-                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddHealth(new ReactiveVariable<float>(baseStats[StatTypes.MaxHealth]))
+                .AddMaxHealth(new ReactiveVariable<float>(baseStats[StatTypes.MaxHealth]))
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddAttackTrigger()
                 .AddIsAttackProcess()
                 .AddInstantAttackEvent()
-                .AddDamage(new ReactiveVariable<float>(config.Damage))
-                .AddAttackInterval(new ReactiveVariable<float>(config.AttackInterval))
+                .AddDamage(new ReactiveVariable<float>(baseStats[StatTypes.Damage]))
+                .AddAttackInterval(new ReactiveVariable<float>(baseStats[StatTypes.AttackInterval]))
                 .AddAttackCooldown()
                 .AddIsDead()
                 .AddIsDeathProcess()
@@ -161,6 +178,11 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddAttackCancelCondition(attackCancelCondition);
 
             instance
+                .AddBehavior(new StatsEffectsApplierBehavior())
+                .AddBehavior(new MoveSpeedModifierApplierBehavior())
+                .AddBehavior(new MaxHealthModifierApplierBehavior())
+                .AddBehavior(new DamageModifierApplierBehavior())
+                .AddBehavior(new AttackIntervalModifierApplierBehavior())
                 .AddBehavior(new CharacterControllerMovementBehavior())
                 .AddBehavior(new RotationBehavior())
                 .AddBehavior(new DeathBehavior())
@@ -174,7 +196,7 @@ namespace FinalGame.Develop.Gameplay.Entities
                 .AddBehavior(new AttackCooldownRestartOnMoveBehavior())
                 .AddBehavior(new SelfDestroyBehavior())
                 .AddBehavior(new UpdateEntitiesBuffer(_entitiesBuffer));
-                
+;
             instance.Initialize();
             
             return instance;

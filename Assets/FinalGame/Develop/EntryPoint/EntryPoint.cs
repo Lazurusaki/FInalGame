@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel;
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.DataManagement;
@@ -9,12 +7,9 @@ using FinalGame.Develop.CommonServices.LoadingScreen;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonServices.Timer;
 using FinalGame.Develop.CommonServices.Wallet;
-using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
-using FinalGame.Develop.Gameplay;
 using UnityEngine;
-using UnityEngine.Rendering.LookDev;
 
 namespace FinalGame.Develop.EntryPoint
 {
@@ -24,13 +19,13 @@ namespace FinalGame.Develop.EntryPoint
         [SerializeField] private Bootstrap _gameBootstrap;
 
         private DIContainer _projectContainer = new DIContainer();
-        
+
         private void Awake()
         {
             SetupAppSettings();
-            
+
             ProcessRegistrations();
-            
+
             _projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(_projectContainer));
 
             //регистрация глобальных сервисов
@@ -50,7 +45,7 @@ namespace FinalGame.Develop.EntryPoint
             RegisterConfigsProvider();
             RegisterCompletedLevelsService();
             RegisterTimerFactory();
-            
+
             _projectContainer.Initialize();
         }
 
@@ -102,15 +97,15 @@ namespace FinalGame.Develop.EntryPoint
                 => new SaveLoadService(new LocalDataRepository(), new JsonSerializer()));
 
         private void RegisterPlayerDataProvider()
-            => _projectContainer.RegisterAsSingle(c 
-                => new PlayerDataProvider(c.Resolve<ISaveLoadService>(),c.Resolve<ConfigsProviderService>()));
+            => _projectContainer.RegisterAsSingle(c
+                => new PlayerDataProvider(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>()));
 
         private void RegisterWalletService()
-            => _projectContainer.RegisterAsSingle(c 
+            => _projectContainer.RegisterAsSingle(c
                 => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
         private void RegisterConfigsProvider()
-            => _projectContainer.RegisterAsSingle(c 
+            => _projectContainer.RegisterAsSingle(c
                 => new ConfigsProviderService(c.Resolve<ResourcesAssetLoader>()));
 
         private void RegisterCompletedLevelsService()
@@ -119,6 +114,5 @@ namespace FinalGame.Develop.EntryPoint
 
         private void RegisterTimerFactory()
             => _projectContainer.RegisterAsSingle(c => new TimerServiceFactory(c));
-
     }
 }

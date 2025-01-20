@@ -27,7 +27,7 @@ namespace FinalGame.Develop.EntryPoint
             
             loadingScreen.Hide();
 
-            sceneSwitcher.ProcessSwitchSceneFor(new BootstrapSceneOutputArgs(new MainMenuSceneInputArgs()));
+            sceneSwitcher.ProcessSwitchSceneFor(new BootstrapSceneOutputArgs(new GameplaySceneInputArgs(3)));
 
             //конец инициализации игры
             //запуск игры

@@ -5,6 +5,8 @@ using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.AI;
 using FinalGame.Develop.Gameplay.Entities;
+using FinalGame.Develop.Gameplay.Features.Ability;
+using FinalGame.Develop.Gameplay.Features.Ability.AbilityDrop;
 using FinalGame.Develop.Gameplay.Features.Enemy;
 using FinalGame.Develop.Gameplay.Features.GameModes;
 using FinalGame.Develop.Gameplay.Features.Input;
@@ -54,6 +56,8 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             RegisterGameplayFinishConditionService();
             RegisterMainHeroFinishConditionCreatorService();
             RegisterStateMachinesFactory();
+            RegisterAbilityFactory();
+            RegisterAbilityDropService();
 
             _container.Initialize();
         }
@@ -116,5 +120,14 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
 
         private void RegisterStateMachinesFactory()
             => _container.RegisterAsSingle(c => new GameplayStateMachinesFactory(c));
+
+        private void RegisterAbilityFactory()
+            => _container.RegisterAsSingle(c => new AbilityFactory(c));
+
+        private void RegisterAbilityDropService()
+            => _container.RegisterAsSingle(c => new AbilityDropService(
+                c.Resolve<ConfigsProviderService>().LevelsListConfig.GetBy(
+                    _gameplaySceneInputArgs.LevelNumber).AbilityDropOptionsConfig,
+                    new AbilityDropRules()));
     }
 }

@@ -2,6 +2,7 @@ using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.Configs.Gameplay.Levels;
+using FinalGame.Resources.Configs.Gameplay.Abilities;
 using UnityEngine;
 
 namespace FinalGame.Develop.ConfigsManagement
@@ -18,8 +19,9 @@ namespace FinalGame.Develop.ConfigsManagement
         public StartWalletConfig StartWalletConfig { get; private set; }
         public CurrencyIconsConfig CurrencyIconsConfig { get; private set; }
         public LevelListConfig LevelsListConfig { get; private set; }
-        
         public MainHeroConfig MainHeroConfig { get; private set; }
+        public AbilitiesConfigContainer AbilitiesConfigContainer { get; private set; }        
+        
         
         public void LoadAll()
         {
@@ -29,9 +31,8 @@ namespace FinalGame.Develop.ConfigsManagement
             LoadCurrencyIconsConfig();
             LoadLevelListConfig();
             LoadMainHeroConfig();
+            LoadAbilitiesConfigContainer();
         }
-
-        
 
         private void LoadStartWalletConfig()
             => StartWalletConfig = _resourcesAssetLoader.LoadResource<StartWalletConfig>("Configs/Common/Wallet/StartWalletConfig");
@@ -47,5 +48,10 @@ namespace FinalGame.Develop.ConfigsManagement
         private void LoadMainHeroConfig()
             => MainHeroConfig =
                 _resourcesAssetLoader.LoadResource<MainHeroConfig>("Configs/Gameplay/Creatures/MainHeroConfig");
+
+        private void LoadAbilitiesConfigContainer()
+            => AbilitiesConfigContainer =
+                _resourcesAssetLoader.LoadResource<AbilitiesConfigContainer>(
+                    "Configs/Gameplay/Abilities/StatChangeAbilityConfigContainer");
     }
 }

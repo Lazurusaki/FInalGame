@@ -47,6 +47,11 @@
         
         IsMainHero,
         
+        BaseStats,
+        ModifiedStats,
+        StatsEffectsList,
+        AbilityList,
+        
         //ADV_03
         Energy,
         MaxEnergy,
