@@ -5,6 +5,7 @@ using FinalGame.Develop.Gameplay.AI;
 using FinalGame.Develop.Gameplay.AI.Sensors;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Develop.Gameplay.Features.Ability;
+using FinalGame.Develop.Gameplay.Features.LevelUp;
 using FinalGame.Develop.Gameplay.Features.Team;
 using FinalGame.Develop.Utils.Reactive;
 using UnityEngine;
@@ -36,17 +37,16 @@ namespace FinalGame.Develop.Gameplay.Features.MainHero
         {
             Entity entity = _entityFactory.CreateMainHero(position, config, Team);
             AIStateMachine brain = _aiFactory.CreateMainHeroBehavior(entity, new NearestDamageableTargetSelector(entity.GetTransform(),entity.GetTeam()));
-
-            AbilityList abilityList = new AbilityList();
-            //IAbility testAbility = _abilityFactory.CreateAbilityFor(entity, _configs.AbilitiesConfigContainer.GetConfigBy("MoveSpeed2"));
-            //abilityList.Add(testAbility);
             
             entity
                 .AddIsMainHero(new ReactiveVariable<bool>(true))
-                .AddAbilityList(abilityList);
+                .AddLevel(new ReactiveVariable<int>(1))
+                .AddExperience()
+                .AddAbilityList();
 
             entity
                 .AddBehavior(new StateMachineBrainBehavior(brain))
+                .AddBehavior(new LevelUpBehavior(_configs.ExperienceForLevelUplConfig))
                 .AddBehavior(new AbilityOnAddActivatorBehavior());
             
             _mainHeroHolderService.Register(entity);

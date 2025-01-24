@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4259532123761549568}
   - component: {fileID: 5496893884328861317}
   - component: {fileID: 8331586023877289482}
+  - component: {fileID: 7050997623967109676}
   m_Layer: 5
   m_Name: IconFrame
   m_TagString: Untagged
@@ -77,6 +78,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7050997623967109676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110464384731324222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bce2e28bc9be43829ba580f2ce35c69d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _icon: {fileID: 560558795783315052}
+  _levelParent: {fileID: 6419379062445785998}
+  _level: {fileID: 1298943282222195942}
 --- !u!1 &1409038196588939332
 GameObject:
   m_ObjectHideFlags: 0

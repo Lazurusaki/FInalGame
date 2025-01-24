@@ -2,6 +2,7 @@
 using System.Linq;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Resources.Configs.Gameplay.Abilities.DropOptions;
+using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Features.Ability.AbilityDrop
 {
@@ -21,7 +22,7 @@ namespace FinalGame.Develop.Gameplay.Features.Ability.AbilityDrop
             List<AbilityDropOption> availableDropOptions
                 = new List<AbilityDropOption>(_abilityDropOptionsConfig.DropOptions
                     .Where(dropOption => _abilityDropRules.IsAvailable(dropOption, entity)));
-
+            
             List<AbilityDropOption> selectedOptions = new();
 
             for (int i = 0; i < count; i++)
@@ -31,7 +32,7 @@ namespace FinalGame.Develop.Gameplay.Features.Ability.AbilityDrop
                 selectedOptions.Add(selectedOption);
                 availableDropOptions.Remove(selectedOption);
             }
-
+            
             return selectedOptions;
         }
     }

@@ -1,13 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.AssetsManagement;
-using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
-using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.CommonUI.Wallet;
 using FinalGame.Develop.DI;
-using FinalGame.Develop.Gameplay;
 using FinalGame.Develop.MainMenu.Features.LevelsMenu.LevelsMenuPopup;
 using FinalGame.Develop.MainMenu.UI;
 using UnityEngine;

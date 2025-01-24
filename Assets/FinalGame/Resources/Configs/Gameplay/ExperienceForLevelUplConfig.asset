@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 162e67987c054750a0636304054c1bb4, type: 3}
-  m_Name: StatChangeAbilityConfigContainer
+  m_Script: {fileID: 11500000, guid: 4a0d11b8b9aa428cafba5a813c59be0e, type: 3}
+  m_Name: ExperienceForLevelUplConfig
   m_EditorClassIdentifier: 
-  _abilityConfigs:
-  - {fileID: 11400000, guid: 58f16205f8cb13e4fa99c6690717bb6b, type: 2}
-  - {fileID: 11400000, guid: d4005fe359684ec449ce5625de8e3770, type: 2}
+  _experienceForLevel:
+  - 100
+  - 200
+  - 300

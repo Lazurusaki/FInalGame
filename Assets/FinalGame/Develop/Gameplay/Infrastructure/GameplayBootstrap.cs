@@ -1,4 +1,6 @@
 using System.Collections;
+using FinalGame.Develop.CommonServices.AssetsManagement;
+using FinalGame.Develop.CommonServices.CoroutinePerformer;
 using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.Configs.Gameplay.Levels;
 using FinalGame.Develop.ConfigsManagement;
@@ -7,13 +9,17 @@ using FinalGame.Develop.Gameplay.AI;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Develop.Gameplay.Features.Ability;
 using FinalGame.Develop.Gameplay.Features.Ability.AbilityDrop;
+using FinalGame.Develop.Gameplay.Features.Ability.Presenters;
 using FinalGame.Develop.Gameplay.Features.Enemy;
 using FinalGame.Develop.Gameplay.Features.GameModes;
 using FinalGame.Develop.Gameplay.Features.Input;
+using FinalGame.Develop.Gameplay.Features.LevelUp;
 using FinalGame.Develop.Gameplay.Features.MainHero;
 using FinalGame.Develop.Gameplay.Features.Pause;
 using FinalGame.Develop.Gameplay.Features.Team;
 using FinalGame.Develop.Gameplay.States;
+using FinalGame.Develop.Gameplay.UI;
+using FinalGame.Develop.MainMenu.UI;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Infrastructure
@@ -58,10 +64,15 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             RegisterStateMachinesFactory();
             RegisterAbilityFactory();
             RegisterAbilityDropService();
-
+            RegisterAbilityPresentersFactory();
+            RegisterGameplayUIRoot();
+            RegisterDropAbilityOnLevelUpService();
+            
             _container.Initialize();
         }
 
+        private SelectAbilityPopupPresenter _popup;
+        
         private void Update()
         {
             _gameplayStateMachine?.Update(Time.deltaTime);
@@ -71,6 +82,25 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
                     if (entity.TryGetTeam(out var team) && team.Value == TeamTypes.Enemies)
                         if (entity.TryGetTakeDamageRequest(out var takeDamageRequest))
                             takeDamageRequest.Invoke(9999);
+
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                _container.Resolve<MainHeroHolderService>().MainHero.GetExperience().Value += 400;
+                Debug.Log(_container.Resolve<MainHeroHolderService>().MainHero.GetExperience().Value);
+            }
+
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                _container.Resolve<IPauseService>().Pause();
+                _popup = _container.Resolve<AbilityPresentersFactory>()
+                    .CreateSelectAbilityPopupPresenter(_container.Resolve<MainHeroHolderService>().MainHero);
+                _popup.Enable();
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                _popup.Disable(() => _container.Resolve<IPauseService>().Unpause());
+            }
         }
 
         private void RegisterEntityFactory()
@@ -108,7 +138,7 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
                 c.Resolve<ConfigsProviderService>().LevelsListConfig.GetBy(_gameplaySceneInputArgs.LevelNumber)));
 
         private void RegisterTimeScalePauseService()
-            => _container.RegisterAsSingle(c => new TimeScalePauseService());
+            => _container.RegisterAsSingle<IPauseService>(c => new TimeScalePauseService());
 
         private void RegisterGameplayFinishConditionService()
             => _container.RegisterAsSingle(c => new GameplayFinishConditionService());
@@ -129,5 +159,24 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
                 c.Resolve<ConfigsProviderService>().LevelsListConfig.GetBy(
                     _gameplaySceneInputArgs.LevelNumber).AbilityDropOptionsConfig,
                     new AbilityDropRules()));
+
+        private void RegisterAbilityPresentersFactory()
+            => _container.RegisterAsSingle(c => new AbilityPresentersFactory(c));
+        
+        private void RegisterGameplayUIRoot()
+        {
+            _container.RegisterAsSingle( c =>
+            {
+                var gameplayUIRootPrefab = c.Resolve<ResourcesAssetLoader>().LoadResource<GameplayUIRoot>("Gameplay/UI/GameplayUIRoot");
+                return Instantiate(gameplayUIRootPrefab);
+            }).NonLazy();
+        }
+
+        private void RegisterDropAbilityOnLevelUpService() =>
+            _container.RegisterAsSingle(c => new DropAbilityOnLevelUpService(
+                c.Resolve<MainHeroHolderService>(),
+                c.Resolve<AbilityPresentersFactory>(),
+                c.Resolve<IPauseService>(),
+                c.Resolve<ICoroutinePerformer>())).NonLazy();
     }
 }

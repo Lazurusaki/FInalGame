@@ -5,20 +5,18 @@ using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Features.Ability.Abilities
 {
-    public class StatChangeAbility : IAbility
+    public class StatChangeAbility : Ability
     {
         private readonly Entity _entity;
         private readonly StatChangeAbilityConfig _config;
-        
-        public StatChangeAbility(Entity entity, StatChangeAbilityConfig config)
+
+        public StatChangeAbility(Entity entity, StatChangeAbilityConfig config, int currentLevel) : base(config.ID, currentLevel, config.MaxLevel)
         {
             _entity = entity;
             _config = config;
         }
-
-        public string ID => _config.ID;
                
-        public void Activate()
+        public override void Activate()
         {
             _entity.GetStatsEffectsList().Add(new StatsEffect(_config.StatType, _config.GetApplyEffect()));
         }

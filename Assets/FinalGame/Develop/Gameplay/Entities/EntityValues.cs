@@ -38,6 +38,8 @@
         Damage,
         ShootPoint,
         InstantAttackEvent,
+        InstantShootingDirections,
+        
         AttackInterval,
         AttackCooldown,
         
@@ -51,6 +53,9 @@
         ModifiedStats,
         StatsEffectsList,
         AbilityList,
+        
+        Experience,
+        Level,
         
         //ADV_03
         Energy,

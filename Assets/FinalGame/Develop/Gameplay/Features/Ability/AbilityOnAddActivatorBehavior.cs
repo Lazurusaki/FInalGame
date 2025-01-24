@@ -15,7 +15,7 @@ namespace FinalGame.Develop.Gameplay.Features.Ability
                 ability.Activate();
         }
 
-        private void OnAbilityAdded(IAbility ability)
+        private void OnAbilityAdded(Ability ability)
         {
             ability.Activate();
         }

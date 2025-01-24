@@ -15,12 +15,16 @@ namespace FinalGame.Develop.Gameplay.Features.Ability
             _container = container;
         }
 
-        public IAbility CreateAbilityFor(Entity entity, AbilityConfig config)
+        public Ability CreateAbilityFor(Entity entity, AbilityConfig config, int currentLevel)
         {
             switch (config)
             {
-                case StatChangeAbilityConfig changeAbilityConfig:
-                    return new StatChangeAbility(entity, changeAbilityConfig);
+                case StatChangeAbilityConfig statChangeAbilityConfig:
+                    return new StatChangeAbility(entity, statChangeAbilityConfig, currentLevel);
+                
+                case AddArrowsAbilityConfig addArrowsAbilityConfig:
+                    return new AddArrowsAbility(addArrowsAbilityConfig, entity, currentLevel);
+                
                 default:
                     throw new ArgumentException("Unknown config");
             }

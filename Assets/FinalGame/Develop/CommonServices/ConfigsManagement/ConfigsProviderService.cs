@@ -1,5 +1,6 @@
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.Configs.Common.Wallet;
+using FinalGame.Develop.Configs.Gameplay;
 using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.Configs.Gameplay.Levels;
 using FinalGame.Resources.Configs.Gameplay.Abilities;
@@ -22,6 +23,7 @@ namespace FinalGame.Develop.ConfigsManagement
         public MainHeroConfig MainHeroConfig { get; private set; }
         public AbilitiesConfigContainer AbilitiesConfigContainer { get; private set; }        
         
+        public ExperienceForLevelUplConfig ExperienceForLevelUplConfig { get; private set; }
         
         public void LoadAll()
         {
@@ -32,6 +34,7 @@ namespace FinalGame.Develop.ConfigsManagement
             LoadLevelListConfig();
             LoadMainHeroConfig();
             LoadAbilitiesConfigContainer();
+            LoadExperienceForLevelUpConfig();
         }
 
         private void LoadStartWalletConfig()
@@ -53,5 +56,10 @@ namespace FinalGame.Develop.ConfigsManagement
             => AbilitiesConfigContainer =
                 _resourcesAssetLoader.LoadResource<AbilitiesConfigContainer>(
                     "Configs/Gameplay/Abilities/StatChangeAbilityConfigContainer");
+
+        private void LoadExperienceForLevelUpConfig()
+            => ExperienceForLevelUplConfig =
+                _resourcesAssetLoader.LoadResource<ExperienceForLevelUplConfig>(
+                    "Configs/Gameplay/ExperienceForLevelUplConfig");
     }
 }

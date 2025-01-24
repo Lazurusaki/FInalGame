@@ -23,7 +23,7 @@ namespace FinalGame.Develop.EntryPoint
             container.Resolve<ConfigsProviderService>().LoadAll();
             container.Resolve<PlayerDataProvider>().Load();
             
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.02f);
             
             loadingScreen.Hide();
 

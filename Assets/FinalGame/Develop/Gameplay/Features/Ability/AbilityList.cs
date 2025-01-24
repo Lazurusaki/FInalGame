@@ -2,7 +2,7 @@
 
 namespace FinalGame.Develop.Gameplay.Features.Ability
 {
-    public class AbilityList : ObservableList<IAbility>
+    public class AbilityList : ObservableList<Ability>
     {
     }
 }

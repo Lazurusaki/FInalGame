@@ -9,7 +9,7 @@ namespace FinalGame.Resources.Configs.Gameplay.Abilities
     public class AbilitiesConfigContainer : ScriptableObject
     {
         [SerializeField] private List<AbilityConfig> _abilityConfigs;
-
+        
         private IReadOnlyList<AbilityConfig> AbilityConfigs => _abilityConfigs;
         public AbilityConfig GetConfigBy(string ID)
             => _abilityConfigs.First(config => config.ID == ID);

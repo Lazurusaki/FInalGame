@@ -87,7 +87,7 @@ namespace FinalGame.Develop.Gameplay.States
         public WinState CreateWinState(GameplaySceneInputArgs gameplaySceneInputArgs)
         {
             return new WinState(
-                _container.Resolve<TimeScalePauseService>(),
+                _container.Resolve<IPauseService>(),
                 _container.Resolve<IInputService>(),
                 _container.Resolve<CompletedLevelsService>(),
                 _container.Resolve<PlayerDataProvider>(),
@@ -99,7 +99,7 @@ namespace FinalGame.Develop.Gameplay.States
         {
             return new LooseState(
                 _container.Resolve<SceneSwitcher>(),
-                _container.Resolve<TimeScalePauseService>(),
+                _container.Resolve<IPauseService>(),
                 _container.Resolve<IInputService>());
         }
     }

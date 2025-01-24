@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using FinalGame.Develop.Gameplay.AI.Sensors;
 using FinalGame.Develop.Gameplay.Features.Ability;
+using FinalGame.Develop.Gameplay.Features.Attack;
 using FinalGame.Develop.Gameplay.Features.Stats;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
@@ -45,6 +46,7 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.AttackCancelCondition , typeof(ICompositeCondition)},
             
             {EntityValues.InstantAttackEvent , typeof(ReactiveEvent)},
+            {EntityValues.InstantShootingDirections, typeof(InstantShootingDirectionsArgs)},
             
             {EntityValues.ShootPoint , typeof(Transform)},
             {EntityValues.Damage , typeof(ReactiveVariable<float>)},
@@ -64,6 +66,9 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.ModifiedStats, typeof(Dictionary<StatTypes, float>)},
             {EntityValues.StatsEffectsList, typeof(StatsEffectsList)},
             {EntityValues.AbilityList , typeof(AbilityList)},
+            
+            {EntityValues.Experience , typeof(ReactiveVariable<float>)},
+            {EntityValues.Level , typeof(ReactiveVariable<int>)},
             
             //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },

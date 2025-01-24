@@ -149,7 +149,7 @@ namespace FinalGame.Develop.CommonServices.SceneManagement
                 throw new NullReferenceException(nameof(gameplayBootstrap));
             
             _nextSceneContainer = new DIContainer(_projectContainer);
-
+            
             yield return gameplayBootstrap.Run(_nextSceneContainer, gameplaySceneInputArgs);
             
             _loadingScreen.Hide();

@@ -800,6 +800,7 @@ GameObject:
   - component: {fileID: 7675083449132195981}
   - component: {fileID: 3415880114261652082}
   - component: {fileID: 6488928625418848950}
+  - component: {fileID: 4049750160200743510}
   m_Layer: 5
   m_Name: SelectionAbilityView
   m_TagString: Untagged
@@ -922,6 +923,25 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &4049750160200743510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6757105471072705744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243960d3124d4e549075ef1ecab88bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 6488928625418848950}
+  _button: {fileID: 3415880114261652082}
+  _icon: {fileID: 8774469547338881414}
+  _name: {fileID: 994814082806044017}
+  _description: {fileID: 4930673920954466231}
+  _textOnTablet: {fileID: 6927828474027096562}
+  _selectImage: {fileID: 3121230825511320173}
 --- !u!1 &8356271338995113013
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,3 +1176,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1738109541825055658}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8774469547338881414 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7050997623967109676, guid: e74980e849c1c5e40b52a72e5440416c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1738109541825055658}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bce2e28bc9be43829ba580f2ce35c69d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
