@@ -17,7 +17,7 @@ namespace FinalGame.Develop.Gameplay.Features.LevelUp
             _config = config;
         }
 
-        public float CurrentLimitForExp => _config.GetExperienceFor(_level.Value);
+        public float CurrentLimitForExp => _config.GetExperienceFor(_level.Value + 1);
 
         public void OnInit(Entity entity)
         {
@@ -34,15 +34,19 @@ namespace FinalGame.Develop.Gameplay.Features.LevelUp
 
         private void OnExperienceChanged(float arg1, float newExp)
         {
-            if (_level.Value >= _config.MaxLevel)
-            { 
+            if (arg1 >= newExp)
                 return;
-            }
-
+            
+            if (_level.Value >= _config.MaxLevel)
+                return;
+            
             while (newExp >= CurrentLimitForExp)
             {
                 newExp -= CurrentLimitForExp;
                 _level.Value++;
+                
+                if (_level.Value == _config.MaxLevel)
+                    break;
             }
 
             _experience.Value = newExp;

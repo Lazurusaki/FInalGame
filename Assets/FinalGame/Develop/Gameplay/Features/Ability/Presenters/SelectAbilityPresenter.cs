@@ -80,8 +80,6 @@ namespace FinalGame.Develop.Gameplay.Features.Ability.Presenters
         {
             if (AbilityConfig.IsUpgradable())
             {
-                Debug.Log("dsds");
-                
                 Ability ability = _entity.GetAbilityList().Elements.FirstOrDefault(abil => abil.ID == AbilityConfig.ID);
 
                 if (ability is not null)

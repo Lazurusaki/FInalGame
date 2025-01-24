@@ -8,11 +8,11 @@ namespace FinalGame.Develop.Configs.Gameplay
     {
         [SerializeField] private List<float> _experienceForLevel;
 
-        public int MaxLevel => _experienceForLevel.Count;
+        public int MaxLevel => _experienceForLevel.Count + 1;
 
         public float GetExperienceFor(int level)
         {
-            return _experienceForLevel[level - 1];
+            return _experienceForLevel[level - 2];
         }
     }
 }

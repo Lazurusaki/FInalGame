@@ -48,7 +48,7 @@ namespace FinalGame.Develop.Gameplay.Features.LevelUp
             
             if (_selectAbilityProcess != null)
                 return;
-
+            
             _selectAbilityProcess = _coroutinePerformer.StartPerform(SelectAbilityProcess());
         }
 
@@ -66,6 +66,8 @@ namespace FinalGame.Develop.Gameplay.Features.LevelUp
 
                 yield return new WaitUntil(() => PopupIsOpened == false);
             }
+
+            _selectAbilityProcess = null;
         }
 
         private void OnAbilitySelected(SelectAbilityPopupPresenter popup)

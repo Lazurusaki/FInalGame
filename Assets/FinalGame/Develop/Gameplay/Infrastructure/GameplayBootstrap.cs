@@ -86,7 +86,6 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             if (Input.GetKeyDown(KeyCode.T))
             {
                 _container.Resolve<MainHeroHolderService>().MainHero.GetExperience().Value += 400;
-                Debug.Log(_container.Resolve<MainHeroHolderService>().MainHero.GetExperience().Value);
             }
 
             if (Input.GetKeyDown(KeyCode.M))

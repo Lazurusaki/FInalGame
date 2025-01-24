@@ -20,7 +20,7 @@ MonoBehaviour:
   _addArrowsByLevel:
   - <DirectionShootConfigs>k__BackingField:
     - <Angle>k__BackingField: 0
-      <NumberOfProjectiles>k__BackingField: 2
+      <NumberOfProjectiles>k__BackingField: 1
   - <DirectionShootConfigs>k__BackingField:
     - <Angle>k__BackingField: -30
       <NumberOfProjectiles>k__BackingField: 1
