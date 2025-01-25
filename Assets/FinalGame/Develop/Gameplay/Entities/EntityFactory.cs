@@ -2,8 +2,8 @@
 using FinalGame.Develop.CommonServices.AssetsManagement;
 using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.DI;
-using FinalGame.Develop.Gameplay.Features.Ability;
 using FinalGame.Develop.Gameplay.Features.Attack;
+using FinalGame.Develop.Gameplay.Features.Bounce;
 using FinalGame.Develop.Gameplay.Features.Damage;
 using FinalGame.Develop.Gameplay.Features.Death;
 using FinalGame.Develop.Gameplay.Features.DetectEntities;
@@ -14,8 +14,8 @@ using FinalGame.Develop.Gameplay.Features.Stats;
 using FinalGame.Develop.Gameplay.Features.Teleport;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
+using SelfDestroyBehavior = FinalGame.Develop.Gameplay.Features.Death.SelfDestroyBehavior;
 
 namespace FinalGame.Develop.Gameplay.Entities
 {
@@ -25,6 +25,8 @@ namespace FinalGame.Develop.Gameplay.Entities
         private const string ShifterPrefabPath = "Gameplay/Creatures/Shifter";
         private const string MainHeroPrefabPath = "Gameplay/Creatures/MainHero";
         private const string ArrowPrefabPath = "Gameplay/Projectiles/Arrow";
+
+        private readonly LayerMask _projectileDeathLayer = 1 << 7; // 7th layer in order
 
         private readonly DIContainer _container;
         private readonly ResourcesAssetLoader _assetsLoader;
@@ -203,17 +205,25 @@ namespace FinalGame.Develop.Gameplay.Entities
             return instance;
         }
 
-        public Entity CreateArrow(Vector3 position, Vector3 direction, float damage)
+        public Entity CreateArrow(Vector3 position, Vector3 direction, float damage , Entity owner)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(ArrowPrefabPath);
 
             var instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
 
             instance
-                .AddMoveSpeed(new ReactiveVariable<float>(3500))
+                .AddMoveSpeed(new ReactiveVariable<float>(3000))
                 .AddMoveDirection(new ReactiveVariable<Vector3>(direction))
                 .AddRotationDirection(new ReactiveVariable<Vector3>(direction))
-                .AddIsMoving();
+                .AddIsMoving()
+                .AddIsProjectile(true)
+                .AddSelfTriggerDamage(new ReactiveVariable<float>(damage))
+                .AddTeam(new ReactiveVariable<int>(owner.GetTeam().Value))
+                .AddIsDead()
+                .AddDeathLayer(_projectileDeathLayer)
+                .AddIsTouchDeathLayer()
+                .AddIsTouchAnotherTeam()
+                .AddOwner(owner);
             
             ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => true));
@@ -221,13 +231,30 @@ namespace FinalGame.Develop.Gameplay.Entities
             ICompositeCondition rotationCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => true));
 
-            instance
-                .AddMoveCondition(moveCondition)
-                .AddRotationCondition(rotationCondition);
+            ICompositeCondition deathCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsTouchDeathLayer().Value), 0)
+                .Add(new FuncCondition(() => instance.GetIsTouchAnotherTeam().Value), 10 , LogicOperations.OrOperation); 
+
+            ICompositeCondition selfDestroyCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value));
 
             instance
+                .AddMoveCondition(moveCondition)
+                .AddRotationCondition(rotationCondition)
+                .AddDeathCondition(deathCondition)
+                .AddSelfDestroyCondition(selfDestroyCondition);
+            
+            instance
                 .AddBehavior(new RigidbodyMovementBehavior())
-                .AddBehavior(new ForceRotationBehavior());
+                .AddBehavior(new ForceRotationBehavior())
+                .AddBehavior(new DeathLayerTouchDetector())
+                .AddBehavior(new AnotherTeamTouchDetector())
+                .AddBehavior(new InstantDeathBehavior())
+                .AddBehavior(new SelfDestroyBehavior())
+                .AddBehavior(new DealTouchDamageBehavior());
+            
+            
+                
             
             instance.Initialize();
             

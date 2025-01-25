@@ -17,6 +17,7 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
         private IDisposable _disposableShootEvent;
         
         private EntityFactory _factory;
+        private Entity _owner;
 
 
         public MultipleInstantShootBehavior(EntityFactory factory)
@@ -30,6 +31,7 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
             _damage = entity.GetDamage();
             _shootPoint = entity.GetShootPoint();
             _directions = entity.GetInstantShootingDirections();
+            _owner = entity;
 
             _disposableShootEvent = _instantShootEvent.Subscribe(OnAttack);
         }
@@ -60,7 +62,7 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
                 Vector3 position = new Vector3(_shootPoint.position.x + offset.x, _shootPoint.position.y,
                     _shootPoint.position.z + offset.y);
 
-                _factory.CreateArrow(position, directionForShoot, _damage.Value);
+                _factory.CreateArrow(position, directionForShoot, _damage.Value, _owner);
             }
         }
     }

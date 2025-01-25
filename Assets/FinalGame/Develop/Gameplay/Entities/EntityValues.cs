@@ -48,6 +48,8 @@
         DetectedEntitiesBuffer,
         
         IsMainHero,
+        IsProjectile,
+        Owner,
         
         BaseStats,
         ModifiedStats,
@@ -56,6 +58,14 @@
         
         Experience,
         Level,
+        
+        DeathLayer,
+        IsTouchDeathLayer,
+        IsTouchAnotherTeam,
+        
+        BounceCount,
+        BounceEvent,
+        BounceLayer,
         
         //ADV_03
         Energy,

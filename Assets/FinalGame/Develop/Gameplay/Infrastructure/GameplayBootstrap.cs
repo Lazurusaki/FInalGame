@@ -19,7 +19,6 @@ using FinalGame.Develop.Gameplay.Features.Pause;
 using FinalGame.Develop.Gameplay.Features.Team;
 using FinalGame.Develop.Gameplay.States;
 using FinalGame.Develop.Gameplay.UI;
-using FinalGame.Develop.MainMenu.UI;
 using UnityEngine;
 
 namespace FinalGame.Develop.Gameplay.Infrastructure
@@ -94,6 +93,11 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
                 _popup = _container.Resolve<AbilityPresentersFactory>()
                     .CreateSelectAbilityPopupPresenter(_container.Resolve<MainHeroHolderService>().MainHero);
                 _popup.Enable();
+            }
+            
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _container.Resolve<MainHeroHolderService>().MainHero.GetAttackTrigger().Invoke();
             }
 
             if (Input.GetKeyDown(KeyCode.N))

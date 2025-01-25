@@ -6,8 +6,9 @@ namespace FinalGame.Develop.Utils.Conditions
 {
     public class CompositeCondition : ICompositeCondition
     {
-        private readonly List<(ICondition, Func<bool, bool, bool>)> _conditions = new();
         private readonly Func<bool, bool, bool> _standardLogicOperation;
+        
+        private  List<(ICondition, Func<bool, bool, bool>, int)> _conditions = new();
 
         public CompositeCondition(Func<bool, bool, bool> standardLogicOperation)
         {
@@ -16,7 +17,7 @@ namespace FinalGame.Develop.Utils.Conditions
 
         public CompositeCondition(ICondition condition, Func<bool, bool, bool> standardLogicOperation) : this(standardLogicOperation)
         {
-            _conditions.Add((condition, standardLogicOperation));
+            _conditions.Add((condition, standardLogicOperation , 0));
         }
         
         public bool Evaluate()
@@ -39,9 +40,10 @@ namespace FinalGame.Develop.Utils.Conditions
             return result;   
         }
 
-        public ICompositeCondition Add(ICondition condition, Func<bool, bool, bool> logicOperation = null)
+        public ICompositeCondition Add(ICondition condition, int order = 0, Func<bool, bool, bool> logicOperation = null)
         {
-            _conditions.Add((condition, logicOperation));
+            _conditions.Add((condition, logicOperation, order));
+            _conditions = _conditions.OrderBy(condition => condition.Item3).ToList();
             return this;
         }
 

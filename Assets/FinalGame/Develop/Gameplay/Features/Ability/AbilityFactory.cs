@@ -25,6 +25,10 @@ namespace FinalGame.Develop.Gameplay.Features.Ability
                 case AddArrowsAbilityConfig addArrowsAbilityConfig:
                     return new AddArrowsAbility(addArrowsAbilityConfig, entity, currentLevel);
                 
+                case ProjectileBounceAbilityConfig projectileBounceAbilityConfig:
+                    return new ProjectileBounceAbility(projectileBounceAbilityConfig, entity,
+                        _container.Resolve<EntitiesBuffer>(), currentLevel);
+                
                 default:
                     throw new ArgumentException("Unknown config");
             }

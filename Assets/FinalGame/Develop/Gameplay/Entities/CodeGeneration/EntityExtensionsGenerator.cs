@@ -60,7 +60,11 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             
             {EntityValues.Team , typeof(ReactiveVariable<int>)},
             {EntityValues.DetectedEntitiesBuffer , typeof(List<Entity>)},
+            
             {EntityValues.IsMainHero , typeof(ReactiveVariable<bool>)},
+            {EntityValues.IsProjectile , typeof(bool)},
+            
+            {EntityValues.Owner , typeof(Entity)},
 
             {EntityValues.BaseStats, typeof(Dictionary<StatTypes, float>)},
             {EntityValues.ModifiedStats, typeof(Dictionary<StatTypes, float>)},
@@ -69,6 +73,14 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             
             {EntityValues.Experience , typeof(ReactiveVariable<float>)},
             {EntityValues.Level , typeof(ReactiveVariable<int>)},
+
+            {EntityValues.DeathLayer, typeof(LayerMask)},
+            {EntityValues.IsTouchDeathLayer, typeof(ReactiveVariable<bool>)},
+            {EntityValues.IsTouchAnotherTeam, typeof(ReactiveVariable<bool>)},
+            
+            {EntityValues.BounceCount, typeof(ReactiveVariable<int>)},
+            {EntityValues.BounceEvent, typeof(ReactiveEvent<RaycastHit>)},
+            {EntityValues.BounceLayer, typeof(LayerMask)},
             
             //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },

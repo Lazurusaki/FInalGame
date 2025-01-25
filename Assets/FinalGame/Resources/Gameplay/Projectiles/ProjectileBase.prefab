@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: 4315110849497335419}
   - component: {fileID: 3855854060457210978}
   - component: {fileID: 1356824309729869434}
+  - component: {fileID: 4274143960026815751}
+  - component: {fileID: 6640268498760656545}
+  - component: {fileID: 3260356835576754436}
   m_Layer: 0
   m_Name: ProjectileBase
   m_TagString: Untagged
@@ -87,6 +90,53 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!65 &4274143960026815751
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675972828291980638}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6640268498760656545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675972828291980638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917c3ae8f35d435fa214d379ff9b26cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _triggerReceiver: {fileID: 3260356835576754436}
+--- !u!114 &3260356835576754436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675972828291980638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395d97dd7b2f4ac288a8781bcc2c9430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ignoredColliders: []
 --- !u!1 &8990397755582389118
 GameObject:
   m_ObjectHideFlags: 0

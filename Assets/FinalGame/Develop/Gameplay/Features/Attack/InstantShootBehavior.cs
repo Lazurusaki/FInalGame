@@ -13,6 +13,7 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
 
         private IReadOnlyVariable<float> _damage;
         private Transform _shootPoint;
+        private Entity _owner;
         
         private IDisposable _disposableShootEvent;
 
@@ -26,6 +27,7 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
             _instantShootEvent = entity.GetInstantAttackEvent();
             _damage = entity.GetDamage();
             _shootPoint = entity.GetShootPoint();
+            _owner = entity;
             
             _disposableShootEvent = _instantShootEvent.Subscribe(OnShoot);
         }
@@ -37,7 +39,7 @@ namespace FinalGame.Develop.Gameplay.Features.Attack
         
         private void OnShoot()
         {
-            _factory.CreateArrow(_shootPoint.position, _shootPoint.forward, _damage.Value);
+            _factory.CreateArrow(_shootPoint.position, _shootPoint.forward, _damage.Value, _owner);
         }
     }
 }

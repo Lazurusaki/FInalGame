@@ -92,6 +92,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arrow
       objectReference: {fileID: 0}
+    - target: {fileID: 4274143960026815751, guid: 738e26e862c53e7448226d811bbdf725,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274143960026815751, guid: 738e26e862c53e7448226d811bbdf725,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274143960026815751, guid: 738e26e862c53e7448226d811bbdf725,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.19577205
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274143960026815751, guid: 738e26e862c53e7448226d811bbdf725,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.35211396
+      objectReference: {fileID: 0}
     - target: {fileID: 4651779547768167640, guid: 738e26e862c53e7448226d811bbdf725,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -19,6 +19,8 @@ namespace FinalGame.Develop.Gameplay.Features.Movement
             _direction = entity.GetRotationDirection();
             _transform = entity.GetTransform();
             _condition = entity.GetRotationCondition();
+            
+            _transform.rotation = Quaternion.LookRotation(_direction.Value);
         }
 
         public void OnUpdate(float deltaTime)
