@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acfba1d5a39462f48a76da89a974856e, type: 3}
+  m_Name: Level_03_Config
+  m_EditorClassIdentifier: 
+  _reward:
+    CurrencyType: 0
+    Value: 500
+  _maxHealth: 200
+  _waveConfigs:
+  - <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 45dd511f5473b6e4e813ef355553877d,
+      type: 2}
+    <EnemiesCount>k__BackingField: 10
+  - <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 45dd511f5473b6e4e813ef355553877d,
+      type: 2}
+    <EnemiesCount>k__BackingField: 20
+  - <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 45dd511f5473b6e4e813ef355553877d,
+      type: 2}
+    <EnemiesCount>k__BackingField: 30

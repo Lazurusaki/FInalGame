@@ -241,7 +241,18 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+<<<<<<< Updated upstream:Assets/Scenes/SampleScene.unity
 --- !u!1 &410087039
+=======
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
+--- !u!1 &1285806877
+>>>>>>> Stashed changes:Assets/FinalGame/Scenes/Bootstrap.unity
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,9 +260,15 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< Updated upstream:Assets/Scenes/SampleScene.unity
   - component: {fileID: 410087041}
   - component: {fileID: 410087040}
   - component: {fileID: 410087042}
+=======
+  - component: {fileID: 1285806880}
+  - component: {fileID: 1285806879}
+  - component: {fileID: 1285806878}
+>>>>>>> Stashed changes:Assets/FinalGame/Scenes/Bootstrap.unity
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -405,3 +422,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< Updated upstream:Assets/Scenes/SampleScene.unity
+=======
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 503811351}
+  - {fileID: 1942438372}
+  - {fileID: 380159148}
+  - {fileID: 1285806880}
+  - {fileID: 382378421}
+>>>>>>> Stashed changes:Assets/FinalGame/Scenes/Bootstrap.unity

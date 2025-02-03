@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5a10e20a62f8d43a306c11ab362c74, type: 3}
+  m_Name: PlaceBombAbilityConfig
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: Placebomb
+  <Name>k__BackingField: Placebomb
+  <Description>k__BackingField: Placebomb
+  <Icon>k__BackingField: {fileID: 21300000, guid: bb0d0a12b139e4a4b8645d801aa7b9c6,
+    type: 3}
+  <Cost>k__BackingField:
+    CurrencyType: 0
+    Value: 50
+  _bombConfig: {fileID: 11400000, guid: 05a3d0f9cc30c514fb7d7008c5d6da10, type: 2}
