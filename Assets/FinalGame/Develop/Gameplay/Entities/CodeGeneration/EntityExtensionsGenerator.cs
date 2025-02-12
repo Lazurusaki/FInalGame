@@ -82,6 +82,18 @@ namespace FinalGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.BounceEvent, typeof(ReactiveEvent<RaycastHit>)},
             {EntityValues.BounceLayer, typeof(LayerMask)},
             
+            {EntityValues.Target, typeof(ReactiveVariable<Entity>)},
+            {EntityValues.IsPickupable, typeof(ReactiveVariable<bool>)},
+            {EntityValues.IsPickupProcess, typeof(ReactiveVariable<bool>)},
+            {EntityValues.IsCollected, typeof(ReactiveVariable<bool>)},
+            
+            {EntityValues.Coins, typeof(ReactiveVariable<int>)},
+            
+            {EntityValues.DropLootCondition, typeof(ICompositeCondition)},
+            {EntityValues.IsLootDropped, typeof(ReactiveVariable<bool>)},
+            
+            {EntityValues.IsSpawningProcess, typeof(ReactiveVariable<bool>)},
+            
             //ADV_03
             {EntityValues.Energy, typeof(ReactiveVariable<float>) },
             {EntityValues.MaxEnergy , typeof(ReactiveVariable<float>)},

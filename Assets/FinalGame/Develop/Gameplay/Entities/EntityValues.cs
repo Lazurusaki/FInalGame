@@ -67,6 +67,18 @@
         BounceEvent,
         BounceLayer,
         
+        Target,
+        
+        IsPickupable,
+        IsPickupProcess,
+        IsCollected,
+        
+        Coins,
+        
+        DropLootCondition,
+        IsLootDropped,
+        IsSpawningProcess,
+        
         //ADV_03
         Energy,
         MaxEnergy,

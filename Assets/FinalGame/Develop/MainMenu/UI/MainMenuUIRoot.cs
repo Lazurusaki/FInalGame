@@ -9,6 +9,8 @@ namespace FinalGame.Develop.MainMenu.UI
         
         [field: SerializeField] public ActionButton OpenLevelsMenuButton { get; private set; }
         
+        [field: SerializeField] public ActionButton OpenUpgradeMenuButton { get; private set; }
+        
         [field: SerializeField] public Transform HUDLayer { get; private set; }
         [field: SerializeField] public Transform PopupsLayer { get; private set; }
         [field: SerializeField] public Transform VFXLayer { get; private set; }

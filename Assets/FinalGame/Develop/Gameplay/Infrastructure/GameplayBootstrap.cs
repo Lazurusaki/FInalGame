@@ -14,6 +14,7 @@ using FinalGame.Develop.Gameplay.Features.Enemy;
 using FinalGame.Develop.Gameplay.Features.GameModes;
 using FinalGame.Develop.Gameplay.Features.Input;
 using FinalGame.Develop.Gameplay.Features.LevelUp;
+using FinalGame.Develop.Gameplay.Features.Loot;
 using FinalGame.Develop.Gameplay.Features.MainHero;
 using FinalGame.Develop.Gameplay.Features.Pause;
 using FinalGame.Develop.Gameplay.Features.Team;
@@ -66,9 +67,13 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
             RegisterAbilityPresentersFactory();
             RegisterGameplayUIRoot();
             RegisterDropAbilityOnLevelUpService();
+            RegisterLootFactory();
+            RegisterDropLootService();
+            RegisterLootPickupService();
             
             _container.Initialize();
         }
+
 
         private SelectAbilityPopupPresenter _popup;
         
@@ -181,5 +186,13 @@ namespace FinalGame.Develop.Gameplay.Infrastructure
                 c.Resolve<AbilityPresentersFactory>(),
                 c.Resolve<IPauseService>(),
                 c.Resolve<ICoroutinePerformer>())).NonLazy();
+        
+        private void RegisterLootFactory() => _container.RegisterAsSingle(c => new LootFactory(c));
+
+        private void RegisterDropLootService() => _container.RegisterAsSingle(c
+            => new DropLootService(c.Resolve<ConfigsProviderService>(), c.Resolve<LootFactory>()));
+
+        private void RegisterLootPickupService() => _container.RegisterAsSingle(c
+            => new LootPickupService(c.Resolve<EntitiesBuffer>())).NonLazy();
     }
 }

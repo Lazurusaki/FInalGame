@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.DataManagement.DataProviders;
 using FinalGame.Develop.CommonServices.LevelsService;
 using FinalGame.Develop.CommonServices.SceneManagement;
+using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.Configs.Gameplay.Levels;
 using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Develop.Gameplay.Features.GameModes;
 using FinalGame.Develop.Gameplay.Features.Input;
+using FinalGame.Develop.Gameplay.Features.Loot;
 using FinalGame.Develop.Gameplay.Features.MainHero;
 using FinalGame.Develop.Gameplay.Features.Pause;
 using FinalGame.Develop.Utils.Conditions;
@@ -31,19 +33,22 @@ namespace FinalGame.Develop.Gameplay.States
         
         public GameplayStateMachine CreateGameplayLoopState(GameplaySceneInputArgs gameplaySceneInputArgs)
         {
-            GameplayStatesFactory gameplayStatesFactory = _container.Resolve<GameplayStatesFactory>();
+
             GameplayFinishConditionService  gameplayFinishConditionService = _container.Resolve<GameplayFinishConditionService>();
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
             
-            NextStagePrepareState nextStagePrepareState = gameplayStatesFactory.CreateNextStagePrepareState();
-            StageProcessState stageProcessState = gameplayStatesFactory.CreateStageProcessState(gameplaySceneInputArgs);
-
+            NextStagePrepareState nextStagePrepareState = CreateNextStagePrepareState();
+            StageProcessState stageProcessState = CreateStageProcessState(gameplaySceneInputArgs);
+            CollectLootState collectLootState = CreateCollectLootState();
             
             //ADD CREATE TRANSITION CONDITIONS
             ActionCondition preparationStageToProcessStageCondition =
                 new ActionCondition(nextStagePrepareState.OnNextStageTriggerComplete);
+            
+            ActionCondition collectLootStageToPreparationStageCondition =
+                new ActionCondition(collectLootState.LootCollected);
 
-            ActionCondition stageProcessToPreparationStageCondition =
+            ActionCondition stageProcessToCollectLootStageCondition =
                 new ActionCondition(stageProcessState.StageComplete);
 
             gameplayFinishConditionService.WinCondition
@@ -54,7 +59,8 @@ namespace FinalGame.Develop.Gameplay.States
             List<IDisposable> disposables = new List<IDisposable>
             {
                 preparationStageToProcessStageCondition,
-                stageProcessToPreparationStageCondition
+                stageProcessToCollectLootStageCondition,
+                collectLootStageToPreparationStageCondition
             };
 
             //CREATE STATE MACHINE
@@ -63,10 +69,12 @@ namespace FinalGame.Develop.Gameplay.States
             //ADD STATES
             gameplayLoopState.AddState(nextStagePrepareState);
             gameplayLoopState.AddState(stageProcessState);
+            gameplayLoopState.AddState(collectLootState);
 
             //ADD TRANSITIONS
             gameplayLoopState.AddTransition(nextStagePrepareState, stageProcessState, preparationStageToProcessStageCondition);
-            gameplayLoopState.AddTransition(stageProcessState, nextStagePrepareState, stageProcessToPreparationStageCondition);
+            gameplayLoopState.AddTransition(stageProcessState, collectLootState, stageProcessToCollectLootStageCondition);
+            gameplayLoopState.AddTransition(collectLootState, nextStagePrepareState, collectLootStageToPreparationStageCondition);
 
             return gameplayLoopState;
         }
@@ -92,7 +100,9 @@ namespace FinalGame.Develop.Gameplay.States
                 _container.Resolve<CompletedLevelsService>(),
                 _container.Resolve<PlayerDataProvider>(),
                 gameplaySceneInputArgs,
-                _container.Resolve<SceneSwitcher>());
+                _container.Resolve<SceneSwitcher>(),
+                _container.Resolve<WalletService>(),
+                _container.Resolve<MainHeroHolderService>());
         }
         
         public LooseState CreateLooseState()
@@ -101,6 +111,13 @@ namespace FinalGame.Develop.Gameplay.States
                 _container.Resolve<SceneSwitcher>(),
                 _container.Resolve<IPauseService>(),
                 _container.Resolve<IInputService>());
+        }
+
+        public CollectLootState CreateCollectLootState()
+        {
+            return new CollectLootState(
+                _container.Resolve<LootPickupService>(),
+                _container.Resolve<MainHeroHolderService>());
         }
     }
 }

@@ -4,6 +4,7 @@ using FinalGame.Develop.CommonServices.SceneManagement;
 using FinalGame.Develop.CommonUI.Wallet;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.MainMenu.Features.LevelsMenu.LevelsMenuPopup;
+using FinalGame.Develop.MainMenu.Features.StatsUpgradeMenu;
 using FinalGame.Develop.MainMenu.UI;
 using UnityEngine;
 
@@ -34,6 +35,12 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
                 var levelsMenuPopupPresenter = _container.Resolve<LevelsMenuPopupFactory>().CreateLevelsMenuPopupPresenter();
                 levelsMenuPopupPresenter.Enable();
             });
+            
+            mainMenuUIRoot.OpenUpgradeMenuButton.Initialize(() =>
+            {
+                var upgradeStatsPresenter = _container.Resolve<StatsUpgradePopupFactory>().CreatePopup();
+                upgradeStatsPresenter.Enable();
+            });
         }
         
         private void ProcessRegistrations()
@@ -42,6 +49,7 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
             RegisterWalletPresenterFactory();
             RegisterMainMenuUIRoot();
             RegisterWalletPresenter();
+            RegisterPlayerStatsUpgradePopupFactory();
             
             _container.Initialize();    
         }
@@ -65,5 +73,8 @@ namespace FinalGame.Develop.MainMenu.Infrastructure
 
         private void RegisterLevelsMenuPopupFactory()
             => _container.RegisterAsSingle(c => new LevelsMenuPopupFactory(c));
+
+        private void RegisterPlayerStatsUpgradePopupFactory()
+            => _container.RegisterAsSingle(c => new StatsUpgradePopupFactory(c));
     }
 }

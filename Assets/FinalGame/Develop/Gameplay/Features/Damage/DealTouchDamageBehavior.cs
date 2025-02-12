@@ -30,8 +30,7 @@ namespace FinalGame.Develop.Gameplay.Features.Damage
             var otherEntity = colloder.GetComponentInParent<Entity>();
 
             if (otherEntity is not null)
-                if (otherEntity.TryTakeDamage(_damage.Value, _team.Value))
-                    Debug.Log("Touch Damage");
+                otherEntity.TryTakeDamage(_damage.Value, _team.Value);
         }
 
         public void OnDispose()

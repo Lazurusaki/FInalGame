@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.ConfigsManagement;
-using UnityEngine;
+using FinalGame.Develop.Gameplay.Features.Stats;
 using CurrencyTypes = FinalGame.Develop.CommonServices.Wallet.CurrencyTypes;
 
 namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
@@ -22,7 +21,8 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
             return new PlayerData
             {
                 WalletData = InitWalletData(),
-                CompletedLevels = new ()
+                CompletedLevels = new (),
+                StatUpgradeLevel = InitStatsUpgradesLevels()
             };
         }
 
@@ -34,6 +34,16 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
                 walletData.Add(currencyType, _configsProviderService.StartWalletConfig.getStartValueFor(currencyType));
 
             return walletData;
+        }
+
+        private Dictionary<StatTypes, int> InitStatsUpgradesLevels()
+        {
+            Dictionary<StatTypes, int> statsUpgradesLevels = new();
+
+            foreach (StatTypes statType in Enum.GetValues(typeof(StatTypes)))
+                statsUpgradesLevels.Add(statType, 1);
+
+            return statsUpgradesLevels;
         }
     }
 }

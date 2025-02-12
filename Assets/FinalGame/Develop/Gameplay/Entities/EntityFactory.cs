@@ -8,12 +8,14 @@ using FinalGame.Develop.Gameplay.Features.Damage;
 using FinalGame.Develop.Gameplay.Features.Death;
 using FinalGame.Develop.Gameplay.Features.DetectEntities;
 using FinalGame.Develop.Gameplay.Features.Energy;
+using FinalGame.Develop.Gameplay.Features.Loot;
 using FinalGame.Develop.Gameplay.Features.Movement;
 using FinalGame.Develop.Gameplay.Features.Skills;
 using FinalGame.Develop.Gameplay.Features.Stats;
 using FinalGame.Develop.Gameplay.Features.Teleport;
 using FinalGame.Develop.Utils.Conditions;
 using FinalGame.Develop.Utils.Reactive;
+using Unity.VisualScripting;
 using UnityEngine;
 using SelfDestroyBehavior = FinalGame.Develop.Gameplay.Features.Death.SelfDestroyBehavior;
 
@@ -102,19 +104,11 @@ namespace FinalGame.Develop.Gameplay.Entities
             return instance;
         }
         
-        public Entity CreateMainHero(Vector3 position, MainHeroConfig config, int team)
+        public Entity CreateMainHero(Vector3 position, Dictionary<StatTypes,float> baseStats ,MainHeroConfig config, int team)
         {
             var prefab = _assetsLoader.LoadResource<Entity>(MainHeroPrefabPath);
             
             var instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
-
-            Dictionary<StatTypes, float> baseStats = new()
-            {
-                { StatTypes.MoveSpeed, config.MoveSpeed },
-                { StatTypes.MaxHealth, config.MaxHealth },
-                { StatTypes.AttackInterval, config.AttackInterval },
-                { StatTypes.Damage, config.Damage }
-            };
 
             Dictionary<StatTypes, float> modifiedStats = new(baseStats);
             
@@ -354,6 +348,41 @@ namespace FinalGame.Develop.Gameplay.Entities
             instance.Initialize();
             _entitiesBuffer.Add(instance);
             
+            return instance;
+        }
+
+        public Entity CreatePickupable(Entity prefab, Vector3 position)
+        {
+            Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
+
+            instance
+                .AddIsPickupable(new ReactiveVariable<bool>(true))
+                .AddIsPickupProcess()
+                .AddTarget(new ReactiveVariable<Entity>(null))
+                .AddMoveDirection()
+                .AddMoveSpeed(new ReactiveVariable<float>(12))
+                .AddIsMoving()
+                .AddIsCollected()
+                .AddIsSpawningProcess(new ReactiveVariable<bool>(true));
+
+            ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsPickupProcess().Value && instance.GetIsSpawningProcess().Value == false));
+
+            ICompositeCondition selfDestroyCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsCollected().Value));
+
+            instance
+                .AddMoveCondition(moveCondition)
+                .AddSelfDestroyCondition(selfDestroyCondition);
+
+            instance
+                .AddBehavior(new TransformMovementBehavior())
+                .AddBehavior(new GenerateDirectionToTargetBehavior())
+                .AddBehavior(new CollectedOnNearToTargetBehavior())
+                .AddBehavior(new SelfDestroyBehavior()); 
+            
+            instance.Initialize();
+
             return instance;
         }
     }

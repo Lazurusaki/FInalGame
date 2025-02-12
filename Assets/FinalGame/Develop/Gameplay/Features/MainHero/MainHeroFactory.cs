@@ -1,4 +1,6 @@
-﻿using FinalGame.Develop.Configs.Gameplay.Creatures;
+﻿using System;
+using System.Collections.Generic;
+using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
 using FinalGame.Develop.Gameplay.AI;
@@ -6,6 +8,7 @@ using FinalGame.Develop.Gameplay.AI.Sensors;
 using FinalGame.Develop.Gameplay.Entities;
 using FinalGame.Develop.Gameplay.Features.Ability;
 using FinalGame.Develop.Gameplay.Features.LevelUp;
+using FinalGame.Develop.Gameplay.Features.Stats;
 using FinalGame.Develop.Gameplay.Features.Team;
 using FinalGame.Develop.Utils.Reactive;
 using UnityEngine;
@@ -17,11 +20,11 @@ namespace FinalGame.Develop.Gameplay.Features.MainHero
         private const int Team = TeamTypes.MainHero;
 
         private readonly EntitiesBuffer _entitiesBuffer;
-        private readonly AbilityFactory _abilityFactory;
         private readonly EntityFactory _entityFactory;
         private readonly AIFactory _aiFactory;
         private readonly MainHeroHolderService _mainHeroHolderService;
         private readonly ConfigsProviderService _configs;
+        private readonly StatsUpgradeService _statsUpgradeService;
         
         public MainHeroFactory(DIContainer container)
         {
@@ -29,19 +32,20 @@ namespace FinalGame.Develop.Gameplay.Features.MainHero
             _entitiesBuffer = container.Resolve<EntitiesBuffer>();
             _aiFactory = container.Resolve<AIFactory>();
             _mainHeroHolderService = container.Resolve<MainHeroHolderService>();
-            _abilityFactory = container.Resolve<AbilityFactory>();
             _configs = container.Resolve<ConfigsProviderService>();
+            _statsUpgradeService = container.Resolve<StatsUpgradeService>();
         }
 
         public Entity Create(Vector3 position, MainHeroConfig config)
         {
-            Entity entity = _entityFactory.CreateMainHero(position, config, Team);
+            Entity entity = _entityFactory.CreateMainHero(position, GetStats(), config, Team);
             AIStateMachine brain = _aiFactory.CreateMainHeroBehavior(entity, new NearestDamageableTargetSelector(entity.GetTransform(),entity.GetTeam()));
             
             entity
                 .AddIsMainHero(new ReactiveVariable<bool>(true))
                 .AddLevel(new ReactiveVariable<int>(1))
                 .AddExperience()
+                .AddCoins()
                 .AddAbilityList();
 
             entity
@@ -53,6 +57,16 @@ namespace FinalGame.Develop.Gameplay.Features.MainHero
             _entitiesBuffer.Add(entity);
             
             return entity;
+        }
+
+        private Dictionary<StatTypes, float> GetStats()
+        {
+            Dictionary<StatTypes, float> stats = new();
+
+            foreach (StatTypes statType in Enum.GetValues(typeof(StatTypes)))
+                stats.Add(statType, _statsUpgradeService.GetCurrentStatValueFor(statType));
+
+            return stats;
         }
     }
 }

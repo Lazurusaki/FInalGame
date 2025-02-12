@@ -3,6 +3,8 @@ using FinalGame.Develop.Configs.Common.Wallet;
 using FinalGame.Develop.Configs.Gameplay;
 using FinalGame.Develop.Configs.Gameplay.Creatures;
 using FinalGame.Develop.Configs.Gameplay.Levels;
+using FinalGame.Develop.Configs.Loot;
+using FinalGame.Develop.Configs.Player.Stats;
 using FinalGame.Resources.Configs.Gameplay.Abilities;
 using UnityEngine;
 
@@ -25,6 +27,12 @@ namespace FinalGame.Develop.ConfigsManagement
         
         public ExperienceForLevelUplConfig ExperienceForLevelUplConfig { get; private set; }
         
+        public LootListConfig LootListConfig { get; private set; }
+        
+        public PlayerStatsUpgradeConfig StatsUpgradesConfig { get; private set; }
+        
+        public StatsViewConfig StatsViewConfig { get; private set; }
+        
         public void LoadAll()
         {
             //add configs here
@@ -35,6 +43,11 @@ namespace FinalGame.Develop.ConfigsManagement
             LoadMainHeroConfig();
             LoadAbilitiesConfigContainer();
             LoadExperienceForLevelUpConfig();
+            LoadLootListConfig();
+            LoadStatsUpgradesConfig();
+            LoadStatsViewConfig();
+            
+            if (LootListConfig is null)Debug.Log("AAA");
         }
 
         private void LoadStartWalletConfig()
@@ -61,5 +74,20 @@ namespace FinalGame.Develop.ConfigsManagement
             => ExperienceForLevelUplConfig =
                 _resourcesAssetLoader.LoadResource<ExperienceForLevelUplConfig>(
                     "Configs/Gameplay/ExperienceForLevelUplConfig");
+
+        private void LoadLootListConfig()
+            => LootListConfig =
+                _resourcesAssetLoader.LoadResource<LootListConfig>(
+                    "Configs/Gameplay/Loot/LootListConfig");
+
+        private void LoadStatsUpgradesConfig()
+            => StatsUpgradesConfig =
+                _resourcesAssetLoader.LoadResource<PlayerStatsUpgradeConfig>(
+                    "Configs/Player/Stats/PlayerStatsUpgradeConfig");
+
+        private void LoadStatsViewConfig()
+            => StatsViewConfig =
+                _resourcesAssetLoader.LoadResource<StatsViewConfig>(
+                    "Configs/Player/Stats/StatsViewConfig");
     }
 }

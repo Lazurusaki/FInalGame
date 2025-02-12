@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FinalGame.Develop.CommonServices.Wallet;
+using FinalGame.Develop.Gameplay.Features.Stats;
 
 namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
 {
@@ -10,5 +11,7 @@ namespace FinalGame.Develop.CommonServices.DataManagement.DataProviders
         public Dictionary<CurrencyTypes, int> WalletData;
 
         public List<int> CompletedLevels;
+
+        public Dictionary<StatTypes, int> StatUpgradeLevel;
     }
 }

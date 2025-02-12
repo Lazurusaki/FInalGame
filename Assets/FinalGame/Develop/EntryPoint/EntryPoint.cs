@@ -9,6 +9,7 @@ using FinalGame.Develop.CommonServices.Timer;
 using FinalGame.Develop.CommonServices.Wallet;
 using FinalGame.Develop.ConfigsManagement;
 using FinalGame.Develop.DI;
+using FinalGame.Develop.Gameplay.Features.Stats;
 using UnityEngine;
 
 namespace FinalGame.Develop.EntryPoint
@@ -45,6 +46,7 @@ namespace FinalGame.Develop.EntryPoint
             RegisterConfigsProvider();
             RegisterCompletedLevelsService();
             RegisterTimerFactory();
+            RegisterStatsUpgradeService();
 
             _projectContainer.Initialize();
         }
@@ -114,5 +116,9 @@ namespace FinalGame.Develop.EntryPoint
 
         private void RegisterTimerFactory()
             => _projectContainer.RegisterAsSingle(c => new TimerServiceFactory(c));
+
+        private void RegisterStatsUpgradeService()
+            => _projectContainer.RegisterAsSingle(c
+                => new StatsUpgradeService(c.Resolve<PlayerDataProvider>(), c.Resolve<ConfigsProviderService>())).NonLazy();
     }
 }
